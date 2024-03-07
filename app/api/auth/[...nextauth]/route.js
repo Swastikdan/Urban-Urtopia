@@ -11,7 +11,7 @@ const prisma = new PrismaClient();
 export const authOptions = {
   adapter: PrismaAdapter(prisma),
   session: {
-    strategy: "jwt",
+    strategy: "jwt",   
   },
   secret: process.env.NEXTAUTH_SECRET,
   providers: [
