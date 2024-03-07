@@ -20,57 +20,61 @@ export async function plsces(request) {
       return NextResponse.json({ status: 500 });
     }
   }
-  try{
-  const places = await prisma.places.findMany({
-    where: {
-      OR: [
-        {
-          title: {
-            contains: query,
-            mode: "insensitive",
+  try {
+    const places = await prisma.places.findMany({
+      where: {
+        OR: [
+          {
+            title: {
+              contains: query,
+              mode: "insensitive",
+            },
           },
-        },
-        {
-          description: {
-            contains: query,
-            mode: "insensitive",
+          {
+            description: {
+              contains: query,
+              mode: "insensitive",
+            },
           },
-        },
-        {
-          address: {
-            contains: query,
-            mode: "insensitive",
+          {
+            address: {
+              contains: query,
+              mode: "insensitive",
+            },
           },
-        },
-        {
-          city: {
-            contains: query,
-            mode: "insensitive",
+          {
+            city: {
+              contains: query,
+              mode: "insensitive",
+            },
           },
-        },
-        {
-          state: {
-            contains: query,
-            mode: "insensitive",
+          {
+            state: {
+              contains: query,
+              mode: "insensitive",
+            },
           },
-        },
-      ],
-    },
-    include: {
-      owner: {
-        select: {
-          name: true,
-          email: true,
+          {
+            category: {
+              hasSome: [query],
+            },
+          },
+        ],
+      },
+      include: {
+        owner: {
+          select: {
+            name: true,
+            email: true,
+          },
         },
       },
-    },
-  });
+    });
     return NextResponse.json(places);
   } catch (error) {
     console.error("Error:", error);
     return NextResponse.json({ status: 500 });
   }
-
 }
 
 export { plsces as GET };

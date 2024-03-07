@@ -1,9 +1,27 @@
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
-export async function allPlaces(request, response) {
+export async function allPlaces(request) {
+    const searchParams = request.nextUrl.searchParams;
+    const category = searchParams.get("category");
+    const sort = searchParams.get("sort");
+    const sortType = searchParams.get("sortType");
+
     try {
-        const places = await prisma.places.findMany();
+        // Build where clause for filtering
+        const whereClause = {};
+        if (category) whereClause.category = { has: category };
+
+        // Build orderBy clause for sorting
+        const orderByClause = {};
+        if (sort === 'price') orderByClause.price = sortType; 
+        if (sort === 'maxGuests') orderByClause.maxGuests = sortType;
+
+        const places = await prisma.places.findMany({
+            where: whereClause,
+            orderBy: orderByClause,
+        });
+
         if (places.length === 0) {
             return NextResponse.json({ message: "No places found" }, { status: 400 });
         }
