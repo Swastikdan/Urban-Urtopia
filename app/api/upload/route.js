@@ -15,7 +15,7 @@ export async function upload(request) {
         const path = join('/','/tmp', file.name);
         await writeFile(path, buffer);
         let result = await cloudinary.uploader.upload(path, {
-            folder: 'Airbnb/Places',
+          folder: "nestly/places",
         });
         urls.push(result.secure_url);
     }
