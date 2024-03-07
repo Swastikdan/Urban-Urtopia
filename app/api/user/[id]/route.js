@@ -49,8 +49,13 @@ export async function users(request, { params }) {
 
   if (!user) return new Response("User not found", { status: 404 });
 
-  if (request.method === 'GET') return handleGetRequest(user);
-  if (request.method === 'POST') return handlePostRequest(request, user, id, session);
+  try {
+    if (request.method === 'GET') return handleGetRequest(user);
+    if (request.method === 'POST') return handlePostRequest(request, user, id, session);
+  } catch (error) {
+    console.error('Error:', error);
+    return new Response("Internal server error", { status: 500 });
+  }
 }
 
 export { users as GET, users as POST };

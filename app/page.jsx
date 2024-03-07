@@ -1,9 +1,37 @@
+"use client"
+import React, {useState, useEffect} from 'react'
 
+export default function page() {
 
-export default function Home() {
+  const [file, setFile] = useState(null)
+
+  const onSubmit = async (e) => {
+    e.preventDefault()
+    const formData = new FormData()
+    formData.append('file', file)
+    const res = await fetch('/api/upload', {
+      method: 'POST',
+      body: formData
+    })
+    const data = await res.json()
+    console.log(data)
+  }
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-    
-    </main>
-  );
+   <>
+   
+   <div>
+
+    <form onSubmit={onSubmit} >
+
+
+
+    <input type="file" name="file" id="file" onChange={(e)=>setFile(e.target.files?.[0])}  />
+
+    <input type="submit" value="Upload" />  
+    </form>
+   </div>
+   
+   
+   </>
+  )
 }
