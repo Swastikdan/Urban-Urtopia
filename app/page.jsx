@@ -5,9 +5,10 @@ import { useSession } from "next-auth/react";
 export default function Page() {
   const { data: session } = useSession();
 
-  const userid = session?.user.id;
+  const userid =  session?.user.id;
+  
   const sendData = useCallback(() => {
-    const sdata = {
+    let data = {
       title: "some title",
       address: "Manali, Himachal Pradesh, India",
       state: "Himachal Pradesh",
@@ -38,9 +39,11 @@ export default function Page() {
       petsAllowed: false,
       extraInfo: "Some extra Info",
       status: "approved",
+  
     };
 
-    const data = { ...sdata, ownerId: sdata.ownerId ?? userid };
+    data.ownerId = userid;
+    
 
     const routeUrl = "http://localhost:3000/api/places/create";
 

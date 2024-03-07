@@ -24,31 +24,30 @@ const createPlaceSchema = z.object({
 });
 
 export async function createPlace(request) {
-        const session = await getServerSession();
-           
-        if (!session || !session.user) return NextResponse.json({ status: 401 });
-        
-        const data = await request.json();
-        
-        // Validate data with Zod schema
-        const validatedData = createPlaceSchema.safeParse(data);
-        if (!validatedData.success) {
-                const error = validatedData.error.format(); 
-                return NextResponse.json({ error }, { status: 400 });
-        }
-        const { ownerId, ...rest } = validatedData.data;
-        const place = await prisma.places.create({
-            data: {
-                ...rest,
-                owner: {
-                    connect: {
-                        id: ownerId,
-                    },
+    const session = await getServerSession();
+    if (!session || !session.user) return NextResponse.json({ status: 401 });
+    
+    const data = await request.json();
+    
+    // Validate data with Zod schema
+    const validatedData = createPlaceSchema.safeParse(data);
+    if (!validatedData.success) {
+        const error = validatedData.error.format(); 
+        return NextResponse.json({ error }, { status: 400 });
+    }
+    const { ownerId, ...rest } = validatedData.data; // Extract ownerId from validated data
+    const place = await prisma.places.create({
+        data: {
+            ...rest,
+            owner: {
+                connect: {
+                    id: ownerId,
                 },
             },
-        });
-        
-        return NextResponse.json(place);
+        },
+    });
+    
+    return NextResponse.json(place);
 }
 
 export { createPlace as POST };
