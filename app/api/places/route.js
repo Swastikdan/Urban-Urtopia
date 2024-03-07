@@ -18,7 +18,10 @@ export async function allPlaces(request) {
         if (sort === 'maxGuests') orderByClause.maxGuests = sortType;
 
         const places = await prisma.places.findMany({
-            where: whereClause,
+            where: {
+                ...whereClause,
+                status: "approved"
+            },
             orderBy: orderByClause,
         });
 

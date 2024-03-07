@@ -10,7 +10,7 @@ export async function plsces(request) {
       return NextResponse.json("Invalid ID", { status: 401 });
     try {
       const place = await prisma.places.findUnique({
-        where: { id: String(id) },
+        where: { id: String(id), status: "approved" },
       });
       if (!place || place.length === 0)
         return new Response("Place not found", { status: 404 });
@@ -23,6 +23,7 @@ export async function plsces(request) {
   try {
     const places = await prisma.places.findMany({
       where: {
+        status: "approved",
         OR: [
           {
             title: {
