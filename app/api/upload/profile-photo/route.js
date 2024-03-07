@@ -10,7 +10,7 @@ export async function upload(request) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
     const data = await request.formData();
-    const file = data.get("file");
+    const file = data.get("photos");
     if (!file)
       return NextResponse.json({ message: "No file found" }, { status: 400 });
 
@@ -19,7 +19,7 @@ export async function upload(request) {
     const path = join("/", "/tmp", file.name);
     await writeFile(path, buffer);
 
-    let result = await cloudinary.v2.uploader.upload(path, {
+    let result = await cloudinary.uploader.upload(path, {
       folder: "nestly/user",
     });
 
