@@ -1,55 +1,73 @@
-"use client"
-import React, { useState } from 'react'
+"use client";
+import React, { useCallback } from 'react'
+import { useSession } from "next-auth/react"
 
-export default function page() {
+export default function Page() {
+  const { data: session } = useSession();
 
-  const [files, setFiles] = useState([])
-  const [photoLink, setPhotoLink] = useState('')
-  const [addedPhotos, setAddedPhotos] = useState([])
+  const sendData = useCallback(() => {
+     const data = {
+       title: "some title",
+       address: "Manali, Himachal Pradesh, India",
+       state: "Himachal Pradesh",
+       city: "Manali",
+       street: "",
+       photos: [
+         "https://res.cloudinary.com/dp5tomvwb/image/upload/v1709405242/Airbnb/Places/sk8xwpzqprsspc0d5h7s.jpg",
+         "https://res.cloudinary.com/dp5tomvwb/image/upload/v1709405250/Airbnb/Places/ejbtqgvsvqtfhcsrceed.jpg",
+         "https://res.cloudinary.com/dp5tomvwb/image/upload/v1709405251/Airbnb/Places/dqzsf9v6klbxmeqzagkj.jpg",
+         "https://res.cloudinary.com/dp5tomvwb/image/upload/v1709405252/Airbnb/Places/zjqdj8e3zp2to0otz9xg.jpg",
+         "https://res.cloudinary.com/dp5tomvwb/image/upload/v1709405253/Airbnb/Places/u0oraoifctcxwgy1tyzy.jpg",
+       ],
+       description:
+         "Ménage - By The Beas , A colonial style hill cottage near Manali, this delightful vacation home promises the perfect mix of hills with a scenic river side in the privacy of your own space. It offers a great stay on the river bank amidst a small Apple orchard. Tastefully done up interiors, 3 cosy bedrooms, a large living room with fireplace, sun bathing attic with a view of the river and mountains, bon-fire & barbecue by our cook, absolutely perfect for a laid-back friends or family staycation.",
+       category: [
+         "amazing-views",
+         "rooms",
+         "tropical",
+         "farms",
+         "tiny-homes",
+         "historical-homes",
+         "trending",
+         "camping",
+         "cabins",
+       ],
+       maxGuests: 9,
+       price: 9000,
+       petsAllowed: false,
+       extraInfo: "Some extra Info",
+       __v: 0,
+       status: "approved",
+     };
 
-  const addPhotoByLink = async (e) => {
-    e.preventDefault();
-    const res = await fetch("/api/upload/upload-by-link", {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ link: photoLink })
-    });
-    const filename = await res.json();
-    setAddedPhotos((prev) => {
-      return [...prev, filename];
-    });
-    setPhotoLink("");
-  };
+    const routeUrl = "http://localhost:3000/api/places/create";
 
-  const onSubmit = async (e) => {
-    e.preventDefault()
-    const formData = new FormData()
-    files.forEach((file, index) => {
-      formData.append('photos', file)
-    })
-    const res = await fetch("/api/upload/upload-local-files", {
+    fetch(routeUrl, {
       method: "POST",
-      body: formData,
-    });
-    const data = await res.json()
-    console.log(data)
-  }
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Success:", data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }, []);
 
+  
   return (
-    <>
-      <div>
-        <form onSubmit={onSubmit}>
-          <input type="file" name="photos" id="photos" multiple onChange={(e) => setFiles([...e.target.files])} />
-          <input type="submit" value="Upload" />
-        </form>
-
-        <form onSubmit={addPhotoByLink}>
-          <input type="text" name="link" id="link" value={photoLink} onChange={(e) => setPhotoLink(e.target.value)} />
-          <input type="submit" value="Upload by link" />
-        </form>
-      </div>
-    </>
-  )
+    <div>
+      {session && <h1>Session {session.user.id}</h1>}
+      <button onClick={sendData}>Send Data</button>
+    </div>
+  );
 }
