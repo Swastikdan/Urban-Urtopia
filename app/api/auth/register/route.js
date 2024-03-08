@@ -1,7 +1,7 @@
 // route.js
 import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/utils";
+import prisma from "@/lib/prisma";
 export async function POST(request, response) {
   try {
     const body = await request.json();

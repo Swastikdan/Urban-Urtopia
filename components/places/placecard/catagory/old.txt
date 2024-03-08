@@ -1,0 +1,105 @@
+
+import * as React from "react";
+import { useRouter} from "next/navigation";
+import categories from "../../config/categories";
+import { Card, CardContent } from "@/components/ui/card";
+import Image from "next/image";
+import {
+    Carousel,
+    CarouselContent,
+    CarouselItem,
+    CarouselNext,
+    CarouselPrevious,
+} from "@/components/ui/carousel";
+
+const CatagoryCard = ({ name, icon, className, onClick }) => {
+    return (
+        <div className={className} onClick={onClick}>
+            <div className="flex flex-col items-center space-y-2">
+               
+            <Image src={icon} alt={name} width={24} height={24} />
+                    <span className="text-xs font-medium text-gray-700">{name}</span>
+                
+            </div>
+        </div>
+    );
+};
+
+export function CatagorySlider() {
+    const router = useRouter();
+
+    const handleClick = (value) => {
+        router.push(`/?category=${value}`);
+    };
+
+    return (
+        <Carousel
+            opts={{
+                align: "start",
+            }}
+            className=" -mx-10 md:-mx-0 w-auto md:w-2/3"
+        >
+            <CarouselContent>
+                {categories.map((category, index) => (
+                    <CarouselItem key={index} className=" basis-[25%] md:basis-[30%] lg:basis-[12%]">
+                        <div className="p-1">
+                            <CatagoryCard
+                                name={category.name}
+                                icon={category.icon}
+                                onClick={() => handleClick(category.value)}
+                            />
+                        </div>
+                    </CarouselItem>
+                ))}
+            </CarouselContent>
+            <CarouselPrevious  className="hidden md:flex" />
+            <CarouselNext className="hidden md:flex" />
+        </Carousel>
+    );
+}
+import * as React from "react";
+import categories from "../../config/categories";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+    Carousel,
+    CarouselContent,
+    CarouselItem,
+    CarouselNext,
+    CarouselPrevious,
+} from "@/components/ui/carousel";
+
+const CatagoryCard = ({ name, icon, className }) => {
+    return (
+        <Card className={className}>
+            <CardContent className="flex aspect-square items-center justify-center p-6">
+                <div className="flex items-center justify-center">
+                    <img src={icon} alt={name} className="w-12 h-12" />
+                    <span className="ml-4 text-lg font-semibold">{name}</span>
+                </div>
+            </CardContent>
+        </Card>
+    );
+};
+
+export function CatagorySlider() {
+    return (
+        <Carousel
+            opts={{
+                align: "start",
+            }}
+            className="w-full"
+        >
+            <CarouselContent>
+                {categories.map((category, index) => (
+                    <CarouselItem key={index} className="md:basis-1/2 lg:basis-[10%]">
+                        <div className="p-1">
+                            <CatagoryCard name={category.name} icon={category.icon} />
+                        </div>
+                    </CarouselItem>
+                ))}
+            </CarouselContent>
+            <CarouselPrevious />
+            <CarouselNext />
+        </Carousel>
+    );
+}
