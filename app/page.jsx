@@ -1,10 +1,15 @@
-import React from 'react';
-import Places from '@/components/places/Places';
+import SearchBar from '@/components/searchbar/SearchBar'
+import React from 'react'
+
 export default function page() {
   return (
-    <>
-     
-      <Places />
-    </>
-  );
+    <div>
+
+        
+        <SearchBar />
+
+
+
+    </div>
+  )
 }

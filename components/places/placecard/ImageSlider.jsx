@@ -36,7 +36,7 @@ export default function ImageSlider({ customButton, images }) {
         {images.map((img, index) => (
           <SwiperSlide key={index} className="overflow-hidden">
             <img
-              src={img.replace('/upload/', '/upload/w_500/')}
+              src={img.replace('/upload/', '/upload/w_1000/')}
               alt="property image"
               className="h-80 w-full object-cover"
             />
