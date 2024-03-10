@@ -11,34 +11,34 @@ const prisma = new PrismaClient();
 export const authOptions = {
   adapter: PrismaAdapter(prisma),
   session: {
-    strategy: "jwt",
+    strategy: 'jwt',
   },
   secret: process.env.NEXTAUTH_SECRET,
   providers: [
     GitHubProvider({
-      clientId: process.env.GITHUB_ID ?? "",
-      clientSecret: process.env.GITHUB_SECRET ?? "",
+      clientId: process.env.GITHUB_ID ?? '',
+      clientSecret: process.env.GITHUB_SECRET ?? '',
     }),
     GoogleProvider({
       clientId: process.env.GOOGLE_ID,
       clientSecret: process.env.GOOGLE_SECRET,
       authorization: {
         params: {
-          prompt: "consent",
-          access_type: "offline",
-          response_type: "code",
+          prompt: 'consent',
+          access_type: 'offline',
+          response_type: 'code',
         },
       },
     }),
     CredentialsProvider({
-      name: "credentials",
+      name: 'credentials',
       credentials: {
-        email: { label: "email", type: "text" },
-        password: { label: "password", type: "password" },
+        email: { label: 'email', type: 'text' },
+        password: { label: 'password', type: 'password' },
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          throw new Error("Invalid credentials");
+          throw new Error('Invalid credentials');
         }
 
         const user = await prisma.user.findUnique({
@@ -48,23 +48,26 @@ export const authOptions = {
         });
 
         if (!user || !user?.hashedPassword) {
-          throw new Error("Invalid credentials");
+          throw new Error('Invalid credentials');
         }
 
         const isCorrectPassword = await bcrypt.compare(
           credentials.password,
-          user.hashedPassword
+          user.hashedPassword,
         );
 
         if (!isCorrectPassword) {
-          throw new Error("Invalid credentials");
+          throw new Error('Invalid credentials');
         }
 
         return user;
       },
     }),
   ],
-
+  pages: {
+    signIn: '/login',
+    signUp: '/register',
+  },
   callbacks: {
     session: async ({ session, token }) => {
       if (session?.user) {
