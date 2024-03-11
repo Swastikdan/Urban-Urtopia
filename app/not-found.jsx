@@ -4,7 +4,7 @@ import Link from 'next/link';
 export default function errorpage() {
   return (
     <>
-      <div className="grid h-screen place-content-center  px-4 ">
+      <div className="grid h-screen place-content-center">
         <div className="text-center">
           <h1 className="text-9xl font-black text-gray-200 dark:text-gray-700">
             404
