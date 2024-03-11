@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import Suspense from 'react';
 import { ModeToggle } from '../ModeToggle';
 import Sort from '../sort/Sort';
 import UserMenu from '../usermenu/UserMenu';
@@ -21,10 +22,14 @@ export default function NavBar() {
           </Link>
           <div className="w-full md:w-auto">
             <div className="hidden md:flex">
+              <Suspense fallback={<div>Loading...</div>}>
               <SearchBarTriggerDesktop />
+              </Suspense>
             </div>
             <div className="ml-2 md:hidden">
+              <Suspense fallback={<div>Loading...</div>}>
               <SearchBarMobile />
+              </Suspense>
             </div>
           </div>
           {/* <ModeToggle /> */}
