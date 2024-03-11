@@ -125,9 +125,9 @@ const categories = [
     value: 'islands',
   },
   {
-    name: 'Amazing pools',
+    name: 'Pools',
     icon: 'https://res.cloudinary.com/debewnh29/image/upload/pictures//3fb523a0-b622-4368-8142-b5e03df7549b.jpg',
-    value: 'amazing-pools',
+    value: 'pools',
   },
   {
     name: 'Arctic',
@@ -185,16 +185,6 @@ const categories = [
     value: 'skiing',
   },
   {
-    name: 'Cycladic homes',
-    icon: 'https://res.cloudinary.com/debewnh29/image/upload/pictures//e4b12c1b-409b-4cb6-a674-7c1284449f6e.jpg',
-    value: 'cycladic-homes',
-  },
-  {
-    name: "Chef's kitchens",
-    icon: 'https://res.cloudinary.com/debewnh29/image/upload/pictures//ddd13204-a5ae-4532-898c-2e595b1bb15f.jpg',
-    value: "chef's-kitchens",
-  },
-  {
     name: 'Ryokans',
     icon: 'https://res.cloudinary.com/debewnh29/image/upload/pictures//827c5623-d182-474a-823c-db3894490896.jpg',
     value: 'ryokans',
@@ -208,11 +198,6 @@ const categories = [
     name: 'Windmills',
     icon: 'https://res.cloudinary.com/debewnh29/image/upload/pictures//5cdb8451-8f75-4c5f-a17d-33ee228e3db8.jpg',
     value: 'windmills',
-  },
-  {
-    name: 'Casas particulares',
-    icon: 'https://res.cloudinary.com/debewnh29/image/upload/pictures//251c0635-cc91-4ef7-bb13-1084d5229446.jpg',
-    value: 'casas-particulares',
   },
   {
     name: 'Beachfront',
@@ -270,9 +255,9 @@ const categories = [
     value: 'grand-pianos',
   },
   {
-    name: 'Creative spaces',
+    name: 'Creative',
     icon: 'https://res.cloudinary.com/debewnh29/image/upload/pictures//8a43b8c6-7eb4-421c-b3a9-1bd9fcb26622.jpg',
-    value: 'creative-spaces',
+    value: 'creative',
   },
   {
     name: 'Dammusi',

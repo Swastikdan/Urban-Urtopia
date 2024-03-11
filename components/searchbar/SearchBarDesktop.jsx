@@ -1,41 +1,27 @@
+'use client';
 import React from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { ModeToggle } from '../ModeToggle';
-import Sort from '../sort/Sort';
-import UserMenu from '../usermenu/UserMenu';
-import SearchBarTriggerDesktop from '../searchbar/SearchBarTriggerDesktop';
-import SearchBarMobile from '../searchbar/SearchBarMobile';
-import CatagoryWithSort from '../places/placecard/catagory/CatagoryWithSort';
-export default function NavBar() {
+import { useSearchParams } from 'next/navigation';
+import SearchBarTriggerDesktop from './SearchBarTriggerDesktop';
+export default function SearchBarDesktop() {
+  const searchParams = useSearchParams();
+
+  // Extracting values from URL
+  const Location = searchParams.get('location') || '';
+  const CheckIn = searchParams.get('checkin') || '';
+  const CheckOut = searchParams.get('checkout') || '';
+  const Guests = searchParams.get('guests') || '';
   return (
-    <>
-      <header className="sticky top-0 mx-auto flex  w-full flex-col items-center bg-white dark:bg-black">
-        <nav className="max-w-screen-xl items-center flex h-full w-full justify-between px-2 py-5">
-          <Link
-            href="/"
-            className="hidden items-center space-x-2 text-xl font-bold md:flex  "
-          >
-            <Image src="/logo_small.svg" alt="Nestly" width={40} height={20} />
-            <h1>Nestly</h1>
-          </Link>
-          <div className="w-full md:w-auto">
-            <div className="hidden md:flex">
-              <SearchBarTriggerDesktop />
-            </div>
-            <div className="ml-2 md:hidden">
-              <SearchBarMobile />
-            </div>
-          </div>
-          {/* <ModeToggle /> */}
-          <div className="ml-2 md:hidden">
-            <Sort />
-          </div>
-          <div className="hidden md:flex">
-            <UserMenu />
-          </div>
-        </nav>
-        {/* <div class="visible px-4">
+    <div className="flex flex-col">
+      <div className='w-auto hidden'>
+      <SearchBarTriggerDesktop
+        Location={Location}
+        CheckIn={CheckIn}
+        CheckOut={CheckOut}
+        Guests={Guests}
+      />
+      </div>
+      <div className="pt-5">
+        <div class="visible px-4">
           <div class="false mx-auto mt-2 hidden max-w-[850px] rounded-full border border-gray-200 bg-white duration-300 md:flex">
             <form
               action="/search"
@@ -394,7 +380,6 @@ export default function NavBar() {
                                 d="M12 4v16m8-8H4"
                               ></path>
                             </svg>
-                            <span>Search</span>
                           </span>
                         </div>
                       </div>
@@ -404,11 +389,8 @@ export default function NavBar() {
               </span>
             </form>
           </div>
-        </div> */}
-        <div className="max-w-[100vw]  ">
-          <CatagoryWithSort />
         </div>
-      </header>
-    </>
+      </div>
+    </div>
   );
 }
