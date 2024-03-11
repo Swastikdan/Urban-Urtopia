@@ -1,7 +1,6 @@
 import React, { Suspense } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import Suspense from 'react';
 import { ModeToggle } from '../ModeToggle';
 import Sort from '../sort/Sort';
 import UserMenu from '../usermenu/UserMenu';
