@@ -66,7 +66,7 @@ export const authOptions = {
   ],
   pages: {
     signIn: '/login',
-    signUp: '/register',
+    signOut: '/'
   },
   callbacks: {
     session: async ({ session, token }) => {
@@ -81,6 +81,13 @@ export const authOptions = {
       }
       return token;
     },
+  //   async redirect({ url, baseUrl }) {
+  //   // Allows relative callback URLs
+  //   if (url.startsWith("/")) return `${baseUrl}${url}`
+  //   // Allows callback URLs on the same origin
+  //   else if (new URL(url).origin === baseUrl) return url
+  //   return baseUrl
+  // }
   },
 };
 

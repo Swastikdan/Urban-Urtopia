@@ -148,13 +148,13 @@ export default function RootLayout({ children }) {
       >
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
-          enableSystem
+          defaultTheme="light"
+          enableLight
           disableTransitionOnChange
         >
           <SessionProvider>
             <NavBar />
-            <main>
+            <main className='w-full mx-auto max-w-screen-xl px-4 md:px-8 xl:px-10'>
               {children}
               <div className="font-heading">
                 <Toaster richColors />
