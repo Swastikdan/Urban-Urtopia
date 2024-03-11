@@ -4,6 +4,7 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/sonner';
 import NavBar from '@/components/navbar/NavBar';
 import Footer from '@/components/Footer';
+import BottomNav from '@/components/navbar/BottomNav';
 const sans = DM_Sans({
   subsets: ['latin'],
   variable: '--font-sans',
@@ -154,13 +155,13 @@ export default function RootLayout({ children }) {
         >
           <SessionProvider>
             <NavBar />
-            <main className='w-full mx-auto max-w-screen-xl px-4 md:px-8 xl:px-10'>
+            <main className="mx-auto w-full max-w-screen-xl px-4 md:px-8 xl:px-10">
               {children}
               <div className="font-heading">
                 <Toaster richColors />
               </div>
             </main>
-
+            <BottomNav />
             <Footer />
           </SessionProvider>
         </ThemeProvider>
