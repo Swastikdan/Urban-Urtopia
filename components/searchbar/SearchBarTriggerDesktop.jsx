@@ -2,22 +2,18 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Search, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-export default function SearchBarTrigger({
-  Location,
-  CheckIn,
-  CheckOut,
-  Guests,
-}) {
-  function formatDate(dateString) {
-    const date = new Date(dateString);
-    const year =
-      date.getFullYear() === new Date().getFullYear()
-        ? ''
-        : ` ${date.getFullYear()}`;
-    return `${date.getDate()} ${date.toLocaleString('en-US', {
-      month: 'short',
-    })}${year}`;
-  }
+import { useSearchParams } from 'next/navigation';
+import {  formatRangeDate } from '@/utils';
+import { formatGuests } from '@/utils';
+export default function SearchBarTriggerDesktop() {
+
+  const searchParams = useSearchParams();
+
+  // Extracting values from URL
+  const Location = searchParams.get('location') || '';
+  const CheckIn = searchParams.get('checkin') || '';
+  const CheckOut = searchParams.get('checkout') || '';
+  const Guests = JSON.parse(searchParams.get('guests'));
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -43,7 +39,8 @@ export default function SearchBarTrigger({
                 Location ? 'font-medium text-black' : 'text-gray-700'
               }`}
             >
-              {Location || 'Anywhere'}
+              {Location.charAt(0).toUpperCase() + Location.slice(1) ||
+                'Anywhere'}
             </div>
           )}
           {isLoading ? (
@@ -56,13 +53,16 @@ export default function SearchBarTrigger({
                 CheckIn && CheckOut ? 'font-medium text-black' : 'text-gray-700'
               }`}
             >
-              {CheckIn && CheckOut
+              {/* {CheckIn && CheckOut
                 ? new Date(CheckIn).getMonth() ===
                     new Date(CheckOut).getMonth() &&
                   new Date(CheckIn).getFullYear() ===
                     new Date(CheckOut).getFullYear()
                   ? `${new Date(CheckIn).getDate()}–${formatDate(CheckOut)}`
                   : `${formatDate(CheckIn)} – ${formatDate(CheckOut)}`
+                : 'Add Date'} */}
+              {CheckIn && CheckOut
+                ? formatRangeDate(CheckIn, CheckOut)
                 : 'Add Date'}
             </div>
           )}
@@ -76,7 +76,9 @@ export default function SearchBarTrigger({
                 Guests ? 'font-medium text-black' : 'text-gray-700'
               }`}
             >
-              {Guests ? `${Guests} Guests` : 'Add Guests'}
+              {Guests
+                ? `${formatGuests(Guests, { noInfants: true })}`
+                : 'Add Guests'}
             </div>
           )}
         </div>
@@ -85,8 +87,10 @@ export default function SearchBarTrigger({
           <Search width={20} height={20} className="text-white" />
         </div>
       </div>
-
-      {/* <div className="flex w-full items-center rounded-full  bg-gray-100 p-1 md:hidden md:w-auto">
+    </>
+  );
+}
+{/* <div className="flex w-full items-center rounded-full  bg-gray-100 p-1 md:hidden md:w-auto">
         <div className="px-3 py-2">
           {Location || CheckIn || CheckOut || Guests ? (
             <Link href="/">
@@ -122,6 +126,3 @@ export default function SearchBarTrigger({
           </div>
         )}
       </div> */}
-    </>
-  );
-}

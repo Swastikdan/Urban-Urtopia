@@ -1,7 +1,13 @@
-import React from 'react'
+import SearchBarDesktop from "./SearchBarDesktop"
+import SearchBarMobile from "./SearchBarMobile"
 
 export default function SearchBar() {
   return (
-    <div>SearchBar</div>
+    <>
+      <div className="flex w-full md:hidden">
+      <SearchBarMobile /></div>
+      <div className="hidden md:flex w-auto">
+      <SearchBarDesktop /></div>
+    </>
   )
 }

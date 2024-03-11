@@ -1,12 +1,15 @@
+"use client";
 import React, { useEffect, useState } from 'react';
-import { Link,  useLocation } from 'react-router-dom';
-import { useAuth } from '../../../hooks';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import { Home, LayoutDashboard } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 export default function BottomNav() {
-  const auth = useAuth();
-  const { user } = auth;
-  const { pathname } = useLocation();
+
+  const { data: session } = useSession();
+  const user = session?.user;
+   const pathname = usePathname();
 
   const [lastScrollTop, setLastScrollTop] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
@@ -35,14 +38,14 @@ export default function BottomNav() {
     >
       <div className="mx-auto flex  h-full  max-w-[15rem] justify-between space-x-10 py-2 ">
         <Link
-          to="/"
+          href="/"
           className={`inline-flex flex-col items-center justify-center ${pathname === '/' ? ' text-primary ' : 'font-light'}`}
         >
           <Home size={28} className="my-1" />
           <span className="pt-1 text-xs ">Home</span>
         </Link>
         <Link
-          to={user ? "/dashboard" : "/login"}
+          href={user ? '/dashboard' : '/login'}
           className={`inline-flex flex-col items-center justify-center ${pathname === '/dashboard' ? ' text-primary ' : 'font-light'}`}
         >
           <LayoutDashboard size={28} className="my-1" />
@@ -50,14 +53,14 @@ export default function BottomNav() {
         </Link>
         {user ? (
           <Link
-            to="/account"
+            href="/account"
             className={`inline-flex flex-col items-center justify-center ${pathname === '/account' ? ' text-primary ' : 'font-light'}`}
           >
             <Avatar
               className={`h-8 w-8  ${pathname === '/account' ? ' ring-[2px] ring-primary ' : ''}`}
             >
               <AvatarImage
-                src={user?.picture}
+                src={user?.image}
                 alt={`${user.name || 'user'} profile image`}
               />
               <AvatarFallback className="bg-black text-white">
@@ -68,7 +71,7 @@ export default function BottomNav() {
           </Link>
         ) : (
           <Link
-            to="/login"
+            href="/login"
             className="inline-flex flex-col  items-center justify-center  "
           >
             <Avatar className="h-8 w-8 ">

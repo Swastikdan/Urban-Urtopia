@@ -56,25 +56,26 @@ export default function CatagorySlider() {
           </button>
         )}
         {isLoading ? (
-          <div className="mx-[17px] -mt-3 mb-3 h-12 w-full animate-pulse rounded-xl bg-gray-200 "></div>
+          <div className="mx-[17px] -mt-2 mb-0 h-[50px] w-full min-w-[85vw] animate-pulse rounded-xl bg-gray-200 "></div>
         ) : (
           <Swiper
             onSwiper={setSwiper}
             direction={'horizontal'}
-            slidesPerView={4}
+            slidesPerView={5}
             mousewheel={true}
             slidesPerGroup={3}
             freeMode={true}
             navigation={{ nextEl: '.nextButton', prevEl: '.prevButton' }}
             breakpoints={{
-              400: { slidesPerView: 5 },
-              640: { slidesPerView: 6 },
-              768: { slidesPerView: 7 },
-              1120: { slidesPerView: 9 },
-              1280: { slidesPerView: 10 },
-              1536: { slidesPerView: 13 },
-              1920: { slidesPerView: 14 },
-              2560: { slidesPerView: 18 },
+              400: { slidesPerView: 6 },
+              640: { slidesPerView: 9 },
+              768: { slidesPerView: 8 },
+              1024: { slidesPerView: 10 },
+              1120: { slidesPerView: 10 },
+              1280: { slidesPerView: 13 },
+              1536: { slidesPerView: 14 },
+              1920: { slidesPerView: 15 },
+              2560: { slidesPerView: 19 },
             }}
             modules={[FreeMode, Mousewheel, Navigation]}
             className="mySwiper"

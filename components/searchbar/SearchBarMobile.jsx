@@ -1,6 +1,7 @@
 'use client';
 // Demo Url /?location=NewYork&checkin=2023-Jan-01&checkout=2023-01-07&guests=4
 import { useSearchParams } from 'next/navigation';
+
 import {
   Drawer,
   DrawerClose,
@@ -20,7 +21,7 @@ export default function SearchBarMobile() {
   const Location = searchParams.get('location') || '';
   const CheckIn = searchParams.get('checkin') || '';
   const CheckOut = searchParams.get('checkout') || '';
-  const Guests = searchParams.get('guests') || '';
+   const Guests = JSON.parse(searchParams.get('guests'));
 
   return (
     <>

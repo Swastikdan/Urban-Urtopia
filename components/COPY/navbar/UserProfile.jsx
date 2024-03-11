@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
@@ -40,21 +40,21 @@ export default function UserProfile({ user, handleLogout }) {
               (user?.name?.length > 10 ? '...' : '') || 'Guest'}
           </DropdownMenuLabel>
           <DropdownMenuSeparator className="h-[.5px]  bg-black dark:bg-white" />
-          <Link to="/account">
+          <Link href="/account">
             <DropdownMenuItem className="flex cursor-pointer items-center rounded-md">
               <CircleUser width={15} />
               <span className="pl-2">Profile</span>
             </DropdownMenuItem>
           </Link>
 
-          <Link to="/dashboard">
+          <Link href="/dashboard">
             <DropdownMenuItem className="flex cursor-pointer items-center rounded-md">
               <LayoutDashboard width={15} />{' '}
               <span className="pl-2">Dashboard</span>
             </DropdownMenuItem>
           </Link>
 
-          <Link to="/dashboard">
+          <Link href="/dashboard">
             <DropdownMenuItem className="flex cursor-pointer items-center rounded-md">
               <Plus width={15} />
               <span className="pl-2">

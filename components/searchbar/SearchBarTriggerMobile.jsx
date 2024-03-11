@@ -2,40 +2,30 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Search, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+import { formatRangeDate } from '@/utils';
+import { formatGuests } from '@/utils';
 export default function SearchBarTriggerMobile({
   Location,
   CheckIn,
   CheckOut,
   Guests,
 }) {
+  const [isLoading, setIsLoading] = useState(true);
 
-   function formatDate(dateString) {
-     const date = new Date(dateString);
-     const year =
-       date.getFullYear() === new Date().getFullYear()
-         ? ''
-         : ` ${date.getFullYear()}`;
-     return `${date.getDate()} ${date.toLocaleString('en-US', {
-       month: 'short',
-     })}${year}`;
-   }
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    });
 
-   const [isLoading, setIsLoading] = useState(true);
-
-   useEffect(() => {
-     const timer = setTimeout(() => {
-       setIsLoading(false);
-     });
-
-     return () => clearTimeout(timer);
-   }, []);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <>
       <div className="flex w-full items-center rounded-full  bg-gray-100 p-1 md:hidden md:w-auto">
-        <div className="px-3 py-2">
+        <div className="mr-2 rounded-full bg-white px-3 py-3">
           {Location || CheckIn || CheckOut || Guests ? (
-            <Link href="/">
+            <Link href="/" className=" ">
               <ArrowLeft width={20} height={20} />
             </Link>
           ) : (
@@ -48,21 +38,27 @@ export default function SearchBarTriggerMobile({
         ) : (
           <div className="flex flex-col text-sm">
             <div className="text-start text-base font-semibold">
-              {Location || 'Anywhere'}
+              {Location.charAt(0).toUpperCase() + Location.slice(1) ||
+                'Anywhere'}
             </div>
             <div className="flex pb-1 text-xs">
               <span className="border-r-[1px] pr-1">
-                {CheckIn && CheckOut
+                {/* {CheckIn && CheckOut
                   ? new Date(CheckIn).getMonth() ===
                       new Date(CheckOut).getMonth() &&
                     new Date(CheckIn).getFullYear() ===
                       new Date(CheckOut).getFullYear()
                     ? `${new Date(CheckIn).getDate()}–${formatDate(CheckOut)}`
                     : `${formatDate(CheckIn)} – ${formatDate(CheckOut)}`
+                  : 'Add Date'} */}
+                {CheckIn && CheckOut
+                  ? formatRangeDate(CheckIn, CheckOut)
                   : 'Add Date'}
               </span>
               <span className="pl-1">
-                {Guests ? `${Guests} Guests` : 'Add Guests'}
+                {Guests
+                  ? `${formatGuests(Guests, { noInfants: true })}`
+                  : 'Add Guests'}
               </span>
             </div>
           </div>
