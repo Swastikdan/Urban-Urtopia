@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Suspense} from 'react'
 import getPlaces from './server/places/getPlaces'
 import Places from '@/components/places/Places'
 export default async function page() {
@@ -10,8 +10,10 @@ export default async function page() {
   return (
   <section>
 
+<Suspense fallback={<div>Loading...</div>}>
 
 <Places />
+</Suspense>
 
   </section>
   )
