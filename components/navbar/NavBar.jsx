@@ -29,15 +29,15 @@ export default function NavBar({ className }) {
     // <header className="sticky top-0 mx-auto flex w-full  max-w-[1440px] flex-col  items-center bg-white px-6 dark:bg-black md:px-14">
     <header
       className={cn(
-        'sticky top-0 z-50 mx-auto flex w-full max-w-[1440px] flex-col  items-center bg-white  dark:bg-black ',
-        { 'shadow-md': scrolled },
+        ' sticky top-0 z-50 mx-auto flex w-full max-w-[1440px] flex-col  items-center bg-white   dark:bg-black',
+        { ' shadow-md': scrolled },
         className,
       )}
     >
-      <nav className="flex h-full w-full max-w-screen-xl items-center justify-between px-2 py-5">
+      <nav className=" flex h-full w-full max-w-screen-xl items-center justify-between  px-2">
         <Link
           href="/"
-          className="hidden items-center space-x-2 text-xl font-bold md:flex  "
+          className="hidden items-center space-x-2 text-xl font-bold md:flex   "
         >
           <Image src="/logo_small.svg" alt="Nestly" width={40} height={20} />
           <h1>Nestly</h1>
@@ -54,7 +54,7 @@ export default function NavBar({ className }) {
                 <SearchBarTriggerDesktop />
               </Suspense>
             </div>
-            <div className=" flex items-center  md:hidden">
+            <div className=" flex items-center  md:hidden pt-5">
               <div className="ml-2 flex w-full ">
                 <Suspense
                   fallback={
@@ -67,21 +67,21 @@ export default function NavBar({ className }) {
             </div>
           </div>
         ) : (
-          <div className="w-full md:w-auto"></div>
+          <div className="w-full md:w-auto "></div>
         )}
 
         {/* <ModeToggle /> */}
         {path === '/' ? (
-          <div className="ml-2 md:hidden">
+          <div className="ml-2 md:hidden pt-5">
             <Sort />
           </div>
         ) : null}
-        <div className="hidden md:flex">
+        <div className="hidden md:flex py-5">
           <UserMenu />
         </div>
       </nav>
       {path === '/' ? (
-        <div className="w-full  ">
+        <div className="w-full  pt-5">
           <CatagoryWithSort />
         </div>
       ) : null}

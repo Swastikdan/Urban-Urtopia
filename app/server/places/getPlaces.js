@@ -1,6 +1,7 @@
 'use server';
 import prisma from '@/lib/prisma';
 export default async function getPlaces(category, sort , sortType ){
+
   try {
     // Build where clause for filtering
     const whereClause = {};
