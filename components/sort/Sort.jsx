@@ -18,16 +18,17 @@ export default function Sort() {
   //   navigate(`/${fullUrl.search}`);
   // };
   const router = useRouter();
-  const handleClick = (value) => {
+  const handleClick = (sort, sortType = 'asc') => {
     const fullUrl = new URL(window.location.href);
-    fullUrl.searchParams.set('sort', value);
+    fullUrl.searchParams.set('sort', sort);
+    fullUrl.searchParams.set('sortType', sortType);
     router.push(`/${fullUrl.search}`);
   };
 
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="rounded-xl m-auto items-center">
+      <DropdownMenuTrigger className="m-auto items-center rounded-xl">
         <SortTrigger />
       </DropdownMenuTrigger>
       <DropdownMenuContent className=" mr-5 rounded-xl drop-shadow-xl">
@@ -39,25 +40,25 @@ export default function Sort() {
         </DropdownMenuItem>
         <DropdownMenuItem
           className="flex cursor-pointer items-center rounded-md py-3"
-          onClick={() => handleClick('priceLowToHigh')}
+          onClick={() => handleClick('price', 'asc')}
         >
           Price: Low to High
         </DropdownMenuItem>
         <DropdownMenuItem
           className="flex cursor-pointer items-center rounded-md py-3"
-          onClick={() => handleClick('priceHighToLow')}
+          onClick={() => handleClick('price', 'desc')}
         >
           Price: High to Low
         </DropdownMenuItem>
         <DropdownMenuItem
           className="flex cursor-pointer items-center rounded-md py-3"
-          onClick={() => handleClick('guestsLowToHigh')}
+          onClick={() => handleClick('maxGuests', 'asc')}
         >
           Capacity: Low to High
         </DropdownMenuItem>
         <DropdownMenuItem
           className="flex cursor-pointer items-center rounded-md py-3"
-          onClick={() => handleClick('guestsHighToLow')}
+          onClick={() => handleClick('maxGuests', 'desc')}
         >
           Capacity: High to Low
         </DropdownMenuItem>

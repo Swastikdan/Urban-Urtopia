@@ -46,7 +46,8 @@ model User {
   name          String?
   hashedPassword String?
   email         String?   @unique
-  emailVerified DateTime?
+  emailVerified DateTime? 
+  role          String    @default("user")
   image         String? 
   accounts      Account[]
   sessions      Session[]

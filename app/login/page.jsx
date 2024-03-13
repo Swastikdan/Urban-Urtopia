@@ -10,8 +10,8 @@ export default async function page() {
   }
   return (
     <>
-      <section className=" mx-auto my-10 w-full max-w-md sm:mt-0 md:p-6">
-        <div className="mt-7 rounded-xl border border-gray-200 shadow-sm dark:border-gray-700 sm:bg-white sm:dark:bg-gray-800">
+      <section className=" mx-auto pb-10 sm:my-10 w-full max-w-md sm:mt-0 md:p-6">
+        <div className="sm:mt-7 rounded-xl md:border border-gray-200 shadow-sm dark:border-gray-700 sm:bg-white sm:dark:bg-gray-800">
           <div className="p-4 sm:p-7">
             <div className="text-center">
               <h1 className="block text-4xl font-bold text-gray-800 dark:text-white">

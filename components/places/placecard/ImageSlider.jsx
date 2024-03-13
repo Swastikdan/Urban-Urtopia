@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import React from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
@@ -10,7 +10,7 @@ import { ChevronLeft, ChevronRight, Heart } from 'lucide-react';
 export default function ImageSlider({ customButton, images }) {
   const likeselected = Math.random() < 0.5;
   return (
-    <div className=" group relative m-1 flex h-full min-h-80 items-center justify-center overflow-hidden rounded-xl bg-gray-200 dark:bg-gray-600">
+    <div className=" group relative m-1 flex h-full min-h-[300px] items-center justify-center overflow-hidden rounded-xl bg-gray-200 dark:bg-gray-600">
       <button
         className={`prevButton${customButton} absolute  left-5 -z-10 -mr-10 cursor-pointer rounded-full bg-white py-[6px] pl-[5px] pr-[6px] text-black  opacity-0 shadow-xl transition-all duration-200 hover:scale-105 hover:transition-all disabled:opacity-0 group-hover:z-10 md:opacity-100`}
       >
@@ -38,7 +38,7 @@ export default function ImageSlider({ customButton, images }) {
             <img
               src={img.replace('/upload/', '/upload/w_1000/')}
               alt="property image"
-              className="h-80 w-full object-cover"
+              className="w-full h-[300px] object-cover"
             />
           </SwiperSlide>
         ))}

@@ -1,5 +1,6 @@
 'use client';
 import React, { useState } from 'react';
+import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import validator from 'validator';
 import axios from 'axios';
@@ -149,6 +150,23 @@ export default function RegisterForm() {
       }
     }
   };
+  async function handleOauthSignin(
+    provider,
+    callbackUrl = `${window.location.origin}/`,
+  ) {
+    setLoading(true);
+
+    signIn(provider, { callbackUrl })
+      .then(() => {
+        setLoading(false);
+        toast.success('Logged in successfully');
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error('An unexpected error occurred');
+        setLoading(false);
+      });
+  }
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };

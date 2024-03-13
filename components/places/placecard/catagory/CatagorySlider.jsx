@@ -1,30 +1,26 @@
 'use client';
-
 import React, { useRef, useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation'; // corrected import
+import { useRouter } from 'next/navigation';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { FreeMode, Mousewheel, Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
-import Image from 'next/image';
-import categories from '../../config/categories';
+import { FreeMode, Mousewheel, Navigation } from 'swiper/modules';
+import categories from '@/components/places/config/categories';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-export default function CatagorySlider() {
-  const [swiper, setSwiper] = useState(null);
+export default function page() {
   const router = useRouter();
   const [cat, setCat] = useState('');
   const prevButtonRef = useRef(null);
   const nextButtonRef = useRef(null);
-  const [isLoading, setIsLoading] = useState(true);
-
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const category = params.get('category');
     if (category) {
       setCat(category);
     } else {
-      setCat(''); // Reset category state when no category is selected
+      setCat('');
     }
   }, [router.asPath]);
 
@@ -36,34 +32,30 @@ export default function CatagorySlider() {
   };
   useEffect(() => {
     const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 0); // Adjust the delay as needed
-
+      setLoading(false);
+    }, 0);
     return () => clearTimeout(timer);
   }, []);
   return (
-    <>
-      <div className="flex w-full items-center pl-3 md:w-auto  ">
-        {isLoading ? (
-          <div></div>
-        ) : (
+    <div className="relative flex items-center ">
+      {loading ? (
+        <div className="w-full rounded-xl bg-gray-200 pb-3 mx-4 ">
+          <div className="  h-[50px] w-full  animate-pulse rounded-xl  "></div>
+        </div>
+      ) : (
+        <>
           <button
             ref={prevButtonRef}
-            className="prevButton mx-3 mb-3 hidden cursor-pointer rounded-full  p-[4px] shadow-xl ring-[1.5px] ring-gray-500 transition-all duration-200 hover:scale-105 hover:transition-all disabled:opacity-0 md:flex "
+            className="prevButton absolute left-3 z-10 mb-3  hidden cursor-pointer rounded-full bg-white p-1.5 shadow-xl ring-[1.5px] ring-gray-500 transition-transform duration-200 hover:scale-105 hover:transition-all disabled:opacity-0 md:flex"
           >
-            <ChevronLeft width={18} height={18} />
+            <ChevronLeft strokeWidth={3} width={19} height={19} />
             <span className="sr-only">Previous</span>
           </button>
-        )}
-        {isLoading ? (
-          <div className="mx-[17px] -mt-2 mb-0 h-[50px] w-full min-w-[85vw] animate-pulse rounded-xl bg-gray-200 "></div>
-        ) : (
           <Swiper
-            onSwiper={setSwiper}
             direction={'horizontal'}
             slidesPerView={5}
             mousewheel={true}
-            slidesPerGroup={3}
+            slidesPerGroup={5}
             freeMode={true}
             navigation={{ nextEl: '.nextButton', prevEl: '.prevButton' }}
             breakpoints={{
@@ -78,10 +70,10 @@ export default function CatagorySlider() {
               2560: { slidesPerView: 19 },
             }}
             modules={[FreeMode, Mousewheel, Navigation]}
-            className="mySwiper"
+            className="mySwiper z-0 w-full -mb-0"
           >
             {categories.map((category, index) => (
-              <SwiperSlide key={index}>
+              <SwiperSlide>
                 <div
                   className=" group scale-100 cursor-pointer transition-all duration-200 active:scale-95"
                   onClick={() => handleClick(category.value)}
@@ -92,20 +84,6 @@ export default function CatagorySlider() {
                     }`}
                   >
                     <div>
-                      {/* <Image
-                        
-                        placeholder="blur"
-                        blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN8+vz1WwAJFgOmu+DJrAAAAABJRU5ErkJggg=="
-                        src={category.icon}
-                        alt={category.name}
-                        width={24}
-                        height={24}
-                        quality={100}
-                        onload={(e) => {
-                          e.target.onerror = null; // To prevent infinite loop in case fallback image also fails
-                          e.target.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN8+vz1WwAJFgOmu+DJrAAAAABJRU5ErkJggg=='; // Replace with your fallback image
-                        }}
-                      /> */}
                       <Avatar className="h-5 w-5 rounded-none">
                         <AvatarImage
                           src={category.icon}
@@ -136,19 +114,15 @@ export default function CatagorySlider() {
               </SwiperSlide>
             ))}
           </Swiper>
-        )}
-        {isLoading ? (
-          <div></div>
-        ) : (
           <button
             ref={nextButtonRef}
-            className="nextButton mb-3 ml-3 hidden cursor-pointer rounded-full  p-[4px] shadow-xl ring-[1.5px] ring-gray-500 transition-all duration-200 hover:scale-105 hover:transition-all disabled:opacity-0 md:flex  "
+            className="nextButton absolute right-3 z-10 mb-3   hidden cursor-pointer rounded-full bg-white p-1.5 shadow-xl ring-[1.5px] ring-gray-500 transition-transform duration-200 hover:scale-105 hover:transition-all disabled:opacity-0 md:flex  "
           >
-            <ChevronRight width={18} height={18} />
+            <ChevronRight strokeWidth={3} width={19} height={19} />
             <span className="sr-only">Next</span>
           </button>
-        )}
-      </div>
-    </>
+        </>
+      )}
+    </div>
   );
 }

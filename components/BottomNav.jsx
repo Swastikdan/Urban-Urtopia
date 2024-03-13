@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-import { Home, LayoutDashboard } from 'lucide-react';
+import { Home, LayoutDashboard, ShieldCheck } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 export default function BottomNav() {
 
@@ -36,7 +36,7 @@ export default function BottomNav() {
         isVisible ? 'slide-down' : 'slide-up'
       }`}
     >
-      <div className="mx-auto flex  h-full  max-w-[15rem] justify-between space-x-10 py-2 ">
+      <div className="mx-auto flex  h-full  max-w-[15rem] justify-center space-x-10 py-2 ">
         <Link
           href="/"
           className={`inline-flex flex-col items-center justify-center ${pathname === '/' ? ' text-primary ' : 'font-light'}`}
@@ -44,6 +44,7 @@ export default function BottomNav() {
           <Home size={28} className="my-1" />
           <span className="pt-1 text-xs ">Home</span>
         </Link>
+
         <Link
           href={user ? '/dashboard' : '/login'}
           className={`inline-flex flex-col items-center justify-center ${pathname === '/dashboard' ? ' text-primary ' : 'font-light'}`}
@@ -51,6 +52,16 @@ export default function BottomNav() {
           <LayoutDashboard size={28} className="my-1" />
           <span className="pt-1 text-xs ">Dashboard</span>
         </Link>
+        {user && user.role === 'admin' && (
+          <Link
+            href="/admin"
+            className={`inline-flex flex-col items-center justify-center ${pathname === '/admin' ? ' text-primary ' : 'font-light'}`}
+          >
+            <ShieldCheck size={28} className="my-1" />
+            <span className="pt-1 text-xs ">Admin</span>
+          </Link>
+        )}
+
         {user ? (
           <Link
             href="/account"

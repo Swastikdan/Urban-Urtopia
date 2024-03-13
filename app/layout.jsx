@@ -1,10 +1,9 @@
 import './globals.css';
 import { DM_Sans, Sora } from 'next/font/google';
-import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/sonner';
 import NavBar from '@/components/navbar/NavBar';
 import Footer from '@/components/Footer';
-import BottomNav from '@/components/navbar/BottomNav';
+import BottomNav from '@/components/BottomNav';
 const sans = DM_Sans({
   subsets: ['latin'],
   variable: '--font-sans',
@@ -139,32 +138,24 @@ export default function RootLayout({ children }) {
       <head />
       <body
         className={`${sans.variable} ${sora.variable} overflow-y-auto 
-  scroll-smooth 
-  [&::-webkit-scrollbar-thumb]:bg-gray-400
-  dark:[&::-webkit-scrollbar-thumb]:bg-slate-500
-  
-  [&::-webkit-scrollbar-track]:rounded-full
-  [&::-webkit-scrollbar-track]:bg-gray-100
-  dark:[&::-webkit-scrollbar-track]:bg-slate-700  [&::-webkit-scrollbar]:w-2`}
+          scroll-smooth 
+        [&::-webkit-scrollbar-thumb]:bg-gray-400
+        dark:[&::-webkit-scrollbar-thumb]:bg-slate-500
+          [&::-webkit-scrollbar-track]:rounded-full
+        [&::-webkit-scrollbar-track]:bg-gray-100
+        dark:[&::-webkit-scrollbar-track]:bg-slate-700  [&::-webkit-scrollbar]:w-2`}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableLight
-          disableTransitionOnChange
-        >
-          <SessionProvider>
-            <NavBar />
-            <main className="mx-auto w-full max-w-screen-xl px-4 md:px-8 xl:px-10">
-              {children}
-              <div className="font-heading">
-                <Toaster richColors />
-              </div>
-            </main>
-            <BottomNav />
-            <Footer />
-          </SessionProvider>
-        </ThemeProvider>
+        <SessionProvider>
+          <NavBar />
+          <main className="mx-auto w-full  ">
+            {children}
+            <div className="font-heading">
+              <Toaster richColors />
+            </div>
+          </main>
+          <BottomNav />
+          <Footer />
+        </SessionProvider>
       </body>
     </html>
   );

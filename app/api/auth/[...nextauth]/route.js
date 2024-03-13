@@ -72,22 +72,18 @@ export const authOptions = {
     session: async ({ session, token }) => {
       if (session?.user) {
         session.user.id = token.sub;
+        session.user.role = token.role;
+
       }
       return session;
     },
     jwt: async ({ user, token }) => {
       if (user) {
         token.uid = user.id;
+        token.role= user.role;
       }
       return token;
     },
-  //   async redirect({ url, baseUrl }) {
-  //   // Allows relative callback URLs
-  //   if (url.startsWith("/")) return `${baseUrl}${url}`
-  //   // Allows callback URLs on the same origin
-  //   else if (new URL(url).origin === baseUrl) return url
-  //   return baseUrl
-  // }
   },
 };
 

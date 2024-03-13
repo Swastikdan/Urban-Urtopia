@@ -39,7 +39,7 @@ export default function SearchBarTriggerDesktop() {
                 Location ? 'font-medium text-black' : 'text-gray-700'
               }`}
             >
-              {Location.charAt(0).toUpperCase() + Location.slice(1) ||
+              {Location?.charAt(0).toUpperCase() + Location.slice(1) ||
                 'Anywhere'}
             </div>
           )}

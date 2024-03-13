@@ -1,15 +1,19 @@
 'use client';
 import React, { useRef, useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Search, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { formatRangeDate } from '@/utils';
 import { formatGuests } from '@/utils';
 export default function SearchBarTriggerMobile({
-  Location,
-  CheckIn,
-  CheckOut,
-  Guests,
 }) {
+    const searchParams = useSearchParams();
+
+    // Extracting values from URL
+    const Location = searchParams.get('location') || '';
+    const CheckIn = searchParams.get('checkin') || '';
+    const CheckOut = searchParams.get('checkout') || '';
+    const Guests = JSON.parse(searchParams.get('guests'));
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -22,7 +26,7 @@ export default function SearchBarTriggerMobile({
 
   return (
     <>
-      <div className="flex w-full items-center rounded-full  bg-gray-100 p-1 md:hidden md:w-auto">
+      <div className="flex w-full items-center rounded-full  bg-gray-100 p-1 -ml-2 md:hidden md:w-auto">
         <div className="mr-2 rounded-full bg-white px-3 py-3">
           {Location || CheckIn || CheckOut || Guests ? (
             <Link href="/" className=" ">
