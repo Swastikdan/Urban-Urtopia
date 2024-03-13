@@ -5,15 +5,14 @@ import { Search, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { formatRangeDate } from '@/utils';
 import { formatGuests } from '@/utils';
-export default function SearchBarTriggerMobile({
-}) {
-    const searchParams = useSearchParams();
+export default function SearchBarTriggerMobile({}) {
+  const searchParams = useSearchParams();
 
-    // Extracting values from URL
-    const Location = searchParams.get('location') || '';
-    const CheckIn = searchParams.get('checkin') || '';
-    const CheckOut = searchParams.get('checkout') || '';
-    const Guests = JSON.parse(searchParams.get('guests'));
+  // Extracting values from URL
+  const Location = searchParams.get('location') || '';
+  const CheckIn = searchParams.get('checkin') || '';
+  const CheckOut = searchParams.get('checkout') || '';
+  const Guests = JSON.parse(searchParams.get('guests'));
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -47,14 +46,6 @@ export default function SearchBarTriggerMobile({
             </div>
             <div className="flex pb-1 text-xs">
               <span className="border-r-[1px] pr-1">
-                {/* {CheckIn && CheckOut
-                  ? new Date(CheckIn).getMonth() ===
-                      new Date(CheckOut).getMonth() &&
-                    new Date(CheckIn).getFullYear() ===
-                      new Date(CheckOut).getFullYear()
-                    ? `${new Date(CheckIn).getDate()}–${formatDate(CheckOut)}`
-                    : `${formatDate(CheckIn)} – ${formatDate(CheckOut)}`
-                  : 'Add Date'} */}
                 {CheckIn && CheckOut
                   ? formatRangeDate(CheckIn, CheckOut)
                   : 'Add Date'}
@@ -68,6 +59,7 @@ export default function SearchBarTriggerMobile({
           </div>
         )}
       </div>
+      
     </>
   );
 }

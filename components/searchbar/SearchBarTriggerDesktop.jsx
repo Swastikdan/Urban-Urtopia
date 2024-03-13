@@ -53,14 +53,6 @@ export default function SearchBarTriggerDesktop() {
                 CheckIn && CheckOut ? 'font-medium text-black' : 'text-gray-700'
               }`}
             >
-              {/* {CheckIn && CheckOut
-                ? new Date(CheckIn).getMonth() ===
-                    new Date(CheckOut).getMonth() &&
-                  new Date(CheckIn).getFullYear() ===
-                    new Date(CheckOut).getFullYear()
-                  ? `${new Date(CheckIn).getDate()}–${formatDate(CheckOut)}`
-                  : `${formatDate(CheckIn)} – ${formatDate(CheckOut)}`
-                : 'Add Date'} */}
               {CheckIn && CheckOut
                 ? formatRangeDate(CheckIn, CheckOut)
                 : 'Add Date'}

@@ -29,7 +29,7 @@ export default function NavBar({ className }) {
     // <header className="sticky top-0 mx-auto flex w-full  max-w-[1440px] flex-col  items-center bg-white px-6 dark:bg-black md:px-14">
     <header
       className={cn(
-        'sticky top-0 mx-auto flex w-full z-50 max-w-[1440px] flex-col  items-center bg-white  dark:bg-black ',
+        'sticky top-0 z-50 mx-auto flex w-full max-w-[1440px] flex-col  items-center bg-white  dark:bg-black ',
         { 'shadow-md': scrolled },
         className,
       )}
@@ -46,14 +46,24 @@ export default function NavBar({ className }) {
         {path === '/' ? (
           <div className="w-full md:w-auto">
             <div className="hidden md:flex">
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense
+                fallback={
+                  <div className="-ml-2 flex h-[50px]  w-full animate-pulse items-center rounded-full bg-gray-200 p-1"></div>
+                }
+              >
                 <SearchBarTriggerDesktop />
               </Suspense>
             </div>
-            <div className="ml-2 md:hidden">
-              <Suspense fallback={<div>Loading...</div>}>
-                <SearchBarMobile />
-              </Suspense>
+            <div className=" flex items-center  md:hidden">
+              <div className="ml-2 flex w-full ">
+                <Suspense
+                  fallback={
+                    <div className="-ml-2 flex h-[50px]  w-full animate-pulse items-center rounded-full bg-gray-200 p-1"></div>
+                  }
+                >
+                  <SearchBarMobile />
+                </Suspense>
+              </div>
             </div>
           </div>
         ) : (
