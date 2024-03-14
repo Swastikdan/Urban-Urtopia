@@ -54,13 +54,14 @@ model User {
   places        Places[]
   bookings      Bookings[]
   payments      Payments[]
+  favorites     UserFavorites[]
 }
 
 model Places {
   id      String @id @default(auto()) @map("_id") @db.ObjectId
   ownerId String @db.ObjectId
   owner   User   @relation(fields: [ownerId], references: [id])
-  title         String
+  title         String 
   address       String
   state         String
   city          String
@@ -68,6 +69,7 @@ model Places {
   photos        String[]
   description   String
   category      String[]
+  amaenities    String[]
   maxGuests     Int
   price         Float
   status        String   @default("processing")
@@ -77,6 +79,17 @@ model Places {
   numberOfRooms Int?
   capacity      Int?
   bookings      Bookings[]
+  favorites     UserFavorites[]
+   @@index([title , address], name: "search_index")
+}
+
+model UserFavorites {
+  id      String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId  String  @db.ObjectId
+  placeId String  @db.ObjectId
+  user    User    @relation(fields: [userId], references: [id])
+  place   Places  @relation(fields: [placeId], references: [id])
+  @@unique([userId, placeId])
 }
 
 model Bookings {
@@ -92,6 +105,7 @@ model Bookings {
   status    String @default("processing")
   cancelRequest  Boolean  @default(false)
   payment   Payments[]
+
 }
 
 model Payments {

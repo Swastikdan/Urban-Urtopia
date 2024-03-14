@@ -16,12 +16,12 @@ export default function PlacePageMobile({ place }) {
   const { title, address, description, photos } = place;
 
   return (
-    <>
+    <section>
       <div className="w-full max-w-[100vw] overflow-hidden sm:hidden ">
         <ImageGallerySmall
           images={photos}
-          // sheretext={title}
-          // sheretitle={description.slice(0, 50)}
+          title={title}
+          text={description?.slice(0,50)}
         />
       </div>
 
@@ -93,6 +93,6 @@ export default function PlacePageMobile({ place }) {
           </div>
         </div>
       </div>
-    </>
+    </section>
   );
 }

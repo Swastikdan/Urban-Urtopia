@@ -35,7 +35,7 @@ export default function Places() {
     <>
       <div className="mx-auto  my-5 max-w-[1440px]  px-4 md:px-8">
         {!Array.isArray(places) || places.length === 0 ? (
-          <div className="mx-auto flex h-[50vh] w-full flex-col items-center justify-center space-y-3 text-center md:space-y-5">
+          <div className="mx-auto flex h-[70vh] w-full flex-col items-center justify-center space-y-3 text-center md:space-y-5">
             <h1 className="text-2xl font-semibold text-gray-700 md:text-3xl">
               No places found
             </h1>

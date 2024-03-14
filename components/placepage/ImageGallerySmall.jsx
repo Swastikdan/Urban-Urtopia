@@ -7,17 +7,11 @@ import 'swiper/css/navigation';
 import { Pagination } from 'swiper/modules';
 import { useRouter } from 'next/navigation';
 import { ChevronLeft, Heart, Share } from 'lucide-react';
-import ShareButton from '../ShareButton';
-export default function ImageGallerySmall({
-  images,
-  sheretitle,
-  sheretext,
-  url,
-}) {
+export default function ImageGallerySmall({ images, title, text }) {
   const router = useRouter();
   return (
     <>
-      <div className="over relative flex w-full">
+      <div className=" relative flex w-full">
         <div className="absolute top-5 z-20 mx-5  flex w-full justify-between">
           <button
             className="rounded-full bg-white  p-1.5 text-center shadow-md transition-all duration-200 active:scale-90"
@@ -36,11 +30,11 @@ export default function ImageGallerySmall({
               className="rounded-full bg-white p-1.5 text-center shadow-md transition-all duration-200 active:scale-90"
               onClick={() => {
                 if (navigator.share) {
-                  navigator
-                    .share({
-                      url: window.location.href,
-                    })
-                    .catch((error) => alert('Something went wrong '));
+                  navigator.share({
+                    title: title,
+                    text: text,
+                    url: window.location.href,
+                  });
                 } else {
                   alert('Web Share API is not supported in your browser');
                 }
@@ -52,7 +46,7 @@ export default function ImageGallerySmall({
         </div>
         <Swiper
           pagination={{
-            el: '.swiper-pagination',
+            el: '.custom-swiper-pagination',
             type: 'fraction',
           }}
           modules={[Pagination]}
@@ -71,7 +65,9 @@ export default function ImageGallerySmall({
                 />
               </SwiperSlide>
             ))}
-          <span className="swiper-pagination right-5c absolute bottom-5 rounded-md bg-black/70 px-2 py-1 text-xs font-medium text-white"></span>
+          <div className=" absolute bottom-5 right-5 z-10 w-12 ">
+            <span className="custom-swiper-pagination  rounded-md bg-black/70 px-2 py-1 text-xs font-medium text-white"></span>
+          </div>
         </Swiper>
       </div>
     </>
