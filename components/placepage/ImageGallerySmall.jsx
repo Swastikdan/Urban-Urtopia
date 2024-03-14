@@ -32,7 +32,20 @@ export default function ImageGallerySmall({
               <Heart size={20} />
             </button>
 
-            <div className="rounded-full bg-white p-1.5 text-center shadow-md transition-all duration-200 active:scale-90">
+            <div
+              className="rounded-full bg-white p-1.5 text-center shadow-md transition-all duration-200 active:scale-90"
+              onClick={() => {
+                if (navigator.share) {
+                  navigator
+                    .share({
+                      url: window.location.href,
+                    })
+                    .catch((error) => alert('Something went wrong '));
+                } else {
+                  alert('Web Share API is not supported in your browser');
+                }
+              }}
+            >
               <Share size={20} />
             </div>
           </div>
@@ -58,7 +71,7 @@ export default function ImageGallerySmall({
                 />
               </SwiperSlide>
             ))}
-          <span className="swiper-pagination absolute bottom-5 right-5 rounded-md bg-black/70 px-2 py-1 text-xs font-medium text-white"></span>
+          <span className="swiper-pagination right-5c absolute bottom-5 rounded-md bg-black/70 px-2 py-1 text-xs font-medium text-white"></span>
         </Swiper>
       </div>
     </>
