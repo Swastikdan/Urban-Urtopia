@@ -1,18 +1,31 @@
 import './globals.css';
-import { DM_Sans, Sora } from 'next/font/google';
+import { DM_Sans, Sora , Atkinson_Hyperlegible } from 'next/font/google';
 import { Toaster } from '@/components/ui/sonner';
 import NavBar from '@/components/navbar/NavBar';
 import Footer from '@/components/Footer';
 import BottomNav from '@/components/BottomNav';
-const sans = DM_Sans({
+// const sans = DM_Sans({
+//   subsets: ['latin'],
+//   variable: '--font-sans',
+//   display: 'swap',
+// });
+
+// const sora = Sora({
+//   subsets: ['latin'],
+//   variable: '--font-sora',
+//   display: 'swap',
+// });
+const atkinsonRegular = Atkinson_Hyperlegible({
   subsets: ['latin'],
-  variable: '--font-sans',
+  weight: '400',
+  variable: '--font-atkinson-regular',
   display: 'swap',
 });
 
-const sora = Sora({
+const atkinsonBold = Atkinson_Hyperlegible({
   subsets: ['latin'],
-  variable: '--font-sora',
+  weight: '700',
+  variable: '--font-atkinson-bold',
   display: 'swap',
 });
 
@@ -137,7 +150,7 @@ export default function RootLayout({ children }) {
       />
       <head />
       <body
-        className={`${sans.variable} ${sora.variable} overflow-y-auto 
+        className={`${atkinsonRegular.variable} ${atkinsonBold.variable} overflow-y-auto 
           scroll-smooth 
         [&::-webkit-scrollbar-thumb]:bg-gray-400
         dark:[&::-webkit-scrollbar-thumb]:bg-slate-500

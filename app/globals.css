@@ -52,12 +52,22 @@
 }
 */
 body {
-  font-family: var(--font-sans);
+  font-family: var(--font-atkinson-regular);
   
 } 
-.font-heading {
-  font-family: var(--font-sora);
+
+
+.font-body {
+  font-family: var(--font-atkinson-regular);
 }
+
+.font-heading{
+  font-family: var(--font-atkinson-bold);
+
+}
+/* .font-heading {
+  font-family: var(--font-sora);
+} */
 
 
 

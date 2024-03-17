@@ -48,7 +48,7 @@ export default function NavBar({ className }) {
             <div className="hidden md:flex">
               <Suspense
                 fallback={
-                  <div className="-ml-2 flex h-[50px]  w-full animate-pulse items-center rounded-full bg-gray-200 p-1"></div>
+                  <div className="-ml-2 flex h-[50px] min-w-[315px]  w-full animate-pulse items-center rounded-full bg-gray-200 p-1"></div>
                 }
               >
                 <SearchBarTriggerDesktop />
