@@ -39,8 +39,8 @@ export default function page() {
   return (
     <div className="relative flex items-center ">
       {loading ? (
-        <div className="w-full rounded-xl bg-gray-200 pb-3 mx-4 ">
-          <div className="  h-[50px] w-full  animate-pulse rounded-xl  "></div>
+        <div className="w-full rounded-xl   mx-4 ">
+          <div className="  h-[50px] pb-3 mb-1 w-full bg-gray-200 animate-pulse rounded-xl  "></div>
         </div>
       ) : (
         <>

@@ -29,7 +29,7 @@ export default function NavBar({ className }) {
     // <header className="sticky top-0 mx-auto flex w-full  max-w-[1440px] flex-col  items-center bg-white px-6 dark:bg-black md:px-14">
     <header
       className={cn(
-        ' sticky top-0 z-50 mx-auto flex w-full max-w-[1440px] flex-col  items-center bg-white   dark:bg-black',
+        ' sticky top-0 z-50 mx-auto flex w-full  flex-col  items-center bg-white   dark:bg-black',
         { ' shadow-md': scrolled },
         className,
       )}
