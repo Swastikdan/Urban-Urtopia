@@ -1,7 +1,8 @@
 'use server';
 import prisma from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
-export default async function userPlaces() {
+
+export default async function userBookings() {
   const session = await getServerSession();
 
   const user = session?.user;
@@ -18,23 +19,17 @@ export default async function userPlaces() {
       },
     });
 
-    // // If the user is not found, return an error
-    // if (!user) {
-    //   return { code: 404, message: 'User not found' };
-    // }
-
     // Find all places owned by the user
-    const places = await prisma.places.findMany({
+    const bookings = await prisma.bookings.findMany({
       where: {
-        ownerId: user.id,
+        userId: user.id,
       },
     });
 
-    if (!places || places.length === 0) {
-      return { code: 404, message: 'Places not found' };
+    if (!bookings || bookings.length === 0) {
+      return { code: 404, message: 'Bookings not found' };
     }
-
-    return places;
+    return bookings;
   } catch (error) {
     console.error('Error:', error);
     return { code: 500, message: 'Internal Server Error' };

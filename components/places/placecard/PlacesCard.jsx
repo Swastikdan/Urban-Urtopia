@@ -27,8 +27,9 @@ export default function PlacesCard({ place }) {
             10-12 Mar
           </span>
 
-          <span className=" text-[15px] font-medium">
-            <span className="font-sans">₹</span> {price}{' '}
+          <span className=" text-[15px] font-medium ">
+            <span className="font-sans">₹</span>
+            <span className="font-sans">{price}</span>
             <span className="font-light"> night</span>
           </span>
         </div>
