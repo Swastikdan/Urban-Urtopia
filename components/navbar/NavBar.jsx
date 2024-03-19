@@ -39,7 +39,13 @@ export default function NavBar({ className }) {
           href="/"
           className="hidden items-center space-x-2 text-xl font-bold md:flex   "
         >
-          <Image src="/logo_small.svg" alt="Nestly" width={40} height={20} />
+          <Image
+            src="/logo_small.svg"
+            alt="Nestly"
+            width={40}
+            height={20}
+            priority={true}
+          />
           <h1>Nestly</h1>
         </Link>
 
@@ -48,13 +54,13 @@ export default function NavBar({ className }) {
             <div className="hidden md:flex">
               <Suspense
                 fallback={
-                  <div className="-ml-2 flex h-[50px] min-w-[315px]  w-full animate-pulse items-center rounded-full bg-gray-200 p-1"></div>
+                  <div className="-ml-2 flex h-[50px] w-full  min-w-[315px] animate-pulse items-center rounded-full bg-gray-200 p-1"></div>
                 }
               >
                 <SearchBarTriggerDesktop />
               </Suspense>
             </div>
-            <div className=" flex items-center  md:hidden pt-5">
+            <div className=" flex items-center  pt-5 md:hidden">
               <div className="ml-2 flex w-full ">
                 <Suspense
                   fallback={
@@ -72,11 +78,11 @@ export default function NavBar({ className }) {
 
         {/* <ModeToggle /> */}
         {path === '/' ? (
-          <div className="ml-2 md:hidden pt-5">
+          <div className="ml-2 pt-5 md:hidden">
             <Sort />
           </div>
         ) : null}
-        <div className="hidden md:flex py-5">
+        <div className="hidden py-5 md:flex">
           <UserMenu />
         </div>
       </nav>
