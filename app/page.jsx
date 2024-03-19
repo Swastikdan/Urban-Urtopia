@@ -7,10 +7,10 @@ export default async function page() {
 
   return (
     <section>
-      <Suspense fallback={<PlaceLoader />}>
+      {/* <Suspense fallback={<PlaceLoader />}>
         <Places />
-      </Suspense>
-      
+      </Suspense> */}
+      <Places />
     </section>
   );
 }
