@@ -1,9 +1,9 @@
 import React from 'react'
 
 export default function PlaceLoader() {
-  return (
-    <div className="mx-auto   my-5 max-w-[1440px] px-4 md:px-8  ">
+  return (<div className="mx-auto   my-5 max-w-[1440px] px-4 md:px-8  ">
       <div className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2 md:gap-x-6 lg:grid-cols-3 xl:grid-cols-4">
+    
         {Array(12)
           .fill()
           .map((_, i) => (
