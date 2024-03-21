@@ -49,6 +49,7 @@ model User {
   emailVerified DateTime? 
   role          String    @default("user")
   image         String? 
+  bio           String?
   accounts      Account[]
   sessions      Session[]
   places        Places[]

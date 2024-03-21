@@ -73,6 +73,7 @@ export const authOptions = {
       if (session?.user) {
         session.user.id = token.sub;
         session.user.role = token.role;
+        session.user.bio=token.bio;
 
       }
       return session;
@@ -81,6 +82,8 @@ export const authOptions = {
       if (user) {
         token.uid = user.id;
         token.role= user.role;
+        token.bio=user.bio;
+        
       }
       return token;
     },

@@ -10,22 +10,36 @@ import { ArrowLeft } from 'lucide-react';
 export default function Places() {
   const searchParams = useSearchParams();
   const [places, setPlaces] = useState([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-
+    setLoading(true);
     const category = searchParams.get('category') || '';
     const sort = searchParams.get('sort') || '';
     const sortType = searchParams.get('sortType') || '';
-    getPlaces(category, sort, sortType)
+    // getPlaces(category, sort, sortType)
+    //   .then((data) => {
+    //     setPlaces(data);
+    //     setLoading(false);
+    //   })
+    //   .catch((error) => {
+    //     console.error(error);
+    //     setLoading(false);
+    //   });
+    fetch(`/api/places?category=${category}&sort=${sort}&sortType=${sortType}`)
+      .then((res) => res.json())
       .then((data) => {
         setPlaces(data);
-
+        setLoading(false);
       })
       .catch((error) => {
         console.error(error);
+        setLoading(false);
       });
   }, [searchParams]);
 
-
+  if (loading) {
+    return <PlaceLoader />;
+  }
 
   return (
     <>
