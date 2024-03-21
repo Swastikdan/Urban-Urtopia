@@ -128,6 +128,31 @@ export default function ProfileEdit() {
       const data = await res.json();
       if (res.ok) {
         toast.success('Profile updated successfully');
+        // Reset the form and re-fetch the user data
+        setUserData({
+          name: '',
+          image: '',
+          email: '',
+          accountPassword: '',
+          newPassword: '',
+          bio: '',
+        });
+        setPicture('');
+        fetch(`/api/user/${userid}`)
+          .then((res) => res.json())
+          .then((user) => {
+            setUserData({
+              name: user.name || '',
+              image: user.image || '',
+              email: user.email || '',
+              accountPassword: '',
+              newPassword: '',
+              bio: user.bio || '',
+            });
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+          });
       } else {
         toast.error(data.message);
       }
