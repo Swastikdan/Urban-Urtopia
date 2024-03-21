@@ -8,7 +8,18 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 export default function BottomNav() {
 
   const { data: session } = useSession();
-  const user = session?.user;
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    if (session) {
+      fetch(`/api/user/${session.user.id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setUser(data);
+        });
+    }
+  }, [session]);
+
    const pathname = usePathname();
 
   const [lastScrollTop, setLastScrollTop] = useState(0);

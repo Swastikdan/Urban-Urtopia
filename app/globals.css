@@ -52,22 +52,11 @@
 }
 */
 body {
-  font-family: var(--font-atkinson-regular);
-  
+  font-family: var(--font-sans);
 } 
-
-
-.font-body {
-  font-family: var(--font-atkinson-regular);
-}
-
-.font-heading{
-  font-family: var(--font-atkinson-bold);
-
-}
-/* .font-heading {
+.font-heading {
   font-family: var(--font-sora);
-} */
+}
 
 
 

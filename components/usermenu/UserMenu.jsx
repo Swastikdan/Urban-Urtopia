@@ -1,5 +1,5 @@
 'use client ';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
 import {
@@ -22,8 +22,25 @@ import {
 import UserMenuTrigger from './UserMenuTrigger';
 
 export default function UserMenu() {
-  const { data: session } = useSession();
-  const user = session?.user;
+   const { data: session } = useSession();
+  // const id = session?.user?.id;
+
+  // const user = fetch(`/api/user/${id}`).then((res) => res.json());
+
+const [user, setUser] = useState(null);
+
+useEffect(() => {
+  if (session) {
+    fetch(`/api/user/${session.user.id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setUser(data);
+      });
+  }
+}, [session]);
+
+
+  
 
   return (
     <>
