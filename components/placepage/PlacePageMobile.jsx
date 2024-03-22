@@ -21,7 +21,7 @@ export default function PlacePageMobile({ place }) {
         <ImageGallerySmall
           images={photos}
           title={title}
-          text={description?.slice(0,50)}
+          text={description?.slice(0, 50)}
         />
       </div>
 
@@ -69,26 +69,38 @@ export default function PlacePageMobile({ place }) {
           <span className="pb-1  text-xl font-semibold">
             What this place offers
           </span>
-          <div className="flex flex-col gap-2 pt-2">
-            <span className="text-light flex items-center gap-2">
-              <img src="/pictures/amanities/Lockdoor.svg" alt="" width={20} />
-              Lock on bedroom door
+          <div className="flex flex-col gap-2 pt-2 ">
+            <span className="text-light flex items-center gap-2 line-through">
+              <img src="/pictures/amanities/wifi.svg" alt="" width={20} />
+              Wifi
             </span>
             <span className="text-light flex items-center gap-2">
-              <img src="/pictures/amanities/Resortview.svg" alt="" width={20} />
-              Resort view
+              <img src="/pictures/amanities/kitchen.svg" alt="" width={20} />
+              Kitchen
             </span>
             <span className="text-light flex items-center gap-2">
-              <img src="/pictures/amanities/Lockdoor.svg" alt="" width={20} />
-              Courtyard view
+              <img
+                src="/pictures/amanities/free-parking-on-premises.svg"
+                alt=""
+                width={20}
+              />
+              Free parking on premises
+            </span>
+            <span className="text-light flex items-center gap-2 line-through">
+              <img
+                src="/pictures/amanities/paid-parking-on-premises.svg"
+                alt=""
+                width={20}
+              />
+              Paid parking on premises
             </span>
             <span className="text-light flex items-center gap-2">
-              <img src="/pictures/amanities/Lockdoor.svg" alt="" width={20} />
-              Lock on bedroom door
-            </span>
-            <span className="text-light flex items-center gap-2">
-              <img src="/pictures/amanities/Lockdoor.svg" alt="" width={20} />
-              Lock on bedroom door
+              <img
+                src="/pictures/amanities/air-conditioning.svg"
+                alt=""
+                width={20}
+              />
+              Air conditioning
             </span>
           </div>
         </div>

@@ -15,7 +15,7 @@ export default function loading() {
             </div>
           </div>
         </div>
-      </div>{' '}
+      </div>
     </div>
   );
 }

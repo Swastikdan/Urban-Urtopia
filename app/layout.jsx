@@ -1,5 +1,5 @@
 import './globals.css';
-import { DM_Sans, Sora } from 'next/font/google';
+import { DM_Sans, Sora, Pathway_Extreme } from 'next/font/google';
 import { Toaster } from '@/components/ui/sonner';
 import NavBar from '@/components/navbar/NavBar';
 import Footer from '@/components/Footer';
@@ -14,6 +14,13 @@ const sora = Sora({
   subsets: ['latin'],
   variable: '--font-sora',
   display: 'swap',
+});
+
+const pathway_extreme = Pathway_Extreme({
+  subsets: ['latin'],
+  variable: '--font-pathway-extreme',
+  display: 'swap',
+  // weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
 });
 
 export const metadata = {
@@ -137,7 +144,7 @@ export default function RootLayout({ children }) {
       />
       <head />
       <body
-        className={`${sans.variable} ${sora.variable} overflow-y-auto 
+        className={`${pathway_extreme.variable} overflow-y-auto 
           scroll-smooth 
         [&::-webkit-scrollbar-thumb]:bg-gray-400
         dark:[&::-webkit-scrollbar-thumb]:bg-slate-500

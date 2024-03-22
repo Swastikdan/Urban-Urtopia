@@ -1,199 +1,208 @@
 'use client';
 import { useRef, useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
 import { toast } from 'sonner';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Eye, EyeOff, Upload, Loader2 } from 'lucide-react';
-import bcrypt from 'bcryptjs';
+import { Button } from './ui/button';
 
 export default function ProfileEdit() {
- const { data: session, loading: sessionLoading } = useSession();
- const uploadRef = useRef(null);
- const [loading, setLoading] = useState(false);
- const [picture, setPicture] = useState('');
- const [userData, setUserData] = useState({});
- const [userLoading, setUserLoading] = useState(true);
- const [showAccountPassword, setShowAccountPassword] = useState(false);
+  const { data: session, loading: sessionLoading } = useSession();
+  const uploadRef = useRef(null);
+  const [loading, setLoading] = useState(false);
+  const [picture, setPicture] = useState('');
+  const [userData, setUserData] = useState({});
+  const [userLoading, setUserLoading] = useState(true);
+  const [showAccountPassword, setShowAccountPassword] = useState(false);
 
- const [showNewPassword, setShowNewPassword] = useState(false);
- let userid = session?.user?.id;
- useEffect(() => {
-   if (session) {
-     const id = session.user.id;
-     fetch(`/api/user/${id}`)
-       .then((res) => res.json())
-       .then((user) => {
-         setUserData({
-           name: user.name || '',
-           image: user.image || '',
-           email: user.email || '',
-           accountPassword: '',
-           newPassword: '',
-           bio: user.bio || '',
-           passwordAvailable: user.passwordAvailable,
-         });
-         setUserLoading(false);
-       })
-       .catch((error) => {
-         console.error('Error:', error);
-         setUserLoading(false);
-       });
-   }
- }, [session]);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  let userid = session?.user?.id;
+  useEffect(() => {
+    if (session) {
+      const id = session.user.id;
+      fetch(`/api/user/${id}`)
+        .then((res) => res.json())
+        .then((user) => {
+          setUserData({
+            name: user.name || '',
+            image: user.image || '',
+            email: user.email || '',
+            accountPassword: '',
+            newPassword: '',
+            bio: user.bio || '',
+            passwordAvailable: user.passwordAvailable,
+          });
+          setUserLoading(false);
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+          setUserLoading(false);
+        });
+    }
+  }, [session]);
 
- if (sessionLoading || !session || userLoading) {
-   return <div>Loading...</div>;
- }
+  if (sessionLoading || !session || userLoading) {
+    return <div>Loading...</div>;
+  }
 
- const handleImageClick = () => {
-   uploadRef.current.click();
- };
+  const handleImageClick = () => {
+    uploadRef.current.click();
+  };
 
- const handlePictureChange = (e) => {
-   const file = e.target.files[0];
-   setPicture(file);
- };
+  const handlePictureChange = (e) => {
+    const file = e.target.files[0];
+    setPicture(file);
+  };
 
- const handleUserData = (e) => {
-   const { name, value } = e.target;
-   setUserData({ ...userData, [name]: value });
- };
+  const handleUserData = (e) => {
+    const { name, value } = e.target;
+    setUserData({ ...userData, [name]: value });
+  };
 
- const handleSaveChanges = async () => {
-   setLoading(true);
-   let { name, accountPassword, newPassword, bio } = userData;
-   
-   if (name.trim() === '') {
-     setLoading(false);
-     return toast.error("Name can't be empty");
-   } else if (name.trim().length < 3) {
-     setLoading(false);
-     return toast.error('Name must be at least 3 characters');
-   } else if (name.trim().length > 50) {
-     setLoading(false);
-     return toast.error("Name can't be more than 50 characters");
-   }
+  const handleSaveChanges = async () => {
+    setLoading(true);
+    let { name, accountPassword, newPassword, bio } = userData;
 
-   if (newPassword) {
-     if (accountPassword.trim() === '') {
-       setLoading(false);
-       return toast.error('Current password is required');
-     } else if (newPassword.trim().length < 8) {
-       setLoading(false);
-       return toast.error('Password too short. Use minimum 8 characters.');
-     } else if (!/[a-z]/.test(newPassword)) {
-       setLoading(false);
-       return toast.error('Password needs at least one lowercase letter.');
-     } else if (!/[A-Z]/.test(newPassword)) {
-       setLoading(false);
-       return toast.error('Password needs at least one uppercase letter.');
-     } else if (!/[0-9]/.test(newPassword)) {
-       setLoading(false);
-       return toast.error('Password needs at least one number.');
-     } else if (!/[!@#$%^&*]/.test(newPassword)) {
-       setLoading(false);
-       return toast.error('Password needs at least one symbol (!@#$%^&*).');
-     }
-   }
+    if (name.trim() === '') {
+      setLoading(false);
+      return toast.error("Name can't be empty");
+    } else if (name.trim().length < 3) {
+      setLoading(false);
+      return toast.error('Name must be at least 3 characters');
+    } else if (name.trim().length > 50) {
+      setLoading(false);
+      return toast.error("Name can't be more than 50 characters");
+    }
 
-   try {
-     let pictureUrl = '';
-     if (picture) {
-       const formData = new FormData();
-       formData.append('photos', picture);
-       const res = await fetch('/api/upload/profile-photo', {
-         method: 'POST',
-         body: formData,
-       });
-       const data = await res.json();
-       pictureUrl = data.url;
-     }
+    if (newPassword) {
+      if (accountPassword.trim() === '') {
+        setLoading(false);
+        return toast.error('Current password is required');
+      } else if (newPassword.trim().length < 8) {
+        setLoading(false);
+        return toast.error('Password too short. Use minimum 8 characters.');
+      } else if (!/[a-z]/.test(newPassword)) {
+        setLoading(false);
+        return toast.error('Password needs at least one lowercase letter.');
+      } else if (!/[A-Z]/.test(newPassword)) {
+        setLoading(false);
+        return toast.error('Password needs at least one uppercase letter.');
+      } else if (!/[0-9]/.test(newPassword)) {
+        setLoading(false);
+        return toast.error('Password needs at least one number.');
+      } else if (!/[!@#$%^&*]/.test(newPassword)) {
+        setLoading(false);
+        return toast.error('Password needs at least one symbol (!@#$%^&*).');
+      }
+    }
 
-     let userImage;
-     if (pictureUrl) {
-       userImage = pictureUrl;
-     } else {
-       userImage = userData.image;
-     }
-if (
-  (name === userData.name &&
-    accountPassword === '' &&
-    newPassword === '' &&
-    bio === userData.bio,
-  userImage === userData.image)
-) {
-  setLoading(false);
-  return toast.error('No changes made');
-}
-     const userDetails = {
-       name,
-       accountPassword,
-       newPassword,
-       image: userImage,
-       bio,
-     };
+    try {
+      let pictureUrl = '';
+      if (picture) {
+        const formData = new FormData();
+        formData.append('photos', picture);
+        const res = await fetch('/api/upload/profile-photo', {
+          method: 'POST',
+          body: formData,
+        });
+        const data = await res.json();
+        pictureUrl = data.url;
+      }
 
-     console.log(userDetails);
-     //post request to  /api/user/[id] with userDetails
-     const res = await fetch(`/api/user/${userid}`, {
-       method: 'POST',
-       headers: {
-         'Content-Type': 'application/json',
-       },
-       body: JSON.stringify(userDetails),
-     });
-     const data = await res.json();
-     if (res.ok) {
-       toast.success('Profile updated successfully');
-       // Reset the form and re-fetch the user data
-       setUserData({
-         name: '',
-         image: '',
-         email: '',
-         accountPassword: '',
-         newPassword: '',
-         bio: '',
-       });
-       setPicture('');
-       fetch(`/api/user/${userid}`)
-         .then((res) => res.json())
-         .then((user) => {
-           setUserData({
-             name: user.name || '',
-             image: user.image || '',
-             email: user.email || '',
-             accountPassword: '',
-             newPassword: '',
-             bio: user.bio || '',
-           });
-         })
-         .catch((error) => {
-           console.error('Error:', error);
-         });
-     } else {
-       toast.error(data.message);
-     }
-     setLoading(false);
-   } catch (error) {
-     console.error(error);
-     setLoading(false);
-     toast.error('Something Went Wrong');
-   }
- };
- const toggleAccountPasswordVisibility = () => {
-   setShowAccountPassword(!showAccountPassword);
- };
- const toggleNewPasswordVisibility = () => {
-   setShowNewPassword(!showNewPassword);
- };
+      let userImage;
+      if (pictureUrl) {
+        userImage = pictureUrl;
+      } else {
+        userImage = userData.image;
+      }
+      if (
+        name === userData.name &&
+        accountPassword === '' &&
+        newPassword === '' &&
+        bio === userData.bio &&
+        userImage === userData.image
+      ) {
+        setLoading(false);
+        return toast.error('No changes made');
+      }
+      const userDetails = {
+        name,
+        accountPassword,
+        newPassword,
+        image: userImage,
+        bio,
+      };
+
+      console.log(userDetails);
+      //post request to  /api/user/[id] with userDetails
+      const res = await fetch(`/api/user/${userid}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userDetails),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        toast.success('Profile updated successfully');
+        // Reset the form and re-fetch the user data
+        setUserData({
+          name: '',
+          image: '',
+          email: '',
+          accountPassword: '',
+          newPassword: '',
+          bio: '',
+        });
+        setPicture('');
+        fetch(`/api/user/${userid}`)
+          .then((res) => res.json())
+          .then((user) => {
+            setUserData({
+              name: user.name || '',
+              image: user.image || '',
+              email: user.email || '',
+              accountPassword: '',
+              newPassword: '',
+              bio: user.bio || '',
+            });
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+          });
+      } else {
+        toast.error(data.message);
+      }
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+      setLoading(false);
+      toast.error('Something Went Wrong');
+    }
+  };
+  const toggleAccountPasswordVisibility = () => {
+    setShowAccountPassword(!showAccountPassword);
+  };
+  const toggleNewPasswordVisibility = () => {
+    setShowNewPassword(!showNewPassword);
+  };
   return (
     <>
       <div className="rounded-xl bg-white p-1 px-4 dark:bg-slate-900  sm:p-7 md:px-8">
         <div className="mb-8">
-          <h2 className="text-4xl font-bold text-gray-800 dark:text-gray-200 md:text-5xl">
-            Profile
-          </h2>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+          <div className="flex items-center justify-between">
+            <h2 className="text-4xl font-bold text-gray-800 dark:text-gray-200 md:text-5xl">
+              Profile
+            </h2>
+            <Button
+              variant="destructive"
+              className="font-semibold md:text-lg"
+              onClick={() => signOut()}
+            >
+              Log Out
+            </Button>
+          </div>
+          <p className="text-sm text-gray-600 dark:text-gray-400 pt-3">
             Manage your account settings.
           </p>
         </div>
@@ -201,7 +210,7 @@ if (
         <form>
           <div className="grid gap-2 sm:grid-cols-12 sm:gap-6">
             <div className="sm:col-span-3">
-              <label className="mt-2.5 inline-block text-sm text-gray-800 dark:text-gray-200">
+              <label className="mt-2.5 inline-block font-semibold  text-gray-800 dark:text-gray-200">
                 Profile photo
               </label>
             </div>
@@ -250,7 +259,7 @@ if (
             <div className="sm:col-span-3">
               <label
                 htmlFor="af-account-full-name"
-                className="mt-2.5 inline-block text-sm text-gray-800 dark:text-gray-200"
+                className="mt-2.5 inline-block font-semibold  text-gray-800 dark:text-gray-200"
               >
                 Full name
               </label>
@@ -272,7 +281,7 @@ if (
             <div className="sm:col-span-3">
               <label
                 htmlFor="account-email"
-                className="mt-2.5 inline-block text-sm text-gray-800 dark:text-gray-200"
+                className="mt-2.5 inline-block font-semibold  text-gray-800 dark:text-gray-200"
               >
                 Email
               </label>
@@ -298,7 +307,7 @@ if (
             <div className="sm:col-span-3">
               <label
                 htmlFor="account-password"
-                className="mt-2.5 inline-block text-sm text-gray-800 dark:text-gray-200"
+                className="mt-2.5 inline-block font-semibold  text-gray-800 dark:text-gray-200"
               >
                 Password
               </label>
@@ -322,15 +331,15 @@ if (
                     placeholder="Current password"
                     value={userData.accountPassword}
                     onChange={handleUserData}
-                    className="block w-full rounded-lg border-2 border-gray-200 px-3 py-2 pe-11 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-30 disabled:select-none dark:border-gray-700 dark:bg-slate-900 dark:text-gray-400 dark:focus:ring-gray-600"
+                    className="block w-full rounded-lg border-2 border-gray-200 px-3 py-2 pe-11 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500 disabled:pointer-events-none disabled:select-none disabled:opacity-30 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-400 dark:focus:ring-gray-600"
                   />
-                  <button
+                  <div
                     disabled={!userData.passwordAvailable}
-                    className="absolute bottom-2 end-2 cursor-pointer disabled:pointer-events-none disabled:opacity-30 disabled:select-none"
+                    className="absolute bottom-2 end-2 cursor-pointer disabled:pointer-events-none disabled:select-none disabled:opacity-30"
                     onClick={toggleAccountPasswordVisibility}
                   >
                     {showAccountPassword ? <Eye /> : <EyeOff />}
-                  </button>
+                  </div>
                 </div>
               </div>
               <div className="space-y-2">
@@ -350,15 +359,15 @@ if (
                     placeholder="New password"
                     value={userData.newPassword}
                     onChange={handleUserData}
-                    className="block w-full rounded-lg border-2 border-gray-200 px-3 py-2 pe-11 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-30 disabled:select-none dark:border-gray-700 dark:bg-slate-900 dark:text-gray-400 dark:focus:ring-gray-600"
+                    className="block w-full rounded-lg border-2 border-gray-200 px-3 py-2 pe-11 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500 disabled:pointer-events-none disabled:select-none disabled:opacity-30 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-400 dark:focus:ring-gray-600"
                   />
-                  <button
+                  <div
                     disabled={!userData.passwordAvailable}
-                    className="absolute bottom-2 end-2 cursor-pointer disabled:pointer-events-none disabled:opacity-30 disabled:select-none "
+                    className="absolute bottom-2 end-2 cursor-pointer disabled:pointer-events-none disabled:select-none disabled:opacity-30 "
                     onClick={toggleNewPasswordVisibility}
                   >
                     {showNewPassword ? <Eye /> : <EyeOff />}
-                  </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -366,7 +375,7 @@ if (
             <div className="sm:col-span-3">
               <label
                 htmlFor="af-account-bio"
-                className="mt-2.5 inline-block text-sm text-gray-800 dark:text-gray-200"
+                className="mt-2.5 inline-block font-semibold  text-gray-800 dark:text-gray-200"
               >
                 BIO
               </label>
@@ -378,8 +387,8 @@ if (
                 name="bio"
                 value={userData.bio}
                 onChange={handleUserData}
-                className="block w-full rounded-lg border-2 border-gray-200 px-3 py-2 text-sm focus:border-blue-500 focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-50 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-400 dark:focus:ring-gray-600"
-                rows="6"
+                className="block w-full resize-none rounded-lg border-2 border-gray-200 px-3 py-2 text-sm focus:border-blue-500 focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-50 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-400 dark:focus:ring-gray-600"
+                rows="8"
                 placeholder="Type your Bio..."
               ></textarea>
             </div>
@@ -401,8 +410,9 @@ if (
             </button>
           </div>
         </form>
-        <div className='text-xs md:text-sm text-end pt-5'>
-        <span className=''>*</span>  If the changes are not immediately visible, please log out and log back in to refresh the data.
+        <div className="pt-5 text-center text-xs md:text-end md:text-sm">
+          <span className="">*</span> If the changes are not immediately
+          visible, please log out and log back in to refresh the data.
         </div>
       </div>
     </>

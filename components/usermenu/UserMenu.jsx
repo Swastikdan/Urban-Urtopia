@@ -29,17 +29,17 @@ export default function UserMenu() {
 
   // const user = fetch(`/api/user/${id}`).then((res) => res.json());
 
-// const [user, setUser] = useState(null);
+const [userImage, setUserImage] = useState(null);
 
-// useEffect(() => {
-//   if (session) {
-//     fetch(`/api/user/${session.user.id}`)
-//       .then((res) => res.json())
-//       .then((data) => {
-//         setUser(data);
-//       });
-//   }
-// }, [session]);
+useEffect(() => {
+  if (session) {
+    fetch(`/api/user/${session.user.id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setUserImage(data);
+      });
+  }
+}, [session]);
 
 
   
@@ -48,7 +48,7 @@ export default function UserMenu() {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger className="m-auto items-center rounded-3xl">
-          <UserMenuTrigger user={user} />
+          <UserMenuTrigger user={userImage} />
         </DropdownMenuTrigger>
         <DropdownMenuContent className=" mr-5 rounded-xl    drop-shadow-xl ">
           <DropdownMenuLabel className="text-md ">
@@ -91,8 +91,9 @@ export default function UserMenu() {
 
               <DropdownMenuSeparator className="h-[.5px]  bg-black dark:bg-white" />
               <DropdownMenuItem
-                className="flex cursor-pointer items-center rounded-md"
+                className="flex cursor-pointer items-center rounded-md text-red-500 font-medium  "
                 onClick={() => signOut()}
+                
               >
                 <LogOut width={15} />
                 <span className="pl-2">Logout</span>
