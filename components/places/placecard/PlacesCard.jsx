@@ -31,7 +31,7 @@ export default function PlacesCard({ place }) {
           </div>
         </div>
       ) : (
-        <Link href={`/place/${id}`} key={id} target="_blank">
+        <Link href={`/place/${id}`} key={id} >
           <div className="relative">
             <ImageSlider images={photos} customButton={id} />
 

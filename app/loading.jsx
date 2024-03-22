@@ -3,7 +3,7 @@ import PlaceLoader from '@/components/places/placecard/PlaceLoader'
 export default function loading() {
   return (
     <div>
-      <div className="flex min-h-[90vh] flex-col rounded-xl border bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:shadow-slate-700/[.7]">
+      <div className="flex min-h-[90vh] flex-col">
         <div className="flex flex-auto flex-col items-center justify-center p-4 md:p-5">
           <div className="flex justify-center">
             <div

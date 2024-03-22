@@ -46,7 +46,7 @@ export default function NavBar({ className }) {
             height={20}
             priority={true}
           />
-          <h1>Nestly</h1>
+          <h1 className="">Nestly</h1>
         </Link>
 
         {path === '/' ? (

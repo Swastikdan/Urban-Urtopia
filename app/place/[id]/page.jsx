@@ -6,7 +6,7 @@ import { redirect } from 'next/navigation';
 export default async function page({ params }) {
   const id = params.id;
 
-  const place = await getPlacesById(id[0]);
+  const place = await getPlacesById(id);
 
 
   return (
