@@ -53,7 +53,7 @@ export default function Places() {
               Try adjusting your search or filter to find what you're looking
               for.
             </p>
-            <Link href="/">
+            <Link href="/"  >
               <Button variant="outline" className="flex items-center gap-2 ">
                 <ArrowLeft size={16} /> Go Back
               </Button>

@@ -23,21 +23,23 @@ import UserMenuTrigger from './UserMenuTrigger';
 
 export default function UserMenu() {
    const { data: session } = useSession();
+
+   const user = session?.user;
   // const id = session?.user?.id;
 
   // const user = fetch(`/api/user/${id}`).then((res) => res.json());
 
-const [user, setUser] = useState(null);
+// const [user, setUser] = useState(null);
 
-useEffect(() => {
-  if (session) {
-    fetch(`/api/user/${session.user.id}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setUser(data);
-      });
-  }
-}, [session]);
+// useEffect(() => {
+//   if (session) {
+//     fetch(`/api/user/${session.user.id}`)
+//       .then((res) => res.json())
+//       .then((data) => {
+//         setUser(data);
+//       });
+//   }
+// }, [session]);
 
 
   
