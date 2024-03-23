@@ -65,7 +65,7 @@ export default function ImageGallerySmall({ images, title, text }) {
                 />
               </SwiperSlide>
             ))}
-          <div className=" absolute bottom-5 right-5 z-10 w-12 text-white">
+          <div className=" absolute bottom-5 right-5 z-10 w-14 text-white">
             <span className="custom-swiper-pagination  rounded-md bg-black/70 px-2 py-1 text-xs font-medium text-white"></span>
           </div>
         </Swiper>
