@@ -4,10 +4,12 @@ import PlacePageDesktop from '@/components/placepage/PlacePageDesktop';
 import PlacePageMobile from '@/components/placepage/PlacePageMobile';
 import { redirect } from 'next/navigation';
 
-export async function generateMetadata({ params, searchParams }, parent) {
+export async function generateMetadata({ params }) {
   // read route params
   const id = params.id
-const place = await getPlacesById(id);
+  const place = await getPlacesById(id);
+
+  console.log(place); // Add this line
 
   return {
     title: place.title,
@@ -23,9 +25,10 @@ const place = await getPlacesById(id);
     ogDescription: place.description,
     ogUrl: `https://airluxe.com/place/${place.id}`,
   };
-
-
 }
+
+
+
 export default async function page({ params }) {
   const id = params.id;
 
