@@ -40,10 +40,10 @@ export default function NavBar({ className }) {
           className="hidden items-center space-x-2 text-xl font-bold md:flex   "
         >
           <Image
-            src="/logo_small.svg"
+            src="/Icon.png"
             alt="Airluxe"
-            width={40}
-            height={20}
+            width={48}
+            height={48}
             priority={true}
           />
           <h1 className="">Airluxe</h1>

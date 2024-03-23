@@ -28,14 +28,14 @@ export const metadata = {
   title: 'Airluxe | Holiday rentals, cabins, beach houses &amp; more',
   description:
     'Airluxe is a web application that helps users find the best home deals in their desired location. We offer a wide range of homes to choose from, with competitive prices and excellent customer service.',
-  twitterCard: '/android-chrome-512x512.png',
+  twitterCard:
+    'https://res.cloudinary.com/debewnh29/image/upload/w_1200,h_630,c_fill,g_auto/q_auto/f_auto/nestly/public/OGImage.webp',
   ogTitle: 'Airluxe | Holiday rentals, cabins, beach houses &amp; more',
   ogDescription:
     'Airluxe is a web application that helps users find the best home deals in their desired location. We offer a wide range of homes to choose from, with competitive prices and excellent customer service.',
-  ogUrl: 'https://nestly.vercel.app/', // Replace with your website URL
-  ogImage: '/android-chrome-512x512.png', // Replace with the appropriate path to your image file
-  ogImageWidth: '512',
-  ogImageHeight: '512',
+  ogUrl: 'https://airluxe.vercel.app/', 
+  ogImage:
+    'https://res.cloudinary.com/debewnh29/image/upload/w_1200,h_630,c_fill,g_auto/q_auto/f_auto/nestly/public/OGImage.webp', 
 };
 import SessionProvider from '../providers/SessionProvider';
 export default function RootLayout({ children }) {
@@ -56,8 +56,6 @@ export default function RootLayout({ children }) {
       <meta property="og:description" content={metadata.ogDescription} />
       <meta property="og:url" content={metadata.ogUrl} />
       <meta property="og:image" content={metadata.ogImage} />
-      <meta property="og:image:width" content={metadata.ogImageWidth} />
-      <meta property="og:image:height" content={metadata.ogImageHeight} />
       <meta name="robots" content="index, follow" />
       <title>{metadata.title}</title>
       <link rel="canonical" href={metadata.ogUrl} />
