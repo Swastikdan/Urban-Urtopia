@@ -1,9 +1,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
- 
-
-
 
 @layer base {
   :root {
@@ -30,8 +27,6 @@
   }
 }
 
-
- 
 @layer base {
   * {
     @apply border-border;
@@ -53,13 +48,7 @@
 */
 body {
   font-family: var(--font-pathway-extreme);
-} 
-.font-heading {
-  font-family: var(--font-honk);
 }
-
-
-
 
 .swiper-pagination-bullet-active {
   background: rgb(248, 248, 248) !important;
@@ -67,7 +56,7 @@ body {
 
 @layer base {
   body {
-  @apply overflow-y-auto 
+    @apply overflow-y-auto 
   scroll-smooth 
   [&::-webkit-scrollbar-thumb]:bg-gray-400
   dark:[&::-webkit-scrollbar-thumb]:bg-slate-500

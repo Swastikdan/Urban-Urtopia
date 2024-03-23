@@ -18,7 +18,7 @@ import BottomNav from '@/components/BottomNav';
 // });
 
 
-const pathway_extreme = Pathway_Extreme({
+const pathwayextreme = Pathway_Extreme({
   subsets: ['latin'],
   variable: '--font-pathway-extreme',
   display: 'swap',
@@ -146,7 +146,7 @@ export default function RootLayout({ children }) {
       />
       <head />
       <body
-        className={`${pathway_extreme.variable}  overflow-y-auto 
+        className={`${pathwayextreme.variable}  overflow-y-auto 
           scroll-smooth 
         [&::-webkit-scrollbar-thumb]:bg-gray-400
         dark:[&::-webkit-scrollbar-thumb]:bg-slate-500
