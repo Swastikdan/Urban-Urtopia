@@ -131,16 +131,6 @@ export default function ProfileEdit() {
       } else {
         userImage = userData.image;
       }
-      if (
-        name === userData.name &&
-        accountPassword === '' &&
-        newPassword === '' &&
-        bio === userData.bio &&
-        userImage === userData.image
-      ) {
-        setLoading(false);
-        return toast.error('No changes made');
-      }
       const userDetails = {
         name,
         accountPassword,

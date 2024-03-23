@@ -53,6 +53,13 @@ async function updateUser(request, { params }) {
   if (bio && typeof bio !== "string")
      return NextResponse.json({message:"Invalid bio"}, { status: 400 });
 
+  if(name === user.name && image === user.image && bio === user.bio){
+    return NextResponse.json({message:"No changes made"}, { status: 400 });
+  
+  }
+
+
+
 if (accountPassword && newPassword) {
   if (typeof accountPassword !== 'string' || typeof newPassword !== 'string')
     return NextResponse.json({ message: 'Invalid password' }, { status: 400 });
@@ -70,12 +77,17 @@ if (accountPassword && newPassword) {
     });
 }
 
+
+
+
+
 let data = { name, image, bio };
 
 if (user.hashedPassword && newPassword) {
   const hashedPassword = await bcrypt.hash(newPassword, 12);
   data.hashedPassword = hashedPassword;
 }
+
 
   const updatedUser = await prisma.user.update({
     where: { id: String(id) },
