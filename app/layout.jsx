@@ -17,7 +17,6 @@ import BottomNav from '@/components/BottomNav';
 //   display: 'swap',
 // });
 
-
 const pathwayextreme = Pathway_Extreme({
   subsets: ['latin'],
   variable: '--font-pathway-extreme',
@@ -26,13 +25,13 @@ const pathwayextreme = Pathway_Extreme({
 });
 
 export const metadata = {
-  title: 'Nestly | Holiday rentals, cabins, beach houses &amp; more',
+  title: 'Airluxe | Holiday rentals, cabins, beach houses &amp; more',
   description:
-    'Nestly is a web application that helps users find the best home deals in their desired location. We offer a wide range of homes to choose from, with competitive prices and excellent customer service.',
+    'Airluxe is a web application that helps users find the best home deals in their desired location. We offer a wide range of homes to choose from, with competitive prices and excellent customer service.',
   twitterCard: '/android-chrome-512x512.png',
-  ogTitle: 'Nestly | Holiday rentals, cabins, beach houses &amp; more',
+  ogTitle: 'Airluxe | Holiday rentals, cabins, beach houses &amp; more',
   ogDescription:
-    'Nestly is a web application that helps users find the best home deals in their desired location. We offer a wide range of homes to choose from, with competitive prices and excellent customer service.',
+    'Airluxe is a web application that helps users find the best home deals in their desired location. We offer a wide range of homes to choose from, with competitive prices and excellent customer service.',
   ogUrl: 'https://nestly.vercel.app/', // Replace with your website URL
   ogImage: '/android-chrome-512x512.png', // Replace with the appropriate path to your image file
   ogImageWidth: '512',
@@ -62,8 +61,8 @@ export default function RootLayout({ children }) {
       <meta name="robots" content="index, follow" />
       <title>{metadata.title}</title>
       <link rel="canonical" href={metadata.ogUrl} />
-      <meta name="apple-mobile-web-app-title" content="Nestly" />
-      <meta name="application-name" content="Nestly" />
+      <meta name="apple-mobile-web-app-title" content="Airluxe" />
+      <meta name="application-name" content="Airluxe" />
       <meta name="msapplication-TileColor" content="#da532c" />
       <meta name="theme-color" content="#ffffff" />
       <link

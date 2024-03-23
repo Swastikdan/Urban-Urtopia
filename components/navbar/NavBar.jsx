@@ -41,12 +41,12 @@ export default function NavBar({ className }) {
         >
           <Image
             src="/logo_small.svg"
-            alt="Nestly"
+            alt="Airluxe"
             width={40}
             height={20}
             priority={true}
           />
-          <h1 className="">Nestly</h1>
+          <h1 className="">Airluxe</h1>
         </Link>
 
         {path === '/' ? (
@@ -118,8 +118,8 @@ export default function NavBar({ className }) {
 //       href="/"
 //       className="hidden items-center space-x-2 text-xl font-bold md:flex  "
 //     >
-//       <Image src="/logo_small.svg" alt="Nestly" width={40} height={20} />
-//       <h1>Nestly</h1>
+//       <Image src="/logo_small.svg" alt="Airluxe" width={40} height={20} />
+//       <h1>Airluxe</h1>
 //     </Link>
 //     <div className="w-full md:w-auto">
 //       <div className="hidden md:flex">
