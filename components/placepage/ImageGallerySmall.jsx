@@ -32,7 +32,6 @@ export default function ImageGallerySmall({ images, title, text }) {
                 if (navigator.share) {
                   navigator.share({
                     title: title,
-                    text: text,
                     url: window.location.href,
                   });
                 } else {
@@ -61,7 +60,7 @@ export default function ImageGallerySmall({ images, title, text }) {
                     '/upload/w_1200,c_fill,g_auto/q_auto/f_auto/',
                   )}
                   alt="property image"
-                  className="h-60 w-full object-cover"
+                  className="h-60 w-full object-cover bg-gray-400"
                 />
               </SwiperSlide>
             ))}

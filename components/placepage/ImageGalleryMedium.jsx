@@ -16,7 +16,6 @@ export default function ImageGalleryMedium({ images }) {
   return (
     <>
       <section className="mx-auto flex   w-full items-center justify-center pt-0">
- 
         <div className="hidden items-center justify-center gap-1 sm:grid md:grid-cols-2">
           <AllPhotos
             photos={images}
@@ -34,7 +33,7 @@ export default function ImageGalleryMedium({ images }) {
               width="1200"
               height="auto"
               alt=""
-              className="cursor-pointer rounded-xl hover:mix-blend-multiply md:rounded-none md:rounded-l-xl"
+              className="cursor-pointer rounded-xl bg-gray-400 hover:mix-blend-multiply md:rounded-none md:rounded-l-xl"
             />
             <span className="absolute bottom-2 right-2 hidden items-center space-x-3 rounded-md bg-white px-3 py-2 text-xs font-semibold ring-1 ring-black sm:flex md:hidden">
               <Grip size={15} />
@@ -56,7 +55,7 @@ export default function ImageGalleryMedium({ images }) {
                       '/upload/w_600,h_400,c_fill,g_auto/q_auto/f_auto/',
                     )}
                     alt=""
-                    className={`h-full cursor-pointer object-fill hover:mix-blend-multiply ${index === 1 ? 'rounded-tr-xl' : ''} ${index === 3 ? 'rounded-br-xl' : ''}`}
+                    className={`h-full cursor-pointer object-fill hover:mix-blend-multiply bg-gray-400 ${index === 1 ? 'rounded-tr-xl' : ''} ${index === 3 ? 'rounded-br-xl' : ''}`}
                   />
 
                   {index === 3 && (

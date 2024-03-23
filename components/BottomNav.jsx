@@ -82,7 +82,10 @@ export default function BottomNav() {
               className={`h-8 w-8  ${pathname === '/account' ? ' ring-[2px] ring-primary ' : ''}`}
             >
               <AvatarImage
-                src={user?.image}
+                src={user?.image.replace(
+                  '/upload/',
+                  '/upload/w_200,h_200,c_fill,g_auto/q_auto/f_auto/',
+                )}
                 alt={`${user.name || 'user'} profile image`}
               />
               <AvatarFallback className="bg-black text-white">

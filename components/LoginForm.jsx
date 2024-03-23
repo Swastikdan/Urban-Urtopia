@@ -43,7 +43,7 @@ export default function LoginForm() {
         window.location.href = res.url;
         toast.success('Logged in successfully');
       } else {
-        toast.error('Error occurred while logging in');
+        toast.error('Invalid email or password');
       }
     } catch (error) {
       console.log(error);

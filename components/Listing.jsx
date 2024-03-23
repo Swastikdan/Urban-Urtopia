@@ -43,7 +43,7 @@ export default function Listing({ listings }) {
                 {!Array.isArray(listings) || listings.length === 0 ? (
                   <div className="col-span-4 flex flex-1 items-center justify-center py-8 lg:py-16  ">
                     <div className="mx-auto w-[80vw] max-w-2xl px-4 py-8 text-center">
-                      <p className="m-20 mt-4 text-gray-500">
+                      <p className="mt-4 text-gray-500">
                         No listings found.
                       </p>
                     </div>

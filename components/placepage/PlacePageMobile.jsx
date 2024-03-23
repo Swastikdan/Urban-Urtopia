@@ -35,11 +35,7 @@ export default function PlacePageMobile({ place }) {
   return (
     <section>
       <div className="w-full max-w-[100vw] overflow-hidden sm:hidden ">
-        <ImageGallerySmall
-          images={photos}
-          title={title}
-          text={description?.slice(0, 50)}
-        />
+        <ImageGallerySmall images={photos} title={title} />
       </div>
 
       <div className="relative px-5  pt-5 sm:hidden  ">
@@ -48,7 +44,7 @@ export default function PlacePageMobile({ place }) {
         <div className="flex flex-col space-y-1">
           <span className="text-lg font-medium">{address}</span>
           <span className="text-sm font-medium">
-            4 guests &#183; 2 bedrooms &#183; 2 beds &#183; 2 bathrooms{' '}
+            4 guests &#183; 2 bedrooms &#183; 2 beds &#183; 2 bathrooms
           </span>
         </div>
         <Separator className="mt-3 py-[1px]" />
@@ -134,7 +130,7 @@ export default function PlacePageMobile({ place }) {
           </div>
           <Drawer>
             <DrawerTrigger className="w-full">
-              <div className="mt-5 w-full rounded-lg border border-input bg-background py-2 text-base duration-200 hover:bg-accent hover:text-accent-foreground active:scale-[99%]">
+              <div className="mt-5 w-full rounded-lg border border-black bg-background py-2 text-base duration-200 hover:bg-accent hover:text-accent-foreground active:scale-[99%]">
                 Show all amenities
               </div>
             </DrawerTrigger>
@@ -166,7 +162,7 @@ export default function PlacePageMobile({ place }) {
             </span>
           </div>
 
-          <div className="mx-auto my-auto flex w-full  justify-center pt-3 min-h-[337px] top-full">
+          <div className="top-full mx-auto my-auto flex  min-h-[337px] w-full justify-center pt-3">
             <Calendar
               mode="range"
               defaultMonth={date?.from}
@@ -180,7 +176,7 @@ export default function PlacePageMobile({ place }) {
               Clear Dates
             </span>
             <DropdownMenu>
-              <DropdownMenuTrigger className="rounded-lg border border-input bg-background px-[10vw] py-1.5 hover:bg-accent hover:text-accent-foreground">
+              <DropdownMenuTrigger className="rounded-lg border border-black bg-background px-[10vw] py-1.5 hover:bg-accent hover:text-accent-foreground">
                 10 Guests
               </DropdownMenuTrigger>
               <DropdownMenuContent className="mr-5 w-[80vw] space-y-3 p-3 ">
@@ -263,7 +259,7 @@ export default function PlacePageMobile({ place }) {
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
-          <div className="py-3font-semibold text-3xl ">₹6,726 night</div>
+          <div className="py-3 font-semibold text-3xl ">₹6,726 night</div>
           <div className="flex items-center justify-end space-x-5 pt-2 text-base">
             <span className="underline underline-offset-4">
               ₹6,726 x 5 nights
@@ -350,7 +346,7 @@ export default function PlacePageMobile({ place }) {
         <Separator className="my-4 py-[1px]" />
 
         <div className="">
-          <span className="pb-1  text-xl font-semibold">House Rules</span>
+          <span className="pb-1  text-xl font-semibold">Safety & property</span>
 
           <div className="flex flex-col space-y-2 text-left text-sm ">
             <span>No carbon monoxide alarm</span>

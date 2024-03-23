@@ -208,7 +208,7 @@ export default function ProfileEdit() {
               Log Out
             </Button>
           </div>
-          <p className="text-sm text-gray-600 dark:text-gray-400 pt-3">
+          <p className="pt-3 text-sm text-gray-600 dark:text-gray-400">
             Manage your account settings.
           </p>
         </div>
@@ -236,7 +236,10 @@ export default function ProfileEdit() {
                 ) : (
                   <Avatar className="inline-block h-16 w-16 rounded-full ring-2 ring-gray-200 dark:ring-gray-800 ">
                     <AvatarImage
-                      src={userData.image}
+                      src={userData.image.replace(
+                        '/upload/',
+                        '/upload/w_300,h_300,c_fill,g_auto/q_auto/f_auto/',
+                      )}
                       alt={`${userData.name || 'user'} profile picture`}
                     />
                     <AvatarFallback>
