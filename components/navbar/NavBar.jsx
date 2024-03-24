@@ -42,9 +42,10 @@ export default function NavBar({ className }) {
           <Image
             src="/Icon.png"
             alt="Airluxe"
-            width={48}
-            height={48}
+            width={512}
+            height={512}
             priority={true}
+            className='w-12 h-12'
           />
           <h1 className="">Airluxe</h1>
         </Link>

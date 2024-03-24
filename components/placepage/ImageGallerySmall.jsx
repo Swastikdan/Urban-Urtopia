@@ -53,14 +53,14 @@ export default function ImageGallerySmall({ images, title, text }) {
         >
           {images &&
             images.map((img, index) => (
-              <SwiperSlide key={index}>
+              <SwiperSlide key={index} className="bg-gray-400">
                 <img
                   src={img.replace(
                     '/upload/',
                     '/upload/w_1200,c_fill,g_auto/q_auto/f_auto/',
                   )}
                   alt="property image"
-                  className="h-60 w-full object-cover bg-gray-400"
+                  className="h-60 w-full object-cover "
                 />
               </SwiperSlide>
             ))}

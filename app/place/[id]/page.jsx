@@ -8,9 +8,6 @@ export async function generateMetadata({ params }) {
   // read route params
   const id = params.id
   const place = await getPlacesById(id);
-
-  console.log(place); // Add this line
-
   return {
     title: place.title,
     description: place.description,
