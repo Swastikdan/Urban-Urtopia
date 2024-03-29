@@ -14,6 +14,7 @@ export default function ImageSlider({ customButton, images, isFavorite, id }) {
   const { data: session } = useSession();
   const router = useRouter();
   const [isFavoritePlace, setIsFavoritePlace] = useState(false);
+  const [favoriteLoading, setFavoriteLoading] = useState(false);
   useEffect(() => {
     if (isFavorite === true) {
       setIsFavoritePlace(true);
@@ -22,6 +23,7 @@ export default function ImageSlider({ customButton, images, isFavorite, id }) {
 
   const handleFavoriteClick = () => {
     if (session?.user) {
+      setFavoriteLoading(true);
       setIsFavoritePlace(!isFavoritePlace);
 
       fetch('/api/user/favorites', {
@@ -33,11 +35,11 @@ export default function ImageSlider({ customButton, images, isFavorite, id }) {
       })
         .then((res) => res.json())
         .then((data) => {
-        
+        setFavoriteLoading(false);
           toast.success(data.message);
         })
         .catch((error) => {
-         
+         setFavoriteLoading(false);
           toast.error('An error occurred');
           setIsFavoritePlace(isFavoritePlace);
         });
@@ -97,7 +99,7 @@ export default function ImageSlider({ customButton, images, isFavorite, id }) {
         <Heart
           width={30}
           height={30}
-          className="text-white md:h-7 md:w-7 "
+          className={`text-white md:h-7 md:w-7 ${favoriteLoading ? 'animate-pulse' : ''} `}
           fill={
             isFavoritePlace === true ? 'rgb(255,56,92)' : 'rgb(0 0 0 / 0.6)'
           }
