@@ -4,7 +4,8 @@ import ImageSlider from './ImageSlider';
 import Link from 'next/link';
 import { Star } from 'lucide-react';
 export default function PlacesCard({ place }) {
-  const { id, photos, state, city, title, price } = place;
+ 
+  const { id, photos, state, city, title, price, isFavorite } = place;
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -31,11 +32,16 @@ export default function PlacesCard({ place }) {
           </div>
         </div>
       ) : (
-        <Link href={`/place/${id}`} key={id} >
+        <div >
           <div className="relative">
-            <ImageSlider images={photos} customButton={id} />
+            <ImageSlider
+              images={photos}
+              customButton={id}
+              id={id}
+              isFavorite={isFavorite}
+            />
 
-            <div className="tex-sm flex flex-col px-2">
+            <Link href={`/place/${id}`}  className="tex-sm flex flex-col px-2">
               <div className="flex items-center justify-between ">
                 <span className="text-base font-semibold">
                   {state}, {city}
@@ -55,13 +61,13 @@ export default function PlacesCard({ place }) {
               </span>
 
               <span className=" text-[15px] font-medium ">
-                <span className="font-sans">₹</span>
-                <span className="font-sans">{price}</span>
+                <span className="">₹</span>
+                <span className="">{price}</span>
                 <span className="font-light"> night</span>
               </span>
-            </div>
+            </Link>
           </div>
-        </Link>
+        </div>
       )}
     </div>
   );

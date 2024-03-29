@@ -137,7 +137,7 @@ export default function Listing({ listings }) {
                               </TableCell>
                               <TableCell className="size-px whitespace-nowrap">
                                 <div className="px-6 py-3">
-                                  <span className="pl-2 font-sans text-sm">
+                                  <span className="pl-2 text-sm">
                                     {place.price}
                                   </span>
                                 </div>
