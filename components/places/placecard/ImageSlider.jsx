@@ -99,7 +99,8 @@ export default function ImageSlider({ customButton, images, isFavorite, id }) {
         <Heart
           width={30}
           height={30}
-          className={`text-white md:h-7 md:w-7 ${favoriteLoading ? 'animate-pulse' : ''} `}
+          disabled={favoriteLoading}
+          className={`text-white disabled:pointer-events-none md:h-7 md:w-7 ${favoriteLoading ? 'animate-pulse' : ''} `}
           fill={
             isFavoritePlace === true ? 'rgb(255,56,92)' : 'rgb(0 0 0 / 0.6)'
           }
