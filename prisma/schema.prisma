@@ -79,6 +79,8 @@ model Places {
   extraInfo     String?
   numberOfRooms Int?
   capacity      Int?
+  listTillDate  DateTime 
+  minimumStay   Int @default(1)
   bookings      Bookings[]
   favorites     UserFavorites[]
    @@index([title , address], name: "search_index")

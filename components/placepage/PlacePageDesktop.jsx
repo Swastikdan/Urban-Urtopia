@@ -28,8 +28,8 @@ import {
 export default function PlacePageDesktop({ place }) {
   const { title, address, description, photos } = place;
   const [date, setDate] = React.useState({
-    from: new Date(2022, 0, 20),
-    to: addDays(new Date(2022, 0, 20), 20),
+    from: new Date(2024, 3, 30),
+    to: addDays(new Date(2024, 5, 20), 20),
   });
 
   return (
@@ -251,7 +251,9 @@ export default function PlacePageDesktop({ place }) {
         </div>
         <div className="col-span-2  w-full">
           <div className="  rounded-xl border border-gray-200 p-5 shadow-md">
-            <div className="py-3 text-xl font-semibold ">₹6,726 night</div>
+            <div className="py-3 text-xl font-semibold tabular-nums">
+              ₹6,726 night
+            </div>
             <div className="my-5  rounded-xl border-[2px] border-gray-400">
               <DropdownMenu>
                 <DropdownMenuTrigger className="w-full rounded-xl">
@@ -297,15 +299,15 @@ export default function PlacePageDesktop({ place }) {
                     <div className="w-full">
                       <div className="flex w-full justify-between">
                         <div className="flex flex-col ">
-                          <span className="text-lg font-medium">Adults</span>
+                          <span className="text-base font-medium">Adults</span>
                           <span className="text-sm font-light">Age 13+</span>
                         </div>
                         <div className="flex items-center space-x-3">
-                          <button class="rounded-full border border-input bg-background  p-3 hover:bg-accent hover:text-accent-foreground">
+                          <button class="rounded-full border border-input bg-background  p-2 hover:bg-accent hover:text-accent-foreground">
                             <Plus size={14} />
                           </button>
-                          <span className="text-lg font-light">2</span>
-                          <button class="rounded-full border border-input bg-background  p-3 hover:bg-accent hover:text-accent-foreground">
+                          <span className="text-base font-light tabular-nums">2</span>
+                          <button class="rounded-full border border-input bg-background  p-2 hover:bg-accent hover:text-accent-foreground">
                             <Minus size={14} />
                           </button>
                         </div>
@@ -314,15 +316,17 @@ export default function PlacePageDesktop({ place }) {
                     <div className="w-full">
                       <div className="flex w-full justify-between">
                         <div className="flex flex-col ">
-                          <span className="text-lg font-medium">Children</span>
+                          <span className="text-base font-medium">
+                            Children
+                          </span>
                           <span className="text-sm font-light">Ages 2-12</span>
                         </div>
                         <div className="flex items-center space-x-3">
-                          <button class="rounded-full border border-input bg-background  p-3 hover:bg-accent hover:text-accent-foreground">
+                          <button class="rounded-full border border-input bg-background  p-2 hover:bg-accent hover:text-accent-foreground">
                             <Plus size={14} />
                           </button>
-                          <span className="text-lg font-light">1</span>
-                          <button class="rounded-full border border-input bg-background  p-3 hover:bg-accent hover:text-accent-foreground">
+                          <span className="text-base font-light tabular-nums">1</span>
+                          <button class="rounded-full border border-input bg-background  p-2 hover:bg-accent hover:text-accent-foreground">
                             <Minus size={14} />
                           </button>
                         </div>
@@ -332,15 +336,15 @@ export default function PlacePageDesktop({ place }) {
                     <div className="w-full">
                       <div className="flex w-full justify-between">
                         <div className="flex flex-col ">
-                          <span className="text-lg font-medium">Infants</span>
+                          <span className="text-base font-medium">Infants</span>
                           <span className="text-sm font-light">Under 2</span>
                         </div>
                         <div className="flex items-center space-x-3">
-                          <button class="rounded-full border border-input bg-background  p-3 hover:bg-accent hover:text-accent-foreground">
+                          <button class="rounded-full border border-input bg-background  p-2 hover:bg-accent hover:text-accent-foreground">
                             <Plus size={14} />
                           </button>
-                          <span className="text-lg font-light">2</span>
-                          <button class="rounded-full border border-input bg-background  p-3 hover:bg-accent hover:text-accent-foreground">
+                          <span className="text-base font-light tabular-nums">2</span>
+                          <button class="rounded-full border border-input bg-background  p-2 hover:bg-accent hover:text-accent-foreground">
                             <Minus size={14} />
                           </button>
                         </div>
@@ -349,14 +353,14 @@ export default function PlacePageDesktop({ place }) {
                     <div className="w-full">
                       <div className="flex w-full justify-between">
                         <div className="flex flex-col ">
-                          <span className="text-lg font-medium">Pets</span>
+                          <span className="text-base font-medium">Pets</span>
                         </div>
                         <div className="flex items-center space-x-3">
-                          <button class="rounded-full border border-input bg-background  p-3 hover:bg-accent hover:text-accent-foreground">
+                          <button class="rounded-full border border-input bg-background  p-2 hover:bg-accent hover:text-accent-foreground">
                             <Plus size={14} />
                           </button>
-                          <span className="text-lg font-light">2</span>
-                          <button class="rounded-full border border-input bg-background  p-3 hover:bg-accent hover:text-accent-foreground">
+                          <span className="text-base font-light tabular-nums">2</span>
+                          <button class="rounded-full border border-input bg-background  p-2 hover:bg-accent hover:text-accent-foreground">
                             <Minus size={14} />
                           </button>
                         </div>

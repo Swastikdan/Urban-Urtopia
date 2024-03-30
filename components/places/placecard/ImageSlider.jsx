@@ -35,11 +35,11 @@ export default function ImageSlider({ customButton, images, isFavorite, id }) {
       })
         .then((res) => res.json())
         .then((data) => {
-        setFavoriteLoading(false);
+          setFavoriteLoading(false);
           toast.success(data.message);
         })
         .catch((error) => {
-         setFavoriteLoading(false);
+          setFavoriteLoading(false);
           toast.error('An error occurred');
           setIsFavoritePlace(isFavoritePlace);
         });
@@ -93,14 +93,15 @@ export default function ImageSlider({ customButton, images, isFavorite, id }) {
         <span className="sr-only">Next</span>
       </button>
       <button
-        className="absolute right-2 top-2 z-20 rounded-full p-3"
+        type="button"
+        disabled={favoriteLoading}
+        className="p-.5 absolute right-2 top-2 z-20 rounded-full disabled:pointer-events-none disabled:cursor-none"
         onClick={() => handleFavoriteClick()}
       >
         <Heart
           width={30}
           height={30}
-          disabled={favoriteLoading}
-          className={`text-white disabled:pointer-events-none md:h-7 md:w-7 ${favoriteLoading ? 'animate-pulse' : ''} `}
+          className={`text-white  md:h-7 md:w-7`}
           fill={
             isFavoritePlace === true ? 'rgb(255,56,92)' : 'rgb(0 0 0 / 0.6)'
           }

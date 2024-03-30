@@ -64,10 +64,10 @@ export default function page() {
               768: { slidesPerView: 8 },
               1024: { slidesPerView: 10 },
               1120: { slidesPerView: 10 },
-              1280: { slidesPerView: 13 },
-              1536: { slidesPerView: 14 },
-              1920: { slidesPerView: 15 },
-              2560: { slidesPerView: 19 },
+              1280: { slidesPerView: 13.5 },
+              1536: { slidesPerView: 14.5 },
+              1920: { slidesPerView: 15.5 },
+              2560: { slidesPerView: 19.5 },
             }}
             modules={[FreeMode, Mousewheel, Navigation]}
             className="mySwiper z-0 w-full -mb-0"
