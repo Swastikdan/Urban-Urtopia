@@ -9,6 +9,7 @@ import { ChevronLeft, ChevronRight, Heart } from 'lucide-react';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { toast } from 'sonner';
 export default function ImageSlider({ customButton, images, isFavorite, id }) {
   const { data: session } = useSession();
@@ -75,11 +76,21 @@ export default function ImageSlider({ customButton, images, isFavorite, id }) {
         {images.map((img, index) => (
           <SwiperSlide key={index} className="overflow-hidden">
             <Link href={`/place/${id}`}>
-              <img
+              {/* <img
                 src={img.replace('/upload/', '/upload/w_1000/')}
                 alt="property image"
                 className="h-[300px] w-full object-cover"
-              />
+              /> */}
+              <Avatar className="flex h-full w-full rounded-none ">
+                <AvatarImage
+                  className="h-[300px] w-full rounded-none object-cover "
+                  src={img.replace('/upload/', '/upload/w_800/')}
+                  alt="property Image"
+                />
+                <AvatarFallback>
+                  <div className="h-[300px] w-full animate-pulse rounded-none bg-gray-200 object-cover"></div>
+                </AvatarFallback>
+              </Avatar>
             </Link>
           </SwiperSlide>
         ))}
@@ -92,23 +103,21 @@ export default function ImageSlider({ customButton, images, isFavorite, id }) {
         <ChevronRight width={20} height={20} />
         <span className="sr-only">Next</span>
       </button>
-      <button
-        type="button"
-        disabled={favoriteLoading}
-        className="p-.5 absolute right-2 top-2 z-20 rounded-full disabled:pointer-events-none disabled:cursor-none"
+      <div
+        className="group absolute right-2 top-2 z-20 cursor-pointer rounded-full disabled:pointer-events-none disabled:cursor-none "
         onClick={() => handleFavoriteClick()}
       >
         <Heart
-          width={30}
-          height={30}
-          className={`text-white  md:h-7 md:w-7`}
+          width={35}
+          height={35}
+          className={`m-2  text-white transition-all duration-200  active:scale-[.8] md:h-7 md:w-7`}
           fill={
             isFavoritePlace === true ? 'rgb(255,56,92)' : 'rgb(0 0 0 / 0.6)'
           }
           focusable="true"
           strokeWidth={1}
         />
-      </button>
+      </div>
     </div>
   );
 }

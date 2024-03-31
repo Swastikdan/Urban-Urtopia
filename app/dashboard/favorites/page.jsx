@@ -99,7 +99,7 @@ export default function page() {
                 <div className="h-52 w-full animate-pulse rounded-t-xl bg-gray-400"></div>
               </AvatarFallback>
             </Avatar>
-            <div className="p-4 md:p-6">
+            <div className="px-4 py-2 md:px-6 md:py-3">
               <span className="mb-1 block text-xs   text-blue-600 dark:text-blue-500">
                 {place.place.city} ,{' '}
                 {place.place.state.length > 20

@@ -80,7 +80,7 @@ useEffect(() => {
                 </DropdownMenuItem>
               </Link>
 
-              <Link href="/places/new">
+              <Link href="/places/add-place">
                 <DropdownMenuItem className="flex cursor-pointer items-center rounded-md ">
                   <Plus width={15} />
                   <span className="pl-2">
@@ -91,9 +91,8 @@ useEffect(() => {
 
               <DropdownMenuSeparator className="h-[.5px]  bg-black dark:bg-white" />
               <DropdownMenuItem
-                className="flex cursor-pointer items-center rounded-md text-red-500 font-medium  "
+                className="flex cursor-pointer items-center rounded-md font-medium text-red-500  "
                 onClick={() => signOut()}
-                
               >
                 <LogOut width={15} />
                 <span className="pl-2">Logout</span>
