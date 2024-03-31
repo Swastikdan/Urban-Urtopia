@@ -1,9 +1,16 @@
 'use client';
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import ImageGalleryMedium from './ImageGalleryMedium';
 import { Separator } from '@/components/ui/separator';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { ChevronRight, ChevronLeft, Plus, Minus } from 'lucide-react';
+import {
+  ChevronRight,
+  ChevronLeft,
+  Plus,
+  Minus,
+  Share,
+  Heart,
+} from 'lucide-react';
 import { Calendar } from '@/components/ui/calendar';
 import { addDays, format } from 'date-fns';
 import {
@@ -24,19 +31,94 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 export default function PlacePageDesktop({ place }) {
   const { id, title, address, description, photos, isFavorite } = place;
   const [date, setDate] = React.useState({
     from: new Date(2024, 3, 30),
     to: addDays(new Date(2024, 5, 20), 20),
   });
+const router = useRouter();
+const { data: session } = useSession();
+const [isFavoritePlace, setIsFavoritePlace] = useState(false);
+useEffect(() => {
+  if (isFavorite === true) {
+    setIsFavoritePlace(true);
+  }
+}, [isFavorite]);
 
+const user = session?.user;
+
+const handleFavoriteClick = () => {
+  if (session?.user) {
+    setIsFavoritePlace(!isFavoritePlace);
+    fetch('/api/user/favorites', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ placeId: id }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        toast.success(data.message);
+      })
+      .catch((error) => {
+        toast.error('An error occurred');
+        setIsFavoritePlace(isFavoritePlace);
+      });
+  } else {
+    router.push('/login');
+  }
+};
   return (
     <section className="max-w-6xl px-10">
-      <h1 className="text-pretty pb-5 pt-1 text-2xl font-bold xl:text-3xl">
-        {title}
-      </h1>
+      <div className='flex items-center justify-between'>
+        <h1 className="text-pretty pb-5 pt-1 text-2xl font-bold xl:text-3xl">
+          {title}
+        </h1>
+        <div className=" flex items-center space-x-8">
+          <button
+            className="  flex items-center gap-1.5  text-center"
+            onClick={() => handleFavoriteClick()}
+          >
+            <Heart
+              width={20}
+              height={20}
+              className={`m-2  text-white transition-all duration-200  active:scale-[.8] md:h-7 md:w-7`}
+              fill={
+                isFavoritePlace === true ? 'rgb(255,56,92)' : 'rgb(0 0 0 / 0.6)'
+              }
+              focusable="true"
+              strokeWidth={1}
+            />
+
+            <span className=" font-semibold underline ">
+              {isFavoritePlace === true ? 'Saved' : 'Save'}
+            </span>
+          </button>
+          <button
+            className=" text-centerr flex items-center  gap-1.5 "
+            onClick={() => {
+              if (navigator.share) {
+                navigator
+                  .share({
+                    url: window.location.href,
+                  })
+                  .catch((error) => alert('Something went wrong '));
+              } else {
+                alert('Web Share API is not supported in your browser');
+              }
+            }}
+          >
+            <Share size={20} />
+
+            <span className=" font-semibold underline ">Share</span>
+          </button>
+        </div>
+      </div>
       <ImageGalleryMedium images={photos} id={id} isFavorite={isFavorite} />
       <div className="py-5">
         <div className="flex flex-col space-y-1">
