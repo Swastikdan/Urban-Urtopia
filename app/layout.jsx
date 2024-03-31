@@ -19,11 +19,11 @@ import BottomNav from '@/components/BottomNav';
 
 const pathwayextreme = Pathway_Extreme({
   subsets: ['latin'],
-  variable: '--font-pathway-extreme',
+  variable: '--font-pathwayextreme',
   display: 'swap',
   // weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
 });
-
+import { TooltipProvider } from '@/components/ui/tooltip';
 export const metadata = {
   title: 'Airluxe | Holiday rentals, cabins, beach houses &amp; more',
   description:
@@ -33,9 +33,9 @@ export const metadata = {
   ogTitle: 'Airluxe | Holiday rentals, cabins, beach houses &amp; more',
   ogDescription:
     'Airluxe is a web application that helps users find the best home deals in their desired location. We offer a wide range of homes to choose from, with competitive prices and excellent customer service.',
-  ogUrl: 'https://airluxe.vercel.app/', 
+  ogUrl: 'https://airluxe.vercel.app/',
   ogImage:
-    'https://res.cloudinary.com/debewnh29/image/upload/w_1200,h_630,c_fill,g_auto/q_auto/f_auto/nestly/public/OGImage.webp', 
+    'https://res.cloudinary.com/debewnh29/image/upload/w_1200,h_630,c_fill,g_auto/q_auto/f_auto/nestly/public/OGImage.webp',
 };
 import SessionProvider from '../providers/SessionProvider';
 export default function RootLayout({ children }) {
@@ -154,7 +154,7 @@ export default function RootLayout({ children }) {
         <SessionProvider>
           <NavBar />
           <main className="mx-auto w-full  ">
-            {children}
+            <TooltipProvider>{children}</TooltipProvider>
             <div className="font-heading">
               <Toaster richColors />
             </div>

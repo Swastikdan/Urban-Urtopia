@@ -101,7 +101,6 @@ export default async function userBookings() {
       }
     });
   }
-  console.log(bookings);
 
   return bookings;
   // const bookings = await prisma.bookings.findMany({

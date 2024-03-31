@@ -1,4 +1,5 @@
-{/*
+{
+  /*
 
 model UserFavorites {
   id      String  @id @default(auto()) @map("_id") @db.ObjectId
@@ -9,60 +10,70 @@ model UserFavorites {
   @@unique([userId, placeId])
 }
 
-*/}
+*/
+}
 
 import prisma from '@/lib/prisma';
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
-// async function  addFavorite(request){
+async function getFavorites(request) {
+  const session = await getServerSession();
 
-// const session = await getServerSession();
-// const { placeId } = await request.json;
-// console.log('placeId:', placeId); // Add this line
-// const useremail = session.user.email;
-//   if (!session) {
-//     return NextResponse.json('You must be signed in to add a favorite');
-//   }
-//     const user = await prisma.user.findUnique({
-//       where: {
-//         email: useremail,
-//       },
-//     });
+  if (!session) {
+    return NextResponse.json(
+      { message: 'You must be signed in to view favorites' },
+      { status: 401 },
+    );
+  }
 
-//     if (!user) {
-//       return NextResponse.json('User not found');
-//     }
+  const user = await prisma.user.findUnique({
+    where: {
+      email: session.user.email,
+    },
+  });
 
-//     const place = await prisma.places.findUnique({
-//       where: {
-//         id: placeId,
-//       },
-//     });
 
-//     if (!place) {
-//       return NextResponse.json('Place not found');
-//     }
 
-//     const favorite = await prisma.userFavorites.create({
-//       data: {
-//         userId: user.id,
-//         placeId,
-//       },
-//     });
+const favorites = await prisma.userFavorites.findMany({
+    where: {
+      userId: user.id,
+    },
+  });
 
-//     console.log('favorite', favorite);
+  const placesWithFavoriteId = await Promise.all(
+    favorites.map(async (favorite) => {
+      const place = await prisma.places.findUnique({
+        where: {
+          id: favorite.placeId,
+        },
+        select: {
+            id: true,
+          title: true,
+          state: true,
+          city: true,
+          price: true,
+          photos: true,
+        },
+      });
+      return {
+       place,
+      };
+    }),
+  );
 
-//     return NextResponse.json({ message: ' Favorite added ' }, { status: 200 });
 
-// }
-
+return NextResponse.json(placesWithFavoriteId, { status: 200 });
+}
 async function addOrRemoveFavorite(request) {
   const session = await getServerSession();
   const { placeId } = await request.json();
 
   if (!session) {
-    return NextResponse.json({ message: 'You must be signed in to add a favorite' }, { status: 401 });
+    return NextResponse.json(
+      { message: 'You must be signed in to add a favorite' },
+      { status: 401 },
+    );
   }
 
   const user = await prisma.user.findUnique({
@@ -78,7 +89,7 @@ async function addOrRemoveFavorite(request) {
   });
 
   if (!place) {
-    return NextResponse.json({ message: 'Place not found' } , { status: 404 });
+    return NextResponse.json({ message: 'Place not found' }, { status: 404 });
   }
 
   const favorite = await prisma.userFavorites.findUnique({
@@ -113,4 +124,4 @@ async function addOrRemoveFavorite(request) {
   }
 }
 
-export { addOrRemoveFavorite as POST };
+export { getFavorites as GET, addOrRemoveFavorite as POST };

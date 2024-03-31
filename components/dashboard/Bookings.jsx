@@ -14,10 +14,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Ban, Badge, BadgeCheck, BadgeX } from 'lucide-react';
 
 export default function Bookings({ bookings }) {
-  // if (!Array.isArray(bookings)) {
-  //   return <p>No bookings available</p>;
-  // }
-  console.log('bookings', bookings);
+
   return (
     <>
       <div className="mx-auto w-full py-10 sm:px-6 lg:px-8 lg:py-14">

@@ -139,7 +139,7 @@ export default function ProfileEdit() {
         bio,
       };
 
-      console.log(userDetails);
+      // console.log(userDetails);
       //post request to  /api/user/[id] with userDetails
       const res = await fetch(`/api/user/${userid}`, {
         method: 'POST',
@@ -181,7 +181,7 @@ export default function ProfileEdit() {
       }
       setLoading(false);
     } catch (error) {
-      console.error(error);
+      // console.error(error);
       setLoading(false);
       toast.error('Something Went Wrong');
     }
