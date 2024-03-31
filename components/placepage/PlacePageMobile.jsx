@@ -30,12 +30,17 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '../ui/button';
 
 export default function PlacePageMobile({ place }) {
-  const { title, address, description, photos } = place;
+  const { id, title, address, description, photos, isFavorite } = place;
   const [date, setDate] = React.useState(new Date());
   return (
     <section>
       <div className="w-full max-w-[100vw] overflow-hidden sm:hidden ">
-        <ImageGallerySmall images={photos} title={title} />
+        <ImageGallerySmall
+          images={photos}
+          title={title}
+          id={id}
+          isFavorite={isFavorite}
+        />
       </div>
 
       <div className="relative px-5  pt-5 sm:hidden  ">
@@ -259,7 +264,7 @@ export default function PlacePageMobile({ place }) {
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
-          <div className="py-3 font-semibold text-3xl ">₹6,726 night</div>
+          <div className="py-3 text-3xl font-semibold ">₹6,726 night</div>
           <div className="flex items-center justify-end space-x-5 pt-2 text-base">
             <span className="underline underline-offset-4">
               ₹6,726 x 5 nights

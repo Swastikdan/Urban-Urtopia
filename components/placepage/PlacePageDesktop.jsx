@@ -26,7 +26,7 @@ import {
 } from '@/components/ui/dialog';
 
 export default function PlacePageDesktop({ place }) {
-  const { title, address, description, photos } = place;
+  const { id, title, address, description, photos, isFavorite } = place;
   const [date, setDate] = React.useState({
     from: new Date(2024, 3, 30),
     to: addDays(new Date(2024, 5, 20), 20),
@@ -37,7 +37,7 @@ export default function PlacePageDesktop({ place }) {
       <h1 className="text-pretty pb-5 pt-1 text-2xl font-bold xl:text-3xl">
         {title}
       </h1>
-      <ImageGalleryMedium images={photos} />
+      <ImageGalleryMedium images={photos} id={id} isFavorite={isFavorite} />
       <div className="py-5">
         <div className="flex flex-col space-y-1">
           <span className="text-lg font-medium xl:text-xl">{address}</span>
@@ -306,7 +306,9 @@ export default function PlacePageDesktop({ place }) {
                           <button class="rounded-full border border-input bg-background  p-2 hover:bg-accent hover:text-accent-foreground">
                             <Plus size={14} />
                           </button>
-                          <span className="text-base font-light tabular-nums">2</span>
+                          <span className="text-base font-light tabular-nums">
+                            2
+                          </span>
                           <button class="rounded-full border border-input bg-background  p-2 hover:bg-accent hover:text-accent-foreground">
                             <Minus size={14} />
                           </button>
@@ -325,7 +327,9 @@ export default function PlacePageDesktop({ place }) {
                           <button class="rounded-full border border-input bg-background  p-2 hover:bg-accent hover:text-accent-foreground">
                             <Plus size={14} />
                           </button>
-                          <span className="text-base font-light tabular-nums">1</span>
+                          <span className="text-base font-light tabular-nums">
+                            1
+                          </span>
                           <button class="rounded-full border border-input bg-background  p-2 hover:bg-accent hover:text-accent-foreground">
                             <Minus size={14} />
                           </button>
@@ -343,7 +347,9 @@ export default function PlacePageDesktop({ place }) {
                           <button class="rounded-full border border-input bg-background  p-2 hover:bg-accent hover:text-accent-foreground">
                             <Plus size={14} />
                           </button>
-                          <span className="text-base font-light tabular-nums">2</span>
+                          <span className="text-base font-light tabular-nums">
+                            2
+                          </span>
                           <button class="rounded-full border border-input bg-background  p-2 hover:bg-accent hover:text-accent-foreground">
                             <Minus size={14} />
                           </button>
@@ -359,7 +365,9 @@ export default function PlacePageDesktop({ place }) {
                           <button class="rounded-full border border-input bg-background  p-2 hover:bg-accent hover:text-accent-foreground">
                             <Plus size={14} />
                           </button>
-                          <span className="text-base font-light tabular-nums">2</span>
+                          <span className="text-base font-light tabular-nums">
+                            2
+                          </span>
                           <button class="rounded-full border border-input bg-background  p-2 hover:bg-accent hover:text-accent-foreground">
                             <Minus size={14} />
                           </button>

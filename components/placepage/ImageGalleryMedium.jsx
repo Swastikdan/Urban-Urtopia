@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Grip, ChevronLeft, Share, Heart } from 'lucide-react';
 import {
   Drawer,
@@ -11,14 +11,20 @@ import {
 } from '@/components/ui/drawer';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
-
-export default function ImageGalleryMedium({ images }) {
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+export default function ImageGalleryMedium({ images, id, isFavorite }) {
+  const ids = id;
+  const isFavorites = isFavorite;
   return (
     <>
       <section className="mx-auto flex   w-full items-center justify-center pt-0">
         <div className="hidden items-center justify-center gap-1 sm:grid md:grid-cols-2">
           <AllPhotos
             photos={images}
+            id={ids}
+            isFavorite={isFavorites}
             className="relative col-span-1 rounded-xl bg-black/15 md:rounded-none md:rounded-l-xl  "
           >
             <img
@@ -46,6 +52,8 @@ export default function ImageGalleryMedium({ images }) {
               images.slice(1, 5).map((img, index) => (
                 <AllPhotos
                   photos={images}
+                  id={ids}
+                  isFavorite={isFavorites}
                   key={index}
                   className={`bg-black/15 ${index === 1 ? 'rounded-tr-xl' : ''} ${index === 3 ? 'relative rounded-br-xl' : ''}`}
                 >
@@ -55,7 +63,7 @@ export default function ImageGalleryMedium({ images }) {
                       '/upload/w_600,h_400,c_fill,g_auto/q_auto/f_auto/',
                     )}
                     alt=""
-                    className={`h-full cursor-pointer object-fill hover:mix-blend-multiply bg-gray-400 ${index === 1 ? 'rounded-tr-xl' : ''} ${index === 3 ? 'rounded-br-xl' : ''}`}
+                    className={`h-full cursor-pointer bg-gray-400 object-fill hover:mix-blend-multiply ${index === 1 ? 'rounded-tr-xl' : ''} ${index === 3 ? 'rounded-br-xl' : ''}`}
                   />
 
                   {index === 3 && (
@@ -75,10 +83,49 @@ export default function ImageGalleryMedium({ images }) {
   );
 }
 
-export function AllPhotos({ children, className, photos = [] }) {
+export function AllPhotos({
+  children,
+  className,
+  photos = [],
+  id,
+  isFavorite,
+}) {
   const half = Math.ceil(photos?.length / 2);
   const firstHalf = photos?.slice(0, half);
   const secondHalf = photos?.slice(half);
+  const router = useRouter();
+  const { data: session } = useSession();
+  const [isFavoritePlace, setIsFavoritePlace] = useState(false);
+  useEffect(() => {
+    if (isFavorite === true) {
+      setIsFavoritePlace(true);
+    }
+  }, [isFavorite]);
+
+  const user = session?.user;
+
+  const handleFavoriteClick = () => {
+    if (session?.user) {
+      setIsFavoritePlace(!isFavoritePlace);
+      fetch('/api/user/favorites', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ placeId: id }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          toast.success(data.message);
+        })
+        .catch((error) => {
+          toast.error('An error occurred');
+          setIsFavoritePlace(isFavoritePlace);
+        });
+    } else {
+      router.push('/login');
+    }
+  };
   return (
     <Drawer>
       <DrawerTrigger className={cn(className)}>{children}</DrawerTrigger>
@@ -90,10 +137,26 @@ export function AllPhotos({ children, className, photos = [] }) {
             </button>
           </DrawerClose>
           <div className=" flex items-center space-x-8">
-            <button className="  flex items-center gap-1.5  text-center">
-              <Heart size={20} />
+            <button
+              className="  flex items-center gap-1.5  text-center"
+              onClick={() => handleFavoriteClick()}
+            >
+              <Heart
+                width={20}
+                height={20}
+                className={`m-2  text-white transition-all duration-200  active:scale-[.8] md:h-7 md:w-7`}
+                fill={
+                  isFavoritePlace === true
+                    ? 'rgb(255,56,92)'
+                    : 'rgb(0 0 0 / 0.6)'
+                }
+                focusable="true"
+                strokeWidth={1}
+              />
 
-              <span className=" font-semibold underline ">Save</span>
+              <span className=" font-semibold underline ">
+                {isFavoritePlace === true ? 'Saved' : 'Save'}
+              </span>
             </button>
             <button
               className=" text-centerr flex items-center  gap-1.5 "

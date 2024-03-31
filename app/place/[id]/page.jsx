@@ -31,7 +31,6 @@ export default async function page({ params }) {
 
   const place = await getPlacesById(id);
 
-
   return (
     <div className="mx-auto flex w-full max-w-screen-xl flex-col  items-center">
       <div className="flex w-full sm:hidden">
