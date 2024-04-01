@@ -25,15 +25,15 @@ const pathwayextreme = Pathway_Extreme({
 });
 import { TooltipProvider } from '@/components/ui/tooltip';
 export const metadata = {
-  title: 'Airluxe | Holiday rentals, cabins, beach houses &amp; more',
+  title: 'Urban Utopia | Holiday rentals, cabins, beach houses &amp; more',
   description:
-    'Airluxe is a web application that helps users find the best home deals in their desired location. We offer a wide range of homes to choose from, with competitive prices and excellent customer service.',
+    'Urban Utopia is a web application that helps users find the best home deals in their desired location. We offer a wide range of homes to choose from, with competitive prices and excellent customer service.',
   twitterCard:
     'https://res.cloudinary.com/debewnh29/image/upload/w_1200,h_630,c_fill,g_auto/q_auto/f_auto/nestly/public/OGImage.webp',
-  ogTitle: 'Airluxe | Holiday rentals, cabins, beach houses &amp; more',
+  ogTitle: 'Urban Utopia | Holiday rentals, cabins, beach houses &amp; more',
   ogDescription:
-    'Airluxe is a web application that helps users find the best home deals in their desired location. We offer a wide range of homes to choose from, with competitive prices and excellent customer service.',
-  ogUrl: 'https://airluxe.vercel.app/',
+    'Urban Utopia is a web application that helps users find the best home deals in their desired location. We offer a wide range of homes to choose from, with competitive prices and excellent customer service.',
+  ogUrl: 'https://urbanutopia.vercel.app/',
   ogImage:
     'https://res.cloudinary.com/debewnh29/image/upload/w_1200,h_630,c_fill,g_auto/q_auto/f_auto/nestly/public/OGImage.webp',
 };
@@ -59,8 +59,8 @@ export default function RootLayout({ children }) {
       <meta name="robots" content="index, follow" />
       <title>{metadata.title}</title>
       <link rel="canonical" href={metadata.ogUrl} />
-      <meta name="apple-mobile-web-app-title" content="Airluxe" />
-      <meta name="application-name" content="Airluxe" />
+      <meta name="apple-mobile-web-app-title" content="Urban Utopia" />
+      <meta name="application-name" content="Urban Utopia" />
       <meta name="msapplication-TileColor" content="#da532c" />
       <meta name="theme-color" content="#ffffff" />
       <link

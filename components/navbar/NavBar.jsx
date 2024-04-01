@@ -37,17 +37,20 @@ export default function NavBar({ className }) {
       <nav className=" flex h-full w-full max-w-screen-xl items-center justify-between  px-2">
         <Link
           href="/"
-          className="hidden items-center space-x-2 text-xl font-bold md:flex   "
+          className="hidden items-center space-x-2 text-sm font-bold md:flex   "
         >
           <Image
-            src="/Icon.png"
-            alt="Airluxe"
+            src="/logo.svg"
+            alt="Urban Utopia"
             width={512}
             height={512}
             priority={true}
-            className='w-12 h-12'
+            className="h-12 w-12"
           />
-          <h1 className="">Airluxe</h1>
+          <h1 className="flex flex-col">
+            {' '}
+            <span>Urban</span> <span>Utopia</span>{' '}
+          </h1>
         </Link>
 
         {path === '/' ? (
@@ -119,8 +122,8 @@ export default function NavBar({ className }) {
 //       href="/"
 //       className="hidden items-center space-x-2 text-xl font-bold md:flex  "
 //     >
-//       <Image src="/logo_small.svg" alt="Airluxe" width={40} height={20} />
-//       <h1>Airluxe</h1>
+//       <Image src="/logo_small.svg" alt="Urban Utopia" width={40} height={20} />
+//       <h1>Urban Utopia</h1>
 //     </Link>
 //     <div className="w-full md:w-auto">
 //       <div className="hidden md:flex">

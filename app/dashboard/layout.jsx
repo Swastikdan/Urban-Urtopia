@@ -25,7 +25,7 @@ export default async  function layout({children}) {
   }
   return (
     <div className="flex min-h-screen  w-full flex-col ">
-      <header className="sticky top-0 mx-auto flex h-16 w-full items-center justify-between gap-4 border-b bg-background px-4 py-10 md:px-6 z-20">
+      <header className="sticky top-0 mx-auto flex h-16 w-full items-center justify-between gap-4 border-b bg-background px-4 py-10 md:px-20 z-20 ">
         <h1 className="text-start text-4xl font-bold sm:text-center md:text-5xl xl:text-6xl ">
           Dashboard
         </h1>
