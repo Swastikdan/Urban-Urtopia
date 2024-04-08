@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -42,7 +43,7 @@ export default function FavoriteButton({ isFavorite, id , type}) {
   if(type === 'gallerymid'){
     return (
       <div
-        className="  flex items-center gap-1.5  text-center"
+        className="  flex items-center gap-1.5  text-center cursor-pointer"
         onClick={() => handleFavoriteClick()}
       >
         <Heart
@@ -67,7 +68,7 @@ export default function FavoriteButton({ isFavorite, id , type}) {
 
     return (
       <div
-        className="rounded-full bg-white  p-1.5  text-center shadow-md transition-all duration-200 active:scale-90"
+        className="rounded-full bg-white  p-1.5  text-center shadow-md transition-all duration-200 active:scale-90 cursor-pointer"
         onClick={() => handleFavoriteClick()}
       >
         {/* <Heart size={20} /> */}
@@ -89,7 +90,7 @@ export default function FavoriteButton({ isFavorite, id , type}) {
   else if(type === 'home'){
     return (
       <div
-        className="group absolute right-2 top-2 z-20 cursor-pointer rounded-full disabled:pointer-events-none disabled:cursor-none "
+        className="group absolute right-2 top-2 z-20  rounded-full disabled:pointer-events-none disabled:cursor-none cursor-pointer "
         onClick={() => handleFavoriteClick()}
       >
         <Heart
