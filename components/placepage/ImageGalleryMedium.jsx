@@ -1,6 +1,5 @@
-'use client';
-import React, { useState, useEffect } from 'react';
-import { Grip, ChevronLeft, Share, Heart } from 'lucide-react';
+
+import { Grip, ChevronLeft, Share } from 'lucide-react';
 import {
   Drawer,
   DrawerTrigger,
@@ -11,20 +10,16 @@ import {
 } from '@/components/ui/drawer';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import { toast } from 'sonner';
+import FavoriteButton from '../FavoriteButton';
 export default function ImageGalleryMedium({ images, id, isFavorite }) {
-  const ids = id;
-  const isFavorites = isFavorite;
   return (
     <>
       <section className="mx-auto flex   w-full items-center justify-center pt-0">
         <div className="hidden items-center justify-center gap-1 sm:grid md:grid-cols-2">
           <AllPhotos
             photos={images}
-            id={ids}
-            isFavorite={isFavorites}
+            id={id}
+            isFavorite={isFavorite}
             className="relative col-span-1 rounded-xl bg-black/15 md:rounded-none md:rounded-l-xl  "
           >
             <img
@@ -52,8 +47,8 @@ export default function ImageGalleryMedium({ images, id, isFavorite }) {
               images.slice(1, 5).map((img, index) => (
                 <AllPhotos
                   photos={images}
-                  id={ids}
-                  isFavorite={isFavorites}
+                  id={id}
+                  isFavorite={isFavorite}
                   key={index}
                   className={`bg-black/15 ${index === 1 ? 'rounded-tr-xl' : ''} ${index === 3 ? 'relative rounded-br-xl' : ''}`}
                 >
@@ -93,39 +88,6 @@ export function AllPhotos({
   const half = Math.ceil(photos?.length / 2);
   const firstHalf = photos?.slice(0, half);
   const secondHalf = photos?.slice(half);
-  const router = useRouter();
-  const { data: session } = useSession();
-  const [isFavoritePlace, setIsFavoritePlace] = useState(false);
-  useEffect(() => {
-    if (isFavorite === true) {
-      setIsFavoritePlace(true);
-    }
-  }, [isFavorite]);
-
-  const user = session?.user;
-
-  const handleFavoriteClick = () => {
-    if (session?.user) {
-      setIsFavoritePlace(!isFavoritePlace);
-      fetch('/api/user/favorites', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ placeId: id }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          toast.success(data.message);
-        })
-        .catch((error) => {
-          toast.error('An error occurred');
-          setIsFavoritePlace(isFavoritePlace);
-        });
-    } else {
-      router.push('/login');
-    }
-  };
   return (
     <Drawer>
       <DrawerTrigger className={cn(className)}>{children}</DrawerTrigger>
@@ -137,27 +99,11 @@ export function AllPhotos({
             </button>
           </DrawerClose>
           <div className=" flex items-center space-x-8">
-            <button
-              className="  flex items-center gap-1.5  text-center"
-              onClick={() => handleFavoriteClick()}
-            >
-              <Heart
-                width={20}
-                height={20}
-                className={`m-2  text-white transition-all duration-200  active:scale-[.8] md:h-7 md:w-7`}
-                fill={
-                  isFavoritePlace === true
-                    ? 'rgb(255,56,92)'
-                    : 'rgb(0 0 0 / 0.6)'
-                }
-                focusable="true"
-                strokeWidth={1}
-              />
-
-              <span className=" font-semibold underline ">
-                {isFavoritePlace === true ? 'Saved' : 'Save'}
-              </span>
-            </button>
+            <FavoriteButton
+              isFavorite={isFavorite}
+              id={id}
+              type="gallerymid"
+            />
             <button
               className=" text-centerr flex items-center  gap-1.5 "
               onClick={() => {
@@ -166,7 +112,6 @@ export function AllPhotos({
                     .share({
                       url: window.location.href,
                     })
-                    .catch((error) => alert('Something went wrong '));
                 } else {
                   alert('Web Share API is not supported in your browser');
                 }

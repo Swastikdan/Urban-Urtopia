@@ -1,47 +1,13 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import { Pagination } from 'swiper/modules';
-import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
-import { toast } from 'sonner';
-import { ChevronLeft, Heart, Share } from 'lucide-react';
+import { ChevronLeft, Share } from 'lucide-react';
+import FavoriteButton from '../FavoriteButton';
 export default function ImageGallerySmall({ images, title, id, isFavorite }) {
-  const router = useRouter();
-  const { data: session } = useSession();
-  const [isFavoritePlace, setIsFavoritePlace] = useState(false);
-  useEffect(() => {
-    if (isFavorite === true) {
-      setIsFavoritePlace(true);
-    }
-  }, [isFavorite]);
-
-
-  const handleFavoriteClick = () => {
-    if (session?.user) {
-      setIsFavoritePlace(!isFavoritePlace);
-      fetch('/api/user/favorites', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ placeId: id }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          toast.success(data.message);
-        })
-        .catch((error) => {
-          toast.error('An error occurred');
-          setIsFavoritePlace(isFavoritePlace);
-        });
-    } else {
-      router.push('/login');
-    }
-  };
   return (
     <>
       <div className=" relative flex w-full">
@@ -55,23 +21,11 @@ export default function ImageGallerySmall({ images, title, id, isFavorite }) {
             <ChevronLeft size={25} />
           </button>
           <div className="mr-10 flex space-x-3">
-            <button
-              className="rounded-full bg-white  p-1.5  text-center shadow-md transition-all duration-200 active:scale-90"
-              onClick={() => handleFavoriteClick()}
-            >
-              {/* <Heart size={20} /> */}
-              <Heart
-                size={25}
-                className={` text-white transition-all duration-200  active:scale-[.8] md:h-7 md:w-7`}
-                fill={
-                  isFavoritePlace === true
-                    ? 'rgb(255,56,92)'
-                    : 'rgb(0 0 0 / 0.6)'
-                }
-                focusable="true"
-                strokeWidth={1}
-              />
-            </button>
+            <FavoriteButton
+              isFavorite={isFavorite}
+              id={id}
+              type="gallerysmall"
+            />
 
             <div
               className="rounded-full bg-white p-1.5 text-center shadow-md transition-all duration-200 active:scale-90"

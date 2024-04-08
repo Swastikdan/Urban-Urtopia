@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import ImageGalleryMedium from './ImageGalleryMedium';
 import { Separator } from '@/components/ui/separator';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -22,7 +22,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -31,74 +30,22 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import { toast } from 'sonner';
+
+import FavoriteButton from '../FavoriteButton';
 export default function PlacePageDesktop({ place }) {
   const { id, title, address, description, photos, isFavorite } = place;
   const [date, setDate] = React.useState({
     from: new Date(2024, 3, 30),
     to: addDays(new Date(2024, 5, 20), 20),
   });
-const router = useRouter();
-const { data: session } = useSession();
-const [isFavoritePlace, setIsFavoritePlace] = useState(false);
-useEffect(() => {
-  if (isFavorite === true) {
-    setIsFavoritePlace(true);
-  }
-}, [isFavorite]);
-
-const user = session?.user;
-
-const handleFavoriteClick = () => {
-  if (session?.user) {
-    setIsFavoritePlace(!isFavoritePlace);
-    fetch('/api/user/favorites', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ placeId: id }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        toast.success(data.message);
-      })
-      .catch((error) => {
-        toast.error('An error occurred');
-        setIsFavoritePlace(isFavoritePlace);
-      });
-  } else {
-    router.push('/login');
-  }
-};
   return (
     <section className="max-w-6xl px-10">
-      <div className='flex items-center justify-between'>
+      <div className="flex items-center justify-between">
         <h1 className="text-pretty pb-5 pt-1 text-2xl font-bold xl:text-3xl">
           {title}
         </h1>
         <div className=" flex items-center space-x-8">
-          <button
-            className="  flex items-center gap-1.5  text-center"
-            onClick={() => handleFavoriteClick()}
-          >
-            <Heart
-              width={20}
-              height={20}
-              className={`m-2  text-white transition-all duration-200  active:scale-[.8] md:h-7 md:w-7`}
-              fill={
-                isFavoritePlace === true ? 'rgb(255,56,92)' : 'rgb(0 0 0 / 0.6)'
-              }
-              focusable="true"
-              strokeWidth={1}
-            />
-
-            <span className=" font-semibold underline ">
-              {isFavoritePlace === true ? 'Saved' : 'Save'}
-            </span>
-          </button>
+          <FavoriteButton isFavorite={isFavorite} id={id} type="gallerymid" />
           <button
             className=" text-centerr flex items-center  gap-1.5 "
             onClick={() => {
