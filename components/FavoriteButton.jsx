@@ -41,7 +41,7 @@ export default function FavoriteButton({ isFavorite, id , type}) {
 
   if(type === 'gallerymid'){
     return (
-      <button
+      <div
         className="  flex items-center gap-1.5  text-center"
         onClick={() => handleFavoriteClick()}
       >
@@ -59,14 +59,14 @@ export default function FavoriteButton({ isFavorite, id , type}) {
         <span className=" font-semibold underline ">
           {isFavoritePlace === true ? 'Saved' : 'Save'}
         </span>
-      </button>
+      </div>
     );
   } 
 
   else if(type === 'gallerysmall'){
 
     return (
-      <button
+      <div
         className="rounded-full bg-white  p-1.5  text-center shadow-md transition-all duration-200 active:scale-90"
         onClick={() => handleFavoriteClick()}
       >
@@ -80,7 +80,7 @@ export default function FavoriteButton({ isFavorite, id , type}) {
           focusable="true"
           strokeWidth={1}
         />
-      </button>
+      </div>
     );
 
 
