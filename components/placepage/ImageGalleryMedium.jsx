@@ -10,7 +10,6 @@ import {
 } from '@/components/ui/drawer';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import FavoriteButton from '../FavoriteButton';
 export default function ImageGalleryMedium({ images, id, isFavoritePlace , onClick }) {
   return (
     <>

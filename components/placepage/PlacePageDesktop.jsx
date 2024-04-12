@@ -31,7 +31,6 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 
-import FavoriteButton from '../FavoriteButton';
 export default function PlacePageDesktop({ place , onClick, isFavoritePlace}) {
   const { id, title, address, description, photos } = place;
   const [date, setDate] = React.useState({
