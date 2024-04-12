@@ -5,9 +5,8 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import { Pagination } from 'swiper/modules';
-import { ChevronLeft, Share } from 'lucide-react';
-import FavoriteButton from '../FavoriteButton';
-export default function ImageGallerySmall({ images, title, id, isFavorite }) {
+import { ChevronLeft, Share, Heart } from 'lucide-react';
+export default function ImageGallerySmall({ images, title, id, isFavoritePlace ,onClick }) {
   return (
     <>
       <div className=" relative flex w-full">
@@ -21,11 +20,23 @@ export default function ImageGallerySmall({ images, title, id, isFavorite }) {
             <ChevronLeft size={25} />
           </button>
           <div className="mr-10 flex space-x-3">
-            <FavoriteButton
-              isFavorite={isFavorite}
-              id={id}
-              type="gallerysmall"
-            />
+            <div
+              className="cursor-pointer rounded-full  bg-white  p-1.5 text-center shadow-md transition-all duration-200 active:scale-90"
+              onClick={onClick}
+            >
+              {/* <Heart size={20} /> */}
+              <Heart
+                size={25}
+                className={` text-white transition-all duration-200  active:scale-[.8] md:h-7 md:w-7`}
+                fill={
+                  isFavoritePlace === true
+                    ? 'rgb(255,56,92)'
+                    : 'rgb(0 0 0 / 0.6)'
+                }
+                focusable="true"
+                strokeWidth={1}
+              />
+            </div>
 
             <div
               className="rounded-full bg-white p-1.5 text-center shadow-md transition-all duration-200 active:scale-90"

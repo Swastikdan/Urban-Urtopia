@@ -11,44 +11,43 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { toast } from 'sonner';
-import FavoriteButton from '@/components/FavoriteButton';
 export default function ImageSlider({ customButton, images, isFavorite, id }) {
-  // const { data: session } = useSession();
-  // const router = useRouter();
-  // const [isFavoritePlace, setIsFavoritePlace] = useState(false);
-  // const [favoriteLoading, setFavoriteLoading] = useState(false);
-  // useEffect(() => {
-  //   if (isFavorite === true) {
-  //     setIsFavoritePlace(true);
-  //   }
-  // }, [isFavorite]);
+  const { data: session } = useSession();
+  const router = useRouter();
+  const [isFavoritePlace, setIsFavoritePlace] = useState(false);
+  const [favoriteLoading, setFavoriteLoading] = useState(false);
+  useEffect(() => {
+    if (isFavorite === true) {
+      setIsFavoritePlace(true);
+    }
+  }, [isFavorite]);
 
-  // const handleFavoriteClick = () => {
-  //   if (session?.user) {
-  //     setFavoriteLoading(true);
-  //     setIsFavoritePlace(!isFavoritePlace);
+  const handleFavoriteClick = () => {
+    if (session?.user) {
+      setFavoriteLoading(true);
+      setIsFavoritePlace(!isFavoritePlace);
 
-  //     fetch('/api/user/favorites', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({ placeId: id }),
-  //     })
-  //       .then((res) => res.json())
-  //       .then((data) => {
-  //         setFavoriteLoading(false);
-  //         toast.success(data.message);
-  //       })
-  //       .catch((error) => {
-  //         setFavoriteLoading(false);
-  //         toast.error('An error occurred');
-  //         setIsFavoritePlace(isFavoritePlace);
-  //       });
-  //   } else {
-  //     router.push('/login');
-  //   }
-  // };
+      fetch('/api/user/favorites', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ placeId: id }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setFavoriteLoading(false);
+          toast.success(data.message);
+        })
+        .catch((error) => {
+          setFavoriteLoading(false);
+          toast.error('An error occurred');
+          setIsFavoritePlace(isFavoritePlace);
+        });
+    } else {
+      router.push('/login');
+    }
+  };
 
   return (
     <div className=" group relative z-0 m-1 flex h-full min-h-[300px] items-center justify-center overflow-hidden rounded-xl bg-gray-200 dark:bg-gray-600">
@@ -104,7 +103,21 @@ export default function ImageSlider({ customButton, images, isFavorite, id }) {
         <ChevronRight width={20} height={20} />
         <span className="sr-only">Next</span>
       </button>
-     <FavoriteButton type="home"  isFavorite={isFavorite} id={id} />
+      <div
+        className="group absolute right-2 top-2 z-20  cursor-pointer rounded-full disabled:pointer-events-none disabled:cursor-none "
+        onClick={() => handleFavoriteClick()}
+      >
+        <Heart
+          width={35}
+          height={35}
+          className={`m-2  text-white transition-all duration-200  active:scale-[.8] md:h-7 md:w-7`}
+          fill={
+            isFavoritePlace === true ? 'rgb(255,56,92)' : 'rgb(0 0 0 / 0.6)'
+          }
+          focusable="true"
+          strokeWidth={1}
+        />
+      </div>
     </div>
   );
 }

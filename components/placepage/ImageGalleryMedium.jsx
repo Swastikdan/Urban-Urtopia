@@ -1,5 +1,5 @@
 
-import { Grip, ChevronLeft, Share } from 'lucide-react';
+import { Grip, ChevronLeft, Share , Heart } from 'lucide-react';
 import {
   Drawer,
   DrawerTrigger,
@@ -11,7 +11,7 @@ import {
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import FavoriteButton from '../FavoriteButton';
-export default function ImageGalleryMedium({ images, id, isFavorite }) {
+export default function ImageGalleryMedium({ images, id, isFavoritePlace , onClick }) {
   return (
     <>
       <section className="mx-auto flex   w-full items-center justify-center pt-0">
@@ -19,7 +19,8 @@ export default function ImageGalleryMedium({ images, id, isFavorite }) {
           <AllPhotos
             photos={images}
             id={id}
-            isFavorite={isFavorite}
+            isFavoritePlace={isFavoritePlace}
+            onClick={onClick}
             className="relative col-span-1 rounded-xl bg-black/15 md:rounded-none md:rounded-l-xl  "
           >
             <img
@@ -47,8 +48,8 @@ export default function ImageGalleryMedium({ images, id, isFavorite }) {
               images.slice(1, 5).map((img, index) => (
                 <AllPhotos
                   photos={images}
-                  id={id}
-                  isFavorite={isFavorite}
+                  isFavoritePlace={isFavoritePlace}
+                  onClick={onClick}
                   key={index}
                   className={`bg-black/15 ${index === 1 ? 'rounded-tr-xl' : ''} ${index === 3 ? 'relative rounded-br-xl' : ''}`}
                 >
@@ -78,13 +79,7 @@ export default function ImageGalleryMedium({ images, id, isFavorite }) {
   );
 }
 
-export function AllPhotos({
-  children,
-  className,
-  photos = [],
-  id,
-  isFavorite,
-}) {
+export function AllPhotos({ children, className, photos = [], id, isFavoritePlace , onClick }) {
   const half = Math.ceil(photos?.length / 2);
   const firstHalf = photos?.slice(0, half);
   const secondHalf = photos?.slice(half);
@@ -99,19 +94,34 @@ export function AllPhotos({
             </button>
           </DrawerClose>
           <div className=" flex items-center space-x-8">
-            <FavoriteButton
-              isFavorite={isFavorite}
-              id={id}
-              type="gallerymid"
-            />
+            <div
+              className="  flex cursor-pointer items-center  gap-1.5 text-center"
+              onClick={onClick}
+            >
+              <Heart
+                width={20}
+                height={20}
+                className={`m-2  text-white transition-all duration-200  active:scale-[.8] md:h-7 md:w-7`}
+                fill={
+                  isFavoritePlace === true
+                    ? 'rgb(255,56,92)'
+                    : 'rgb(0 0 0 / 0.6)'
+                }
+                focusable="true"
+                strokeWidth={1}
+              />
+
+              <span className=" font-semibold underline ">
+                {isFavoritePlace === true ? 'Saved' : 'Save'}
+              </span>
+            </div>
             <button
               className=" text-centerr flex items-center  gap-1.5 "
               onClick={() => {
                 if (navigator.share) {
-                  navigator
-                    .share({
-                      url: window.location.href,
-                    })
+                  navigator.share({
+                    url: window.location.href,
+                  });
                 } else {
                   alert('Web Share API is not supported in your browser');
                 }

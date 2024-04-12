@@ -32,8 +32,8 @@ import {
 } from '@/components/ui/dialog';
 
 import FavoriteButton from '../FavoriteButton';
-export default function PlacePageDesktop({ place }) {
-  const { id, title, address, description, photos, isFavorite } = place;
+export default function PlacePageDesktop({ place , onClick, isFavoritePlace}) {
+  const { id, title, address, description, photos } = place;
   const [date, setDate] = React.useState({
     from: new Date(2024, 3, 30),
     to: addDays(new Date(2024, 5, 20), 20),
@@ -45,7 +45,25 @@ export default function PlacePageDesktop({ place }) {
           {title}
         </h1>
         <div className=" flex items-center space-x-8">
-          <FavoriteButton isFavorite={isFavorite} id={id} type="gallerymid" />
+          <div
+            className="  flex cursor-pointer items-center  gap-1.5 text-center"
+            onClick={onClick}
+          >
+            <Heart
+              width={20}
+              height={20}
+              className={`m-2  text-white transition-all duration-200  active:scale-[.8] md:h-7 md:w-7`}
+              fill={
+                isFavoritePlace === true ? 'rgb(255,56,92)' : 'rgb(0 0 0 / 0.6)'
+              }
+              focusable="true"
+              strokeWidth={1}
+            />
+
+            <span className=" font-semibold underline ">
+              {isFavoritePlace === true ? 'Saved' : 'Save'}
+            </span>
+          </div>
           <button
             className=" text-centerr flex items-center  gap-1.5 "
             onClick={() => {
@@ -66,7 +84,7 @@ export default function PlacePageDesktop({ place }) {
           </button>
         </div>
       </div>
-      <ImageGalleryMedium images={photos} id={id} isFavorite={isFavorite} />
+      <ImageGalleryMedium images={photos} id={id} isFavoritePlace={isFavoritePlace} onClick={onClick}/>
       <div className="py-5">
         <div className="flex flex-col space-y-1">
           <span className="text-lg font-medium xl:text-xl">{address}</span>
