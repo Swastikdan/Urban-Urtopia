@@ -5,15 +5,16 @@ export async function uploadbylink(request) {
   try {
     const session = await getServerSession();
     if (!session)
-      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
 
-    const { link } = await request.json();
-    const links = link.split(',').map(item => item.trim()).slice(0, 100);
+    const { link } = await request.json(); // link is now an array
     let urls = [];
 
-    for (let i = 0; i < links.length; i++) {
-      let result = await cloudinary.uploader.upload(links[i], {
-        folder: "nestly/places",
+    for (let i = 0; i < link.length; i++) {
+      // Iterate over the array
+      let result = await cloudinary.uploader.upload(link[i], {
+        folder: 'nestly/places',
+        public_id: `image_${Date.now()}_${i}`, // Add a unique public_id
       });
       urls.push(result.secure_url);
     }
@@ -21,7 +22,10 @@ export async function uploadbylink(request) {
     return NextResponse.json(urls);
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ message: "Internal server error" }, { status: 500 });
+    return NextResponse.json(
+      { message: 'Internal server error' },
+      { status: 500 },
+    );
   }
 }
 
