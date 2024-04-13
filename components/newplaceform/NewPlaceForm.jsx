@@ -14,6 +14,7 @@ import {
 } from '../places/config/amanities';
 import houseRules from '../places/config/houserules';
 export default function NewPlaceForm() {
+  
   const [loading, setLoading] = useState(false);
   // const [photos, setPhotos] = useState([]);
   const [files, setFiles] = useState([]);
@@ -43,85 +44,64 @@ export default function NewPlaceForm() {
   });
 
   // validation for form
-  const schema = z.object({
-    title: z.string().nonempty(),
-    description: z.string().nonempty(),
-    address: z.string().nonempty(),
-    state: z.string().nonempty(),
-    city: z.string().nonempty(),
-    street: z.string().nonempty(),
-    photos: z.array(z.string()).nonempty().length(5),
-    category: z.array(z.string()),
-    amenities: z.object({
-      necessary: z.array(z.string()),
-      standout: z.array(z.string()),
-      safety: z.array(z.string()),
-    }),
-    maxGuests: z.number(),
-    price: z.number(),
-    petsAllowed: z.boolean(),
-  });
+  // const schema = z.object({
+  //   title: z.string().nonempty(),
+  //   description: z.string().nonempty(),
+  //   address: z.string().nonempty(),
+  //   state: z.string().nonempty(),
+  //   city: z.string().nonempty(),
+  //   street: z.string().nonempty(),
+  //   photos: z.array(z.string()).nonempty().length(5),
+  //   category: z.array(z.string()),
+  //   amenities: z.object({
+  //     necessary: z.array(z.string()),
+  //     standout: z.array(z.string()),
+  //     safety: z.array(z.string()),
+  //   }),
+  //   maxGuests: z.number(),
+  //   price: z.number(),
+  //   petsAllowed: z.boolean(),
+  // });
 
   const isValidPlaceData = () => {
-    if (formdata.title.trim() === '') {
-      toast.error("Title can't be empty!");
-      return false;
-    }
-    if (formdata.description.trim() === '') {
-      toast.error("Description can't be empty!");
-      return false;
-    }
-    if (formdata.address.trim() === '') {
-      toast.error("Address can't be empty!");
-      return false;
-    }
-    if (formdata.state.trim() === '') {
-      toast.error("State can't be empty!");
-      return false;
-    }
-    if (formdata.city.trim() === '') {
-      toast.error("City can't be empty!");
-      return false;
-    }
-    if (formdata.street.trim() === '') {
-      toast.error("Street can't be empty!");
-      return false;
-    }
-    if (formdata.category.length === 0) {
-      toast.error("Category can't be empty!");
-      return false;
-    }
-    if (formdata.amenities.necessary.length === 0) {
-      toast.error("Necessary amenities can't be empty!");
-      return false;
-    }
-    if (formdata.amenities.standout.length === 0) {
-      toast.error("Standout amenities can't be empty!");
-      return false;
-    }
-    if (formdata.amenities.safety.length === 0) {
-      toast.error("Safety amenities can't be empty!");
-      return false;
-    }
-    if (formdata.photos.length < 5) {
-      toast.error('Please upload atleast 5 photos');
-      return false;
-    }
-    if (formdata.maxGuests === null) {
-      toast.error('Please enter max guests');
-      return false;
-    }
-    if (formdata.price === null) {
-      toast.error('Please enter price');
-      return false;
-    }
-    if (formdata.houseRoules.length === 0) {
-      toast.error('Please enter house rules');
+  const fields = [
+    { value: formdata.title, name: 'Title', min: 10, max: 100 },
+    { value: formdata.description, name: 'Description', min: 200, max: 2000, isWordCount: true },
+    { value: formdata.address, name: 'Address' },
+    { value: formdata.state, name: 'State' },
+    { value: formdata.city, name: 'City' },
+    { value: formdata.street, name: 'Street' },
+    { value: formdata.category, name: 'Category' },
+    { value: formdata.amenities.necessary, name: 'Necessary amenities' },
+    { value: formdata.amenities.standout, name: 'Standout amenities' },
+    { value: formdata.amenities.safety, name: 'Safety amenities' },
+    { value: formdata.photos, name: 'Photos', min: 5 },
+    { value: formdata.maxGuests, name: 'Max guests' },
+    { value: formdata.price, name: 'Price' },
+    { value: formdata.houseRoules, name: 'House rules' },
+  ];
+
+  for (let field of fields) {
+    if (!field.value || !field.value.trim()) {
+      toast.error(`${field.name} can't be empty!`);
       return false;
     }
 
-    return true;
-  };
+    const length = field.isWordCount ? field.value.split(/\s+/).length : field.value.length;
+
+    if (field.min && length < field.min) {
+      toast.error(`${field.name} can't be less than ${field.min} ${field.isWordCount ? 'words' : 'characters'}`);
+      return false;
+    }
+
+    if (field.max && length > field.max) {
+      toast.error(`${field.name} can't be more than ${field.max} ${field.isWordCount ? 'words' : 'characters'}`);
+      return false;
+    }
+  }
+
+  return true;
+};
 
   // handle change in form data
 
