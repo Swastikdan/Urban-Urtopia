@@ -16,10 +16,11 @@ import houseRules from '../places/config/houserules';
 export default function NewPlaceForm() {
   const [loading, setLoading] = useState(false);
   // const [photos, setPhotos] = useState([]);
-    const [files, setFiles] = useState([]);
-    const [photoLink, setPhotoLink] = useState('');
-    const [addedPhotos, setAddedPhotos] = useState([]);
-     const [starredPhoto, setStarredPhoto] = useState(null);
+  const [files, setFiles] = useState([]);
+  const [photoLink, setPhotoLink] = useState('');
+  const [addedPhotos, setAddedPhotos] = useState([]);
+  const [starredPhoto, setStarredPhoto] = useState(null);
+  const [isuploading, setIsUploading] = useState(false);
   const [formdata, setFormData] = useState({
     title: '',
     description: '',
@@ -38,7 +39,7 @@ export default function NewPlaceForm() {
     price: null,
     petsAllowed: null,
     listTillDate: '',
-    houseRoules: []
+    houseRoules: [],
   });
 
   // validation for form
@@ -62,8 +63,6 @@ export default function NewPlaceForm() {
   });
 
   const isValidPlaceData = () => {
-
-
     if (formdata.title.trim() === '') {
       toast.error("Title can't be empty!");
       return false;
@@ -104,19 +103,19 @@ export default function NewPlaceForm() {
       toast.error("Safety amenities can't be empty!");
       return false;
     }
-    if(formdata.photos.length < 5) {
+    if (formdata.photos.length < 5) {
       toast.error('Please upload atleast 5 photos');
       return false;
     }
-    if(formdata.maxGuests === null) {
+    if (formdata.maxGuests === null) {
       toast.error('Please enter max guests');
       return false;
     }
-    if(formdata.price === null) {
+    if (formdata.price === null) {
       toast.error('Please enter price');
       return false;
     }
-    if(formdata.houseRoules.length === 0) {
+    if (formdata.houseRoules.length === 0) {
       toast.error('Please enter house rules');
       return false;
     }
@@ -126,50 +125,119 @@ export default function NewPlaceForm() {
 
   // handle change in form data
 
-const handleFileChange = (e) => {
-  setFiles([...e.target.files]);
-};
+  // const handleFileChange = async (e) => {
+  //   const files = Array.from(e.target.files);
+  //   const validFiles = [];
+
+  //   for (let file of files) {
+  //     const isImageValid = await new Promise((resolve) => {
+  //       const img = new Image();
+  //       img.onload = () => resolve(img.width >= 600 && img.height >= 400);
+  //       img.onerror = () => resolve(false);
+  //       img.src = URL.createObjectURL(file);
+  //     });
+
+  //      // Add this line
+
+  //     if (isImageValid) {
+  //       validFiles.push(file);
+  //     }else
+  //     {
+  //       toast.error('Please upload images with minimum resolution of 600x400');
+  //     }
+  //   }
+  //   setFiles(validFiles);
+  //   if (validFiles.length > 0) {
+  //     addPhotoFromLocal(validFiles);
+  //   }
+  // };
   const addPhotoByLink = async (e) => {
     e.preventDefault();
-    const res = await fetch('/api/upload/upload-by-link', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ link: photoLink }),
-    });
-    const filename = await res.json();
-setAddedPhotos((prev) => {
-  const newPhotos = [...prev, filename];
-  setFormData({ ...formdata, photos: newPhotos });
-  return newPhotos;
-});
-    setPhotoLink('');
+    setIsUploading(true);
+    try {
+      const res = await fetch('/api/upload/upload-by-link', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ link: photoLink }),
+      });
+      const filename = await res.json();
+      setAddedPhotos((prev) => {
+        const newPhotos = [...prev, filename];
+        setFormData({ ...formdata, photos: newPhotos });
+        return newPhotos;
+      });
+      setPhotoLink('');
+    } catch (error) {
+      toast.error('Failed to upload photo');
+    } finally {
+      setIsUploading(false);
+    }
   };
-const addPhotoFromLocal = async (e) => {
-  e.preventDefault();
-  const formData = new FormData();
-  files.forEach((file) => {
-    formData.append('photos', file);
-  });
-  const res = await fetch('/api/upload/upload-local-files', {
-    method: 'POST',
-    body: formData,
-  });
-  const data = await res.json();
-setAddedPhotos((prev) => {
-  const newPhotos = [...prev, ...data];
-  setFormData({ ...formdata, photos: newPhotos });
-  return newPhotos;
-});
-};
-const handleStarClick = (photo) => {
-  if (addedPhotos.length === 0) {
+
+  const handleFileChange = async (e) => {
+    setIsUploading(true);
+    const files = Array.from(e.target.files);
+    const validFiles = [];
+
+    for (let file of files) {
+      const isImageValid = await new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve(img.width >= 600 && img.height >= 400);
+        img.onerror = () => resolve(false);
+        img.src = URL.createObjectURL(file);
+      });
+
+      if (isImageValid) {
+        validFiles.push(file);
+      } else {
+        toast.error('Upload images with minimum resolution of 600x400');
+      }
+    }
+
+    setFiles(validFiles);
+    if (validFiles.length > 0) {
+      try {
+        await addPhotoFromLocal(validFiles);
+      } catch (error) {
+        console.error('Error uploading photo:', error);
+      }
+    }
+    setIsUploading(false);
+  };
+
+  const addPhotoFromLocal = async (files) => {
+    setIsUploading(true);
+    try {
+      const formData = new FormData();
+      files.forEach((file) => {
+        formData.append('photos', file);
+      });
+      const res = await fetch('/api/upload/upload-local-files', {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await res.json();
+      setAddedPhotos((prev) => {
+        const newPhotos = [...prev, ...data];
+        setFormData({ ...formdata, photos: newPhotos });
+        return newPhotos;
+      });
+    } catch (error) {
+      toast.error('Failed to upload photo');
+    } finally {
+      setFiles([]);
+      setIsUploading(false);
+    }
+  };
+  const handleStarClick = (photo) => {
+    if (addedPhotos.length === 0) {
+      setStarredPhoto(photo);
+    }
+    setAddedPhotos([photo, ...addedPhotos.filter((p) => p !== photo)]);
     setStarredPhoto(photo);
-  }
-  setAddedPhotos([photo, ...addedPhotos.filter((p) => p !== photo)]);
-  setStarredPhoto(photo);
-};
+  };
   const handleTrashClick = (photo) => {
     setAddedPhotos(addedPhotos.filter((p) => p !== photo));
     if (photo === starredPhoto) {
@@ -194,65 +262,60 @@ const handleStarClick = (photo) => {
           ? prevState[key].filter((category) => category !== value)
           : [...prevState[key], value],
       }));
-    }
-
-    else if (key === 'houseRoules') {
-
+    } else if (key === 'houseRoules') {
       setFormData((prevState) => ({
         ...prevState,
         houseRoules: prevState.houseRoules.includes(value)
           ? prevState.houseRoules.filter((rule) => rule !== value)
           : [...prevState.houseRoules, value],
       }));
-    }
-    
-    else {
+    } else {
       setFormData({ ...formdata, [key]: value });
     }
   };
   // handle submit form
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  if (!isValidPlaceData()) {
-    return;
-  }
-  setLoading(true);
-
-  const formData = new FormData();
-  for (const key in formdata) {
-    if (formdata[key] instanceof Array) {
-      formdata[key].forEach((item) => {
-        formData.append(`${key}[]`, item);
-      });
-    } else {
-      formData.append(key, formdata[key]);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!isValidPlaceData()) {
+      return;
     }
-  }
-  addedPhotos.forEach((file, index) => {
-    formData.append(`photos[${index}]`, file);
-  });
+    setLoading(true);
 
-  try {
-    const response = await fetch('/api/places', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-      body: formData,
+    const formData = new FormData();
+    for (const key in formdata) {
+      if (formdata[key] instanceof Array) {
+        formdata[key].forEach((item) => {
+          formData.append(`${key}[]`, item);
+        });
+      } else {
+        formData.append(key, formdata[key]);
+      }
+    }
+    addedPhotos.forEach((file, index) => {
+      formData.append(`photos[${index}]`, file);
     });
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(data.message || 'Something went wrong!');
+
+    try {
+      const response = await fetch('/api/places', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        body: formData,
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || 'Something went wrong!');
+      }
+      toast.success('Place added successfully!');
+      redirect(`/places/${data.id}`);
+    } catch (error) {
+      toast.error(error.message);
     }
-    toast.success('Place added successfully!');
-    redirect(`/places/${data.id}`);
-  } catch (error) {
-    toast.error(error.message);
-  }
     console.log('formdata', formdata);
-  setLoading(false);
-};
+    setLoading(false);
+  };
 
   return (
     <div>
@@ -338,7 +401,6 @@ const handleSubmit = async (e) => {
                 multiple
                 onChange={handleFileChange}
               />
-              <button onClick={addPhotoFromLocal}>Upload</button>
             </div>
 
             <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
