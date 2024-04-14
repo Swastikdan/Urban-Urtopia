@@ -2,21 +2,19 @@
 import React, { useEffect, useState } from 'react';
 // import { Input } from '@/components/ui/input';
 // import { Label } from '@/components/ui/label';
-import { Input, Textarea } from '../Input';
+import { Input } from '../Input';
+import { Textarea } from '../Textarea';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { redirect } from 'next/navigation';
 import { Star, Trash2, Expand, Link, PawPrint } from 'lucide-react';
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import PlaceImageUpload from './PlaceImageUpload';
 import Amenity from './Amenity';
 import categories from '../places/config/categories';
@@ -36,6 +34,7 @@ export default function NewPlaceForm() {
   const [isUploading, setIsUploading] = useState(false);
   const [photosUploading, setPhotosUploading] = useState(0);
   const [wordCount, setWordCount] = useState(0);
+  const [showCustomOptions, setShowCustomOptions] = useState(false);
   const [formdata, setFormData] = useState({
     title: '',
     description: '',
@@ -50,11 +49,19 @@ export default function NewPlaceForm() {
       standout: [],
       safety: [],
     },
-    maxGuests: null,
     price: null,
-    petsAllowed: null,
     listTillDate: '',
-    houseRoules: [],
+    houseRules: {
+      maxGuests: null,
+      petsAllowed: null,
+      checkInTime: null,
+      checkOutTime: null,
+      smokingNotAllowed: false,
+      partiesNotAllowed: false,
+      PhotographyNotAllowed: false,
+      SelfcheckIn: false,
+    },
+    additionalRules: '',
   });
 
   // validation for form
@@ -259,12 +266,24 @@ export default function NewPlaceForm() {
           ? prevState[key].filter((category) => category !== value)
           : [...prevState[key], value],
       }));
-    } else if (key === 'houseRoules') {
+    } else if (
+      [
+        'maxGuests',
+        'petsAllowed',
+        'checkInTime',
+        'checkOutTime',
+        'smokingNotAllowed',
+        'partiefalseAllowed',
+        'PhotographyNotAllowed',
+        'SelfcheckIn',  
+      ].includes(key)
+    ) {
       setFormData((prevState) => ({
         ...prevState,
-        houseRoules: prevState.houseRoules.includes(value)
-          ? prevState.houseRoules.filter((rule) => rule !== value)
-          : [...prevState.houseRoules, value],
+        houseRules: {
+          ...prevState.houseRules,
+          [key]: value,
+        },
       }));
     } else {
       setFormData({ ...formdata, [key]: value });
@@ -329,19 +348,21 @@ export default function NewPlaceForm() {
           name="title"
           value={formdata.title}
           onChange={(e) => handleChange('title', e.target.value)}
-          placeholder=""
+          placeholder="Short and Catchy Title for your place"
           type="text"
           className="my-3"
         />
-        <Textarea
-          label="Description"
-          name="description"
-          value={formdata.description}
-          onChange={(e) => handleChange('description', e.target.value)}
-          placeholder=""
-          rows="15"
-          className={`my-3 ${wordCount > 2500 ? 'text-red-500' : ''}`}
-        />
+        <div>
+          <Textarea
+            label="Description"
+            name="description"
+            value={formdata.description}
+            onChange={(e) => handleChange('description', e.target.value)}
+            placeholder="Please describe the place in detail"
+            rows="15"
+            className={`my-3 ${wordCount > 2500 ? 'text-red-500' : ''}`}
+          />
+        </div>
         <p className="text-right text-sm text-gray-500 ">
           {wordCount} / 2500 words
         </p>
@@ -350,7 +371,7 @@ export default function NewPlaceForm() {
           name="address"
           value={formdata.address}
           onChange={(e) => handleChange('address', e.target.value)}
-          placeholder=""
+          placeholder="Please state the address of this place"
           type="text"
           className="my-3"
         />
@@ -359,7 +380,7 @@ export default function NewPlaceForm() {
           name="state"
           value={formdata.state}
           onChange={(e) => handleChange('state', e.target.value)}
-          placeholder=""
+          placeholder="Please state the state in which the place is located"
           type="text"
           className="my-3"
         />
@@ -368,7 +389,7 @@ export default function NewPlaceForm() {
           name="city"
           value={formdata.city}
           onChange={(e) => handleChange('city', e.target.value)}
-          placeholder=""
+          placeholder="Please state the city of this place"
           type="text"
           className="my-3"
         />
@@ -377,7 +398,7 @@ export default function NewPlaceForm() {
           name="street"
           value={formdata.street}
           onChange={(e) => handleChange('street', e.target.value)}
-          placeholder=""
+          placeholder="Please state the street of this place"
           type="text"
           className="my-3"
         />
@@ -640,13 +661,13 @@ export default function NewPlaceForm() {
         <div className="py-3">
           <label
             htmlFor="Amanities"
-            className="my-3 mb-5 block text-base font-semibold text-gray-900 md:text-lg"
+            className="my-3 mb-5 block text-lg font-semibold text-gray-900  md:text-xl"
           >
             Amanities
           </label>
 
           <div>
-            <div className="py-3 font-medium  text-gray-700 ">
+            <div className="py-3 font-semibold  text-gray-700 ">
               Necessary Amanities
             </div>
             <ul className="grid w-full grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4">
@@ -662,7 +683,7 @@ export default function NewPlaceForm() {
           </div>
 
           <div>
-            <div className="py-3 font-medium  text-gray-700 ">
+            <div className="py-3 font-semibold  text-gray-700 ">
               {' '}
               Standout Amanities
             </div>
@@ -679,7 +700,7 @@ export default function NewPlaceForm() {
           </div>
 
           <div>
-            <div className="py-3 font-medium  text-gray-700 ">
+            <div className="py-3 font-semibold  text-gray-700 ">
               {' '}
               Safety Amanities
             </div>
@@ -740,50 +761,240 @@ export default function NewPlaceForm() {
             ))}
           </div>
         </div> */}
+        <div className="flex flex-col items-start justify-between py-3 md:flex-row md:items-center">
+          <div className="mb-3 w-full md:mb-0 md:w-1/2 md:pr-2">
+            <Input
+              label="Max Guests"
+              name="maxGuests"
+              value={formdata.houseRules.maxGuests}
+              onChange={(e) => handleChange('maxGuests', e.target.value)}
+              placeholder=""
+              type="number"
+              className="w-full"
+            />
+          </div>
 
-        <Input
-          label="Max Guests"
-          name="maxGuests"
-          value={formdata.maxGuests}
-          onChange={(e) => handleChange('maxGuests', e.target.value)}
-          placeholder=""
-          type="number"
-          className="my-3"
-        />
-
-        <Input
-          label="Price"
-          name="price"
-          value={formdata.price}
-          onChange={(e) => handleChange('price', e.target.value)}
-          placeholder=""
-          type="number"
-          className="my-3"
-        />
-
+          <div className="w-full md:w-1/2 md:pl-2">
+            <Input
+              label="Price"
+              name="price"
+              value={formdata.price}
+              onChange={(e) => handleChange('price', e.target.value)}
+              placeholder=""
+              type="number"
+              className="w-full"
+            />
+          </div>
+        </div>
         {/* Check box for pets allaed */}
 
+        <div className="flex items-center space-x-3 py-3">
+          <div className="flex items-center space-x-1 text-base font-bold md:text-lg ">
+            <PawPrint size={24} className="h-6 w-6" />
+            <span>Pets Allowed</span>
+          </div>
+          <div className="flex  items-start space-x-3 ">
+            <label
+              htmlFor="petsAllowedYes"
+              className="inline-flex w-full cursor-pointer items-center justify-between rounded-lg border-2 border-gray-200 bg-white p-2 px-3 text-gray-500 hover:bg-gray-50 hover:text-gray-600 peer-checked:border-blue-600 peer-checked:bg-blue-100 peer-checked:text-gray-600"
+            >
+              <input
+                type="radio"
+                id="petsAllowedYes"
+                name="petsAllowed"
+                value={true}
+                checked={formdata.houseRules.petsAllowed === true}
+                onChange={(e) => handleChange('petsAllowed', true)}
+                className="form-radio mr-2 h-5 w-5 text-blue-500"
+              />
+              Yes
+            </label>
+            <label
+              htmlFor="petsAllowedNo"
+              className="inline-flex w-full cursor-pointer items-center justify-between rounded-lg border-2 border-gray-200 bg-white p-2 px-3 text-gray-500 hover:bg-gray-50 hover:text-gray-600 peer-checked:border-blue-600 peer-checked:bg-blue-100 peer-checked:text-gray-600"
+            >
+              <input
+                type="radio"
+                id="petsAllowedNo"
+                name="petsAllowed"
+                value={false}
+                checked={formdata.houseRules.petsAllowed === false}
+                onChange={(e) => handleChange('petsAllowed', false)}
+                className="form-radio mr-2 h-5 w-5 text-blue-500"
+              />
+              No
+            </label>
+          </div>
+        </div>
+
         <div className="py-3">
+          <div className="my-3 mb-5 block text-lg font-semibold text-gray-900 md:text-xl">
+            Extra House Rules
+          </div>
+          <div className="py-3 font-semibold  text-gray-700 "> During stay</div>
+          <ul className="grid w-full grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {houseRules.map((rule) => (
+              <li key={rule.id}>
+                <input
+                  className="peer hidden"
+                  type="checkbox"
+                  id={rule.value}
+                  name={rule.name}
+                  checked={formdata.houseRules[rule.name]}
+                  onChange={(e) => handleChange(rule.name, e.target.checked)}
+                />
+                <label
+                  htmlFor={rule.value}
+                  className="inline-flex w-full cursor-pointer items-center justify-between rounded-lg border-2 border-gray-200 bg-white p-2 px-3 text-gray-500 hover:bg-gray-50 hover:text-gray-600 peer-checked:border-blue-600 peer-checked:bg-blue-100 peer-checked:text-gray-600 "
+                >
+                  <div className="flex items-center space-x-3 ">
+                    <img
+                      src={rule.image}
+                      alt={rule.title}
+                      className="h-8 w-8 rounded-md bg-white p-1  "
+                    />
+                    <div className="w-full text-xs font-semibold text-black md:text-sm ">
+                      {rule.title}
+                    </div>
+                  </div>
+                </label>
+              </li>
+            ))}
+          </ul>
+          <div className="py-3 font-semibold  text-gray-700 ">
+            {' '}
+            Checking in and out
+          </div>
+
+          <div>
+            <input
+              className="peer hidden"
+              required=""
+              type="checkbox"
+              id="customOptions"
+              name="customOptions"
+              onChange={() => setShowCustomOptions(!showCustomOptions)}
+            />
+            <label
+              htmlFor="customOptions"
+              className="inline-flex w-auto cursor-pointer items-center justify-between rounded-lg border-2 border-gray-200 bg-white p-2 px-3 text-gray-500 hover:bg-gray-50 hover:text-gray-600 peer-checked:border-blue-600 peer-checked:bg-blue-100 peer-checked:text-gray-600 "
+            >
+              <div className="flex items-center space-x-3 ">
+                <div className="w-full text-xs font-semibold text-black md:text-sm ">
+                  Add Custom check-in/check-out times
+                </div>
+              </div>
+            </label>
+            <div className="py-2 text-xs font-light text-gray-600 md:text-sm">
+              * Without custom time, check-in/out is unrestricted.
+            </div>
+            {showCustomOptions && (
+              <ul className="grid w-full grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                <li>
+                  <label
+                    htmlFor="timePicker"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Check-in after
+                  </label>
+                  <select
+                    id="timePicker"
+                    name="timePicker"
+                    className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                    value={formdata.houseRules.checkInTime}
+                    onChange={(e) =>
+                      handleChange('checkInTime', e.target.value)
+                    }
+                  >
+                    {Array.from({ length: 24 }, (_, i) => i).map((hour) => {
+                      const isPM = hour >= 12;
+                      const displayHour =
+                        hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
+                      const displayPeriod = isPM ? 'pm' : 'am';
+                      return (
+                        <option
+                          key={hour}
+                          value={hour}
+                          className="py-2"
+                        >{`${displayHour}  ${displayPeriod}`}</option>
+                      );
+                    })}
+                  </select>
+                </li>
+                <li>
+                  <label
+                    htmlFor="timePicker"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Checkout before
+                  </label>
+                  <select
+                    id="timePicker"
+                    name="timePicker"
+                    className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                    value={formdata.houseRules.checkOutTime}
+                    onChange={(e) =>
+                      handleChange('checkOutTime', e.target.value)
+                    }
+                  >
+                    {Array.from({ length: 24 }, (_, i) => i).map((hour) => {
+                      const isPM = hour >= 12;
+                      const displayHour =
+                        hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
+                      const displayPeriod = isPM ? 'pm' : 'am';
+                      return (
+                        <option
+                          key={hour}
+                          value={hour}
+                          className="py-2"
+                        >{`${displayHour}  ${displayPeriod}`}</option>
+                      );
+                    })}
+                  </select>
+                </li>
+              </ul>
+            )}
+          </div>
+
+          <div className="py-3 font-semibold  text-gray-700 "> Other Rules</div>
+
           <input
-            type="checkbox"
-            id="petsAllowed"
-            name="petsAllowed"
-            value={formdata.petsAllowed}
-            onChange={(e) => handleChange('petsAllowed', e.target.checked)}
             className="peer hidden"
+            required=""
+            type="checkbox"
+            id="SelfCheckIn"
+            value={formdata.houseRules.SelfcheckIn}
+            onChange={(e) => handleChange('SelfcheckIn', e.target.checked)}
           />
           <label
-            htmlFor="petsAllowed"
-            className="inline-flex w-auto cursor-pointer items-center justify-between rounded-lg border-2 border-gray-200 bg-white p-2 px-3 text-gray-500 hover:bg-gray-50 hover:text-gray-600 peer-checked:border-blue-600 peer-checked:bg-blue-100 peer-checked:text-gray-600"
+            htmlFor="SelfCheckIn"
+            className="inline-flex w-auto cursor-pointer items-center justify-between rounded-lg border-2 border-gray-200 bg-white p-2 px-3 text-gray-500 hover:bg-gray-50 hover:text-gray-600 peer-checked:border-blue-600 peer-checked:bg-blue-100 peer-checked:text-gray-600 "
           >
             <div className="flex items-center space-x-3 ">
-              <PawPrint width={24} height={24} />
+              <img
+                src="/pictures/houserules/door.svg"
+                alt=""
+                className="h-8 w-8 rounded-md bg-white p-1  "
+              />
               <div className="w-full text-xs font-semibold text-black md:text-sm ">
-                Pets Allowed
+                Self check-in
               </div>
             </div>
           </label>
+
+          <div className="py-3 font-semibold  text-gray-700 "> Extra Rules</div>
+
+          <Textarea
+            className="w-full"
+            label="House Rules"
+            name="additionalRules"
+            value={formdata.additionalRules}
+            onChange={(e) => handleChange('additionalRules', e.target.value)}
+            rows="5"
+            placeholder="Enter your additional house rules here ...  "
+          />
         </div>
+
         <button
           type="submit"
           disabled={loading}

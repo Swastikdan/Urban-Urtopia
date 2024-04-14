@@ -135,6 +135,11 @@ const safety_amenities = [
     value: 'carbon-monoxide-alarm',
     image: '/pictures/amanities/carbon-monoxide-alarm.svg',
   },
+  {
+    title: 'Exterior Security Cameras',
+    value: 'exterior-security-cameras',
+    image: '/pictures/amanities/exterior-security-cameras.svg',
+  },
 ];
 
 export { amenities, standout_amenities, safety_amenities };

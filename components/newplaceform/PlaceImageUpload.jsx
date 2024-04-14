@@ -142,7 +142,7 @@ setPhotosUploading(links.length);
     <div className="py-3">
       <span
         htmlFor="Images of the Property"
-        className="mb-2 block text-base font-semibold text-gray-900 md:text-lg"
+        className="mb-2 block text-lg font-semibold text-gray-900  md:text-xl"
       >
         Images of the Property
       </span>
