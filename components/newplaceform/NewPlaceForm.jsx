@@ -15,7 +15,8 @@ import {
   safety_amenities,
 } from '../places/config/amanities';
 import houseRules from '../places/config/houserules';
-
+import { usePathname } from 'next/navigation';
+import { useParams } from 'next/navigation';
 export default function NewPlaceForm() {
   const [loading, setLoading] = useState(false);
   const [files, setFiles] = useState([]);
@@ -56,6 +57,28 @@ export default function NewPlaceForm() {
     numberOfRooms: null,
   });
 
+
+  const pathname = usePathname();
+  if (pathname !== '/dashboard/places/') {
+  
+  const { id } = useParams();
+
+  async function fetchPlace() {
+    const res = await fetch(`/api/places/search?id=${id}`);
+    const place = await res.json();
+    setFormData((prevState) => ({
+      ...prevState,
+      ...place,
+    }));
+  }
+
+  useEffect(() => {
+    fetchPlace();
+  }, []);
+
+  }
+
+  console.log(formdata);
   const isValidPlace = () => {
     const fields = [
       { value: formdata.title, name: 'Title', min: 10, max: 100 },
@@ -194,6 +217,8 @@ export default function NewPlaceForm() {
     }
   };
 
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!isValidPlace()) {
@@ -204,6 +229,28 @@ export default function NewPlaceForm() {
     formdata.ownerId = ownerId;
 
     // prepare the data to send to the server and send a post request to /api/places/create
+
+    if(pathname !== '/dashboard/places/') {
+
+      const id = formdata.id
+      const res = await fetch(`/api/places/edit/${id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formdata),
+      });
+      if (!res.ok) {
+        toast.error('Failed to update place');
+        setLoading(false);
+        return;
+      } else {
+        toast.success('Place updated successfully');
+        setLoading(false);
+      }
+
+
+    }else{
 
     const res = await fetch('/api/places/create', {
       method: 'POST',
@@ -220,7 +267,7 @@ export default function NewPlaceForm() {
     } else {
       toast.success('Place created successfully');
       setLoading(false);
-    }
+    }}
   };
 
   return (
@@ -321,6 +368,7 @@ export default function NewPlaceForm() {
                     id={category.value}
                     name="category"
                     value={category.value}
+                    checked={formdata.category.includes(category.value)}
                     onChange={(e) => handleChange('category', e.target.value)}
                   />
                   <label
@@ -360,6 +408,8 @@ export default function NewPlaceForm() {
                   <Amenity
                     key={amenity.value}
                     amenity={amenity}
+                    formData={formdata}
+                    name="necessary_amenities"
                     onChange={(e) =>
                       handleChange('necessary_amenities', e.target.value)
                     }
@@ -378,6 +428,8 @@ export default function NewPlaceForm() {
                   <Amenity
                     key={amenity.value}
                     amenity={amenity}
+                    formData={formdata}
+                    name="standout_amenities"
                     onChange={(e) =>
                       handleChange('standout_amenities', e.target.value)
                     }
@@ -396,6 +448,8 @@ export default function NewPlaceForm() {
                   <Amenity
                     key={amenity.value}
                     amenity={amenity}
+                    name="safety_amenities"
+                    formData={formdata}
                     onChange={(e) =>
                       handleChange('safety_amenities', e.target.value)
                     }
@@ -622,6 +676,7 @@ export default function NewPlaceForm() {
               type="checkbox"
               id="SelfCheckIn"
               value={formdata.SelfcheckIn}
+              checked={formdata.SelfcheckIn}
               onChange={(e) => handleChange('SelfcheckIn', e.target.checked)}
             />
             <label

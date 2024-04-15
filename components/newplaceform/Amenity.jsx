@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function Amenity({ amenity  , name ,  onChange}) {
+export default function Amenity({ formData,amenity, name, onChange }) {
   return (
     <li key={amenity.value}>
       <input
@@ -10,6 +10,7 @@ export default function Amenity({ amenity  , name ,  onChange}) {
         id={amenity.value}
         name={name}
         value={amenity.value}
+        checked={formData[name] && formData[name].includes(amenity.value)}
         onChange={onChange}
       />
       <label

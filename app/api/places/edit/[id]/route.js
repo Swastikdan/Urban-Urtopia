@@ -6,20 +6,28 @@ import { z } from "zod";
 const updatePlaceSchema = z.object({
   ownerId: z.string(),
   title: z.string().min(1),
+  description: z.string().min(1),
   address: z.string().min(1),
   state: z.string().min(1),
   city: z.string().min(1),
   street: z.string().optional(),
-  photos: z.array(z.string()).min(1),
-  description: z.string().min(1),
+  photos: z.array(z.string().url()).min(5),
   category: z.array(z.string()).min(1),
-  maxGuests: z.number().gte(1),
-  price: z.number().positive(),
-  deleterequst: z.boolean().default(false),
-  petsAllowed: z.boolean(),
-  extraInfo: z.string().optional(),
-  numberOfRooms: z.number().optional(),
-  capacity: z.number().optional(),
+  necessary_amenities: z.array(z.string()).optional(),
+  standout_amenities: z.array(z.string()).optional(),
+  safety_amenities: z.array(z.string()).optional(),
+  price: z.string(), // Changed this line
+  listTillDate: z.string().optional().nullable(),
+  maxGuests: z.string(),
+  petsAllowed: z.boolean().optional(),
+  checkInTime: z.string().nullable(), // Changed this line
+  checkOutTime: z.string().nullable(), // Changed this line
+  smokingNotAllowed: z.boolean().optional(),
+  partiesNotAllowed: z.boolean().optional(),
+  photographyNotAllowed: z.boolean().optional(),
+  SelfcheckIn: z.boolean().optional(),
+  additionalRules: z.string().optional(),
+  numberOfRooms: z.string(), // Changed this line
 });
 
 export async function editPlace(request, { params }) {
