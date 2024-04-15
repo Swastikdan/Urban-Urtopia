@@ -59,32 +59,40 @@ model User {
 }
 
 model Places {
-  id      String @id @default(auto()) @map("_id") @db.ObjectId
-  ownerId String @db.ObjectId
-  owner   User   @relation(fields: [ownerId], references: [id])
-  title         String 
-  address       String
-  state         String
-  city          String
-  street        String?
-  photos        String[]
-  description   String
-  category      String[]
-  amaenities    String[]
-  maxGuests     Int
-  price         Float
-  status        String   @default("processing")
-  deleterequst  Boolean  @default(false)
-  petsAllowed   Boolean
-  extraInfo     String?
-  numberOfRooms Int?
-  capacity      Int?
-  listTillDate  DateTime 
-  minimumStay   Int @default(1)
-  bookings      Bookings[]
-  favorites     UserFavorites[]
-   @@index([title , address], name: "search_index")
+  id                  String       @id @default(auto()) @map("_id") @db.ObjectId
+  ownerId             String       @db.ObjectId
+  owner               User         @relation(fields: [ownerId], references: [id])
+  title               String 
+  description         String
+  address             String
+  state               String
+  city                String
+  street              String?
+  photos              String[]
+  category            String[]
+  necessary_amenities String[]
+  standout_amenities  String[]
+  safety_amenities    String[]
+  price               String?
+  listTillDate        DateTime?
+  maxGuests           String?
+  petsAllowed         Boolean
+  checkInTime         DateTime?
+  checkOutTime        DateTime?
+  smokingNotAllowed   Boolean
+  partiesNotAllowed   Boolean
+  photographyNotAllowed Boolean
+  SelfcheckIn         Boolean
+  additionalRules     String?
+  numberOfRooms       String?
+  bookings            Bookings[]
+  favorites           UserFavorites[]
+  status              String      @default("processing")
+  deleterequst        Boolean     @default(false)
+  @@index([title , address], name: "search_index")
 }
+
+
 
 model UserFavorites {
   id      String  @id @default(auto()) @map("_id") @db.ObjectId

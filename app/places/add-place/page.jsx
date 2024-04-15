@@ -9,6 +9,8 @@ export default async function page() {
     redirect('/login');
   }
 
+  const ownerId = session.user.id;
+
   return (
     <section className="mx-auto flex w-full max-w-screen-xl flex-col px-4 md:px-8 ">
       <div className="flex flex-col space-y-2 pb-10 pt-5">
@@ -16,12 +18,18 @@ export default async function page() {
           {/*   Write a tile to add places to my air ben clione      */}
           Add to Urban Utopia
         </h2>
-        <span className='text-sm text-right px-3 text-gray-600'>
-          For more information visit <a href="#" className='hover:underline underline-offset-4 text-black font-semibold '>here</a>{' '}
+        <span className="px-3 text-right text-sm text-gray-600">
+          For more information visit{' '}
+          <a
+            href="#"
+            className="font-semibold text-black underline-offset-4 hover:underline "
+          >
+            here
+          </a>{' '}
         </span>
       </div>
 
-      <NewPlaceForm />
+      <NewPlaceForm ownerId={ownerId} />
     </section>
   );
 }
