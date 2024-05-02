@@ -50,6 +50,7 @@ export default function PlacePage({ place }) {
           place={place}
           isFavoritePlace={isFavoritePlace}
           onClick={handleFavoriteClick}
+          router={router}
         />
       </div>
       <div className="hidden px-4  sm:flex xl:px-16">

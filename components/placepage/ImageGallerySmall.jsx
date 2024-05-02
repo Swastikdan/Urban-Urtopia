@@ -6,7 +6,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import { Pagination } from 'swiper/modules';
 import { ChevronLeft, Share, Heart } from 'lucide-react';
-export default function ImageGallerySmall({ images, title, id, isFavoritePlace ,onClick }) {
+export default function ImageGallerySmall({ images, title, id, isFavoritePlace ,onClick , router }) {
   return (
     <>
       <div className=" relative flex w-full">

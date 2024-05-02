@@ -46,7 +46,7 @@ export default function LoginForm() {
         toast.error('Invalid email or password');
       }
     } catch (error) {
-      console.log(error);
+      /// console.log(error);
       toast.error('An unexpected error occurred');
     } finally {
       setLoading(false); // Set loading to false in the finally block
@@ -65,7 +65,7 @@ export default function LoginForm() {
       });
       toast.success('Logged in successfully');
     } catch (error) {
-      console.log(error);
+      /// console.log(error);
       toast.error('An unexpected error occurred');
     } finally {
       setLoading(false); // Set loading to false in the finally block

@@ -162,7 +162,7 @@ export default function RegisterForm() {
         toast.success('Logged in successfully');
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
         toast.error('An unexpected error occurred');
         setLoading(false);
       });

@@ -1,5 +1,5 @@
-"use client";
-import React from 'react'
+'use client';
+import React, { useEffect } from 'react';
 import { Star, Trash2, Expand, Link } from 'lucide-react';
 import { toast } from 'sonner';
 import { Input } from '../Input';
@@ -17,127 +17,151 @@ export default function PlaceImageUpload({
   photosUploading,
   setPhotosUploading,
   photos,
-    setFormData,
-
-
+  setFormData,
+  formdata,
 }) {
+  // if photos ave;ave then add them to addedPhotos and only change it wnen the photos chanes and rin it once
 
-    const addPhotoByLink = async (e) => {
-      e.preventDefault();
-      setIsUploading(true);
+  useEffect(() => {
+    if (photos && photos.length > 0) {
+      setAddedPhotos(photos);
+    }
+  }, []);
 
-      try {
-        // Split the photoLink string into an array of links
-        const links = photoLink.split(',').map((link) => link.trim());
-setPhotosUploading(links.length);
-        const res = await fetch('/api/upload/upload-by-link', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ link: links }), // Send the array of links to the server
-        });
+  const addPhotoByLink = async (e) => {
+    e.preventDefault();
+    setIsUploading(true);
 
-        if (!res.ok) throw new Error('Failed to upload photo');
+    try {
+      // Split the photoLink string into an array of links
+      const links = photoLink.split(',').map((link) => link.trim());
+      setPhotosUploading(links.length);
+      const res = await fetch('/api/upload/upload-by-link', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ link: links }), // Send the array of links to the server
+      });
 
-        const filenames = await res.json(); // This should now be an array of URLs
+      if (!res.ok) throw new Error('Failed to upload photo');
 
-        // Handle the array of URLs
-        filenames.forEach((filename) => {
-          setAddedPhotos((prev) => [...prev, filename]);
-          setFormData((prev) => ({
-            ...prev,
-            photos: [...prev.photos, filename],
-          }));
-        });
+      const filenames = await res.json(); // This should now be an array of URLs
 
-        setPhotoLink('');
-         // Set the number of photos uploading
-      } catch (error) {
-        console.error(error);
-        toast.error(error.message);
-      } finally {
-        setIsUploading(false);
-      }
-    };
-    const handleFileChange = async (e) => {
-      e.preventDefault();
-      setIsUploading(true);
+      // Handle the array of URLs
+      filenames.forEach((filename) => {
+        setAddedPhotos((prev) => [...prev, filename]);
+        setFormData((prev) => ({
+          ...prev,
+          photos: [...prev.photos, filename],
+        }));
+      });
 
-      const files = Array.from(
-        e.dataTransfer ? e.dataTransfer.files : e.target.files,
-      );
-      const validFiles = [];
-
-      for (const file of files) {
-        const img = new Image();
-        img.src = URL.createObjectURL(file);
-
-        await new Promise((resolve) => {
-          img.onload = () => {
-            const aspectRatio = img.width / img.height;
-            if (img.width < 600 || img.height < 400) {
-              toast.error('Requried minimum resolution of 600x400');
-            } else if (aspectRatio < 4 / 3) {
-              toast.error('Requried an aspect ratio of 4:3 or higher');
-            } else {
-              validFiles.push(file);
-            }
-            resolve();
-          };
-        });
-      }
-      setPhotosUploading(validFiles.length);
-      console.log(validFiles.length);
-
-      if (validFiles.length > 0) {
-        try {
-          await addPhotoFromLocal(validFiles);
-        } catch (error) {
-          console.error('Error uploading photo:', error);
-        }
-      }
-
+      setPhotoLink('');
+      // Set the number of photos uploading
+    } catch (error) {
+      console.error(error);
+      toast.error(error.message);
+    } finally {
       setIsUploading(false);
-    };
+    }
+  };
+  const handleFileChange = async (e) => {
+    e.preventDefault();
+    setIsUploading(true);
 
-    const addPhotoFromLocal = async (files) => {
+    const files = Array.from(
+      e.dataTransfer ? e.dataTransfer.files : e.target.files,
+    );
+    const validFiles = [];
+
+    for (const file of files) {
+      const img = new Image();
+      img.src = URL.createObjectURL(file);
+
+      await new Promise((resolve) => {
+        img.onload = () => {
+          const aspectRatio = img.width / img.height;
+          if (img.width < 600 || img.height < 400) {
+            toast.error('Requried minimum resolution of 600x400');
+          } else if (aspectRatio < 4 / 3) {
+            toast.error('Requried an aspect ratio of 4:3 or higher');
+          } else {
+            validFiles.push(file);
+          }
+          resolve();
+        };
+      });
+    }
+    setPhotosUploading(validFiles.length);
+    // console.log(validFiles.length);
+
+    if (validFiles.length > 0) {
       try {
-        const formData = new FormData();
-        files.forEach((file) => formData.append('photos', file));
-
-        const res = await fetch('/api/upload/upload-local-files', {
-          method: 'POST',
-          body: formData,
-        });
-
-        if (!res.ok) throw new Error('Failed to upload photo');
-
-        const data = await res.json();
-        setAddedPhotos((prev) => [...prev, ...data]);
-        setFormData((prev) => ({ ...prev, photos: [...prev.photos, ...data] }));
+        await addPhotoFromLocal(validFiles);
       } catch (error) {
-        console.error(error);
-        toast.error(error.message);
-      } finally {
-        setIsUploading(false);
+        console.error('Error uploading photo:', error);
       }
-    };
+    }
 
- const handleStarClick = (photo) => {
-   if (addedPhotos.length === 0) {
-     setStarredPhoto(photo);
-   }
-   setAddedPhotos([photo, ...addedPhotos.filter((p) => p !== photo)]);
-   setStarredPhoto(photo);
- };
- const handleTrashClick = (photo) => {
-   setAddedPhotos(addedPhotos.filter((p) => p !== photo));
-   if (photo === starredPhoto) {
-     setStarredPhoto(null);
-   }
- };
+    setIsUploading(false);
+  };
 
+  const addPhotoFromLocal = async (files) => {
+    try {
+      const formData = new FormData();
+      files.forEach((file) => formData.append('photos', file));
+
+      const res = await fetch('/api/upload/upload-local-files', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!res.ok) throw new Error('Failed to upload photo');
+
+      const data = await res.json();
+      setAddedPhotos((prev) => [...prev, ...data]);
+      setFormData((prev) => ({ ...prev, photos: [...prev.photos, ...data] }));
+    } catch (error) {
+      console.error(error);
+      toast.error(error.message);
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleStarClick = (photo) => {
+    // Create a copy of the addedPhotos array and the photos array in formData
+    let newAddedPhotos = [...addedPhotos];
+    let newPhotos = [...formdata.photos];
+
+    // Find the index of the photo that was clicked
+    const addedIndex = newAddedPhotos.findIndex((p) => p === photo);
+    const photosIndex = newPhotos.findIndex((p) => p === photo);
+
+    // If the photo is in the arrays, remove it
+    if (addedIndex !== -1) {
+      newAddedPhotos.splice(addedIndex, 1);
+    }
+    if (photosIndex !== -1) {
+      newPhotos.splice(photosIndex, 1);
+    }
+
+    // Add the photo to the start of the arrays
+    newAddedPhotos.unshift(photo);
+    newPhotos.unshift(photo);
+
+    // Update the addedPhotos, formData and starredPhoto state
+    setAddedPhotos(newAddedPhotos);
+    setFormData((prev) => ({ ...prev, photos: newPhotos }));
+    setStarredPhoto(photo);
+  };
+  const handleTrashClick = (photo) => {
+    setAddedPhotos(addedPhotos.filter((p) => p !== photo));
+    if (photo === starredPhoto) {
+      setStarredPhoto(null);
+    }
+  };
   return (
     <div className="py-3">
       <span
@@ -222,9 +246,10 @@ setPhotosUploading(links.length);
         </div>
         <div class="grid grid-cols-1 gap-3  py-5 pt-7 sm:grid-cols-3 lg:grid-cols-4  ">
           <div
-            class="flex w-full items-center justify-center"
+            class="flex w-full items-center justify-center disabled:cursor-not-allowed disabled:select-none disabled:opacity-50"
             onDragOver={(e) => e.preventDefault()}
             onDrop={handleFileChange}
+            disabled={isUploading}
           >
             <label
               for="photos"
@@ -275,22 +300,28 @@ setPhotosUploading(links.length);
                 alt="Photo by Rachit Tank"
                 className="h-full w-full object-cover object-center"
               />
-
-              <button
-                className={`absolute left-0 top-0 m-2 cursor-pointer rounded-full bg-gray-100 p-2 sm:p-1.5  sm:hover:opacity-80   ${index === 0 && 'text-yellow-400'}   `}
-                onClick={() => handleStarClick(photo)}
-                disabled={index === 0}
+              <div
+                className={`py-.5 absolute left-0 top-0 m-2 flex items-center space-x-2  ${index === 0 && ' rounded-full border-2 border-gray-500 bg-white p-1 px-2'}`}
               >
-                <Star
-                  size={20}
-                  fill={
-                    index === 0 ? 'rgb(250, 204, 21)' : 'rgb(243, 244, 246)'
-                  }
-                  className="h-6 w-6 sm:h-5 sm:w-5"
-                />
-              </button>
+                <button
+                  className={` cursor-pointer rounded-full bg-gray-100 p-2 duration-150  active:scale-100 sm:p-1.5 sm:hover:scale-[.9]    ${index === 0 && 'text-yellow-400'}   `}
+                  onClick={() => handleStarClick(photo)}
+                  disabled={index === 0}
+                >
+                  <Star
+                    size={20}
+                    fill={
+                      index === 0 ? 'rgb(250, 204, 21)' : 'rgb(243, 244, 246)'
+                    }
+                    className="h-6 w-6 sm:h-5 sm:w-5"
+                  />
+                </button>{' '}
+                {index === 0 && (
+                  <span class="text-xs font-light ">Cover Image</span>
+                )}
+              </div>
               <button
-                className="absolute right-0 top-0 m-2 cursor-pointer rounded-full bg-gray-100 fill-black p-2 hover:bg-red-100 hover:text-red-500 sm:p-1.5"
+                className="absolute right-0 top-0 m-2 cursor-pointer rounded-full bg-gray-100 fill-black p-2 duration-150 hover:bg-red-100 hover:text-red-500 active:scale-100 sm:p-1.5 sm:hover:scale-[.9]"
                 onClick={() => handleTrashClick(photo)}
               >
                 <Trash2 size={20} className="h-6 w-6 sm:h-5 sm:w-5" />

@@ -29,7 +29,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '../ui/button';
 
-export default function PlacePageMobile({ place, isFavoritePlace, onClick }) {
+export default function PlacePageMobile({ place, isFavoritePlace, onClick , router }) {
   const { id, title, address, description, photos, isFavorite } = place;
   const [date, setDate] = React.useState(new Date());
   return (
@@ -41,6 +41,7 @@ export default function PlacePageMobile({ place, isFavoritePlace, onClick }) {
           id={id}
           isFavoritePlace={isFavoritePlace}
           onClick={onClick}
+          router={router}
         />
       </div>
 

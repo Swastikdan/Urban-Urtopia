@@ -19,6 +19,7 @@ import { usePathname } from 'next/navigation';
 import { useParams } from 'next/navigation';
 export default function NewPlaceForm() {
   const [loading, setLoading] = useState(false);
+  const [prevoiusLoading, setPreviousLoading] = useState(false);
   const [files, setFiles] = useState([]);
   const [photoLink, setPhotoLink] = useState('');
   const [addedPhotos, setAddedPhotos] = useState([]);
@@ -57,28 +58,28 @@ export default function NewPlaceForm() {
     numberOfRooms: null,
   });
 
-
   const pathname = usePathname();
-  if (pathname !== '/dashboard/places/') {
+  if (pathname !== '/places/') {
+    const { id } = useParams();
+    
+    async function fetchPlace() { 
+     setPreviousLoading(true)
+      const res = await fetch(`/api/places/search?id=${id}`);
+      const place = await res.json();
+      setFormData((prevState) => ({
+        ...prevState,
+        ...place,
+      }));
+      setPreviousLoading(false)
+    }
+
+    useEffect(() => {
+      fetchPlace();
+        
+    }, []);
+  }
+
   
-  const { id } = useParams();
-
-  async function fetchPlace() {
-    const res = await fetch(`/api/places/search?id=${id}`);
-    const place = await res.json();
-    setFormData((prevState) => ({
-      ...prevState,
-      ...place,
-    }));
-  }
-
-  useEffect(() => {
-    fetchPlace();
-  }, []);
-
-  }
-
-  console.log(formdata);
   const isValidPlace = () => {
     const fields = [
       { value: formdata.title, name: 'Title', min: 10, max: 100 },
@@ -208,16 +209,11 @@ export default function NewPlaceForm() {
     } else {
       setFormData({ ...formdata, [key]: value });
     }
-    if (typeof value === 'string') {
-      const words = value
-        .trim()
-        .split(' ')
-        .filter((word) => word !== '');
-      setWordCount(words.length);
-    }
+   if (typeof value === 'string') {
+  const wordCount = (value.match(/\b\w+\b/g) || []).length;
+  setWordCount(wordCount);
+}
   };
-
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -230,9 +226,8 @@ export default function NewPlaceForm() {
 
     // prepare the data to send to the server and send a post request to /api/places/create
 
-    if(pathname !== '/dashboard/places/') {
-
-      const id = formdata.id
+    if (pathname !== '/places/') {
+      const id = formdata.id;
       const res = await fetch(`/api/places/edit/${id}`, {
         method: 'POST',
         headers: {
@@ -248,31 +243,46 @@ export default function NewPlaceForm() {
         toast.success('Place updated successfully');
         setLoading(false);
       }
-
-
-    }else{
-
-    const res = await fetch('/api/places/create', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formdata),
-    });
-
-    if (!res.ok) {
-      toast.error('Failed to create place');
-      setLoading(false);
-      return;
     } else {
-      toast.success('Place created successfully');
-      setLoading(false);
-    }}
+      const res = await fetch('/api/places/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formdata),
+      });
+
+      if (!res.ok) {
+        toast.error('Failed to create place');
+        setLoading(false);
+        return;
+      } else {
+        toast.success('Place created successfully');
+        setLoading(false);
+      }
+    }
   };
+
+
 
   return (
     <>
-      <div>
+    {
+      prevoiusLoading ? (<div>
+      <div className="flex min-h-[90vh] flex-col">
+        <div className="flex flex-auto flex-col items-center justify-center p-4 md:p-5">
+          <div className="flex justify-center">
+            <div
+              className="inline-block size-9 animate-spin rounded-full border-[3px] border-current border-t-transparent text-blue-600 dark:text-blue-500"
+              role="status"
+              aria-label="loading"
+            >
+              <span className="sr-only">Loading...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> ):(<div>
         <form onSubmit={handleSubmit}>
           <Input
             label="Title"
@@ -291,7 +301,7 @@ export default function NewPlaceForm() {
               onChange={(e) => handleChange('description', e.target.value)}
               placeholder="Please describe the place in detail"
               rows="15"
-              className={`my-3 ${wordCount > 2500 ? 'text-red-500' : ''}`}
+              className={`my-3`}
             />
           </div>
           <p className="text-right text-sm text-gray-500 ">
@@ -348,6 +358,7 @@ export default function NewPlaceForm() {
             setPhotosUploading={setPhotosUploading}
             photos={formdata.photos}
             setFormData={setFormData}
+            formdata={formdata}
           />
           <div className="py-3">
             <label
@@ -716,10 +727,13 @@ export default function NewPlaceForm() {
             disabled={loading}
             className="my-5 rounded bg-blue-500 px-8 py-2 font-bold text-white hover:bg-blue-700"
           >
-            {loading ? 'Loading...' : 'Add Place'}
+          {pathname !== '/places/' ? (loading ? 'Loading...' : 'Update Place') : (loading ? 'Loading...' : 'Add Place')}
+            
           </button>
         </form>
-      </div>
+      </div>)
+    }
+      
     </>
   );
 }
