@@ -2,6 +2,8 @@ import './globals.css';
 // import { DM_Sans, Sora, Pathway_Extreme } from 'next/font/google';
 import { Pathway_Extreme } from 'next/font/google';
 import { Toaster } from '@/components/ui/sonner';
+import { UserProvider } from '@/providers/UserProvider';
+import { LikeProvider } from '@/providers/LikeProvider';
 import NavBar from '@/components/navbar/NavBar';
 import Footer from '@/components/Footer';
 import BottomNav from '@/components/BottomNav';
@@ -152,6 +154,8 @@ export default function RootLayout({ children }) {
         dark:[&::-webkit-scrollbar-track]:bg-slate-700  [&::-webkit-scrollbar]:w-2`}
       >
         <SessionProvider>
+          <UserProvider>
+            <LikeProvider>
           <NavBar />
           <main className="mx-auto w-full  ">
             <TooltipProvider>{children}</TooltipProvider>
@@ -161,6 +165,8 @@ export default function RootLayout({ children }) {
           </main>
           <BottomNav />
           <Footer />
+          </LikeProvider>
+          </UserProvider>
         </SessionProvider>
       </body>
     </html>

@@ -40,7 +40,7 @@ export default function PlacePageDesktop({ place , onClick, isFavoritePlace}) {
   return (
     <section className="max-w-6xl px-10">
       <div className="flex items-center justify-between">
-        <h1 className="text-pretty pb-5 pt-1 text-2xl font-bold xl:text-3xl">
+        <h1 className="text-pretty pb-5 pt-1 text-lg font-bold xl:text-xl">
           {title}
         </h1>
         <div className=" flex items-center space-x-8">
@@ -86,7 +86,7 @@ export default function PlacePageDesktop({ place , onClick, isFavoritePlace}) {
       <ImageGalleryMedium images={photos} id={id} isFavoritePlace={isFavoritePlace} onClick={onClick}/>
       <div className="py-5">
         <div className="flex flex-col space-y-1">
-          <span className="text-lg font-medium xl:text-xl">{address}</span>
+          <span className="text-base font-medium xl:text-lg">{address}</span>
           <span className="text-sm font-medium">
             4 guests &#183; 2 bedrooms &#183; 2 beds &#183; 2 bathrooms
           </span>

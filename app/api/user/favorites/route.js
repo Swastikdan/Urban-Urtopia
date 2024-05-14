@@ -50,9 +50,6 @@ const favorites = await prisma.userFavorites.findMany({
         select: {
             id: true,
           title: true,
-          state: true,
-          city: true,
-          price: true,
           photos: true,
         },
       });

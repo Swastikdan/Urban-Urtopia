@@ -34,7 +34,7 @@ export default function Listing({ listings }) {
                   </h2>
                   <Link
                     className="inline-flex items-center gap-x-2 rounded-lg border border-transparent bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:pointer-events-none disabled:opacity-50 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                    href="/dashboard/places/add-place"
+                    href="/places/add-place"
                   >
                     <Plus width={20} height={20} />
                     <span className="">Add new</span>

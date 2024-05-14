@@ -108,26 +108,26 @@ export default function Bookings({ bookings }) {
                                 <TableCell className="size-px whitespace-nowrap">
                                   <div className="py-3 pe-6 ps-6 lg:ps-3 xl:ps-0">
                                     <div className="flex items-center gap-x-3">
-                                      <Avatar className="h-10 w-10 rounded-lg md:h-12 md:w-12 xl:h-16 xl:w-16">
+                                      <Avatar className="h-8 w-14 rounded-sm md:h-10 md:w-[4.5rem] xl:h-14 xl:w-20">
                                         <AvatarImage
-                                          className="h-10 w-10 md:h-12 md:w-12 xl:h-16 xl:w-16 "
+                                          className="h-8 w-14 rounded-sm md:h-10 md:w-[4.5rem] xl:h-14 xl:w-20 "
                                           src={booking.place.photos[0]}
                                           alt="property Image"
                                           width={80}
                                           height={80}
                                         />
                                         <AvatarFallback>
-                                          <div className="h-10 w-10 animate-pulse bg-gray-400 md:h-12 md:w-12 xl:h-16 xl:w-16"></div>
+                                          <div className=" h-8 w-14 animate-pulse rounded-sm bg-gray-400 md:h-10 md:w-[4.5rem] xl:h-14 xl:w-20"></div>
                                         </AvatarFallback>
                                       </Avatar>
                                       <div className="grow">
                                         <span className="block text-sm font-semibold text-gray-800 dark:text-gray-200 md:text-base xl:text-lg">
                                           {booking.place.title}
                                         </span>
-                                        <span className="block text-xs text-gray-500 md:text-sm">
+                                        {/* <span className="block text-xs text-gray-500 md:text-sm">
                                           {booking.place.city} ,
                                           {booking.place.state}
-                                        </span>
+                                        </span> */}
                                       </div>
                                     </div>
                                   </div>

@@ -59,7 +59,8 @@ export default function NewPlaceForm() {
   });
 
   const pathname = usePathname();
-  if (pathname !== '/places/') {
+
+  if (pathname !== '/places/add-place') {
     const { id } = useParams();
     
     async function fetchPlace() { 
@@ -226,7 +227,7 @@ export default function NewPlaceForm() {
 
     // prepare the data to send to the server and send a post request to /api/places/create
 
-    if (pathname !== '/places/') {
+    if (pathname !== '/places/add-place') {
       const id = formdata.id;
       const res = await fetch(`/api/places/edit/${id}`, {
         method: 'POST',
@@ -267,473 +268,485 @@ export default function NewPlaceForm() {
 
   return (
     <>
-    {
-      prevoiusLoading ? (<div>
-      <div className="flex min-h-[90vh] flex-col">
-        <div className="flex flex-auto flex-col items-center justify-center p-4 md:p-5">
-          <div className="flex justify-center">
-            <div
-              className="inline-block size-9 animate-spin rounded-full border-[3px] border-current border-t-transparent text-blue-600 dark:text-blue-500"
-              role="status"
-              aria-label="loading"
-            >
-              <span className="sr-only">Loading...</span>
+      {prevoiusLoading ? (
+        <div>
+          <div className="flex min-h-[90vh] flex-col">
+            <div className="flex flex-auto flex-col items-center justify-center p-4 md:p-5">
+              <div className="flex justify-center">
+                <div
+                  className="inline-block size-9 animate-spin rounded-full border-[3px] border-current border-t-transparent text-blue-600 dark:text-blue-500"
+                  role="status"
+                  aria-label="loading"
+                >
+                  <span className="sr-only">Loading...</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </div> ):(<div>
-        <form onSubmit={handleSubmit}>
-          <Input
-            label="Title"
-            name="title"
-            value={formdata.title}
-            onChange={(e) => handleChange('title', e.target.value)}
-            placeholder="Short and Catchy Title for your place"
-            type="text"
-            className="my-3"
-          />
-          <div>
-            <Textarea
-              label="Description"
-              name="description"
-              value={formdata.description}
-              onChange={(e) => handleChange('description', e.target.value)}
-              placeholder="Please describe the place in detail"
-              rows="15"
-              className={`my-3`}
+      ) : (
+        <div>
+          <form onSubmit={handleSubmit}>
+            <Input
+              label="Title"
+              name="title"
+              value={formdata.title}
+              onChange={(e) => handleChange('title', e.target.value)}
+              placeholder="Short and Catchy Title for your place"
+              type="text"
+              className="my-3"
             />
-          </div>
-          <p className="text-right text-sm text-gray-500 ">
-            {wordCount} / 2500 words
-          </p>
-          <Input
-            label="Address"
-            name="address"
-            value={formdata.address}
-            onChange={(e) => handleChange('address', e.target.value)}
-            placeholder="Please state the address of this place"
-            type="text"
-            className="my-3"
-          />
-          <Input
-            label="State"
-            name="state"
-            value={formdata.state}
-            onChange={(e) => handleChange('state', e.target.value)}
-            placeholder="Please state the state in which the place is located"
-            type="text"
-            className="my-3"
-          />
-          <Input
-            label="City"
-            name="city"
-            value={formdata.city}
-            onChange={(e) => handleChange('city', e.target.value)}
-            placeholder="Please state the city of this place"
-            type="text"
-            className="my-3"
-          />
-          <Input
-            label="Street"
-            name="street"
-            value={formdata.street}
-            onChange={(e) => handleChange('street', e.target.value)}
-            placeholder="Please state the street of this place"
-            type="text"
-            className="my-3"
-          />
-          <PlaceImageUpload
-            files={files}
-            setFiles={setFiles}
-            photoLink={photoLink}
-            setPhotoLink={setPhotoLink}
-            addedPhotos={addedPhotos}
-            setAddedPhotos={setAddedPhotos}
-            starredPhoto={starredPhoto}
-            setStarredPhoto={setStarredPhoto}
-            isUploading={isUploading}
-            setIsUploading={setIsUploading}
-            photosUploading={photosUploading}
-            setPhotosUploading={setPhotosUploading}
-            photos={formdata.photos}
-            setFormData={setFormData}
-            formdata={formdata}
-          />
-          <div className="py-3">
-            <label
-              htmlFor="Category"
-              className="mb-2 block text-base font-semibold text-gray-900 md:text-lg"
-            >
-              {' '}
-              Category{' '}
-            </label>
-
-            <ul class="grid w-full  grid-cols-2 gap-6 md:grid-cols-5 lg:grid-cols-6">
-              {categories.map((category) => (
-                <li key={category.value}>
-                  <input
-                    className="peer hidden"
-                    required=""
-                    type="checkbox"
-                    id={category.value}
-                    name="category"
-                    value={category.value}
-                    checked={formdata.category.includes(category.value)}
-                    onChange={(e) => handleChange('category', e.target.value)}
-                  />
-                  <label
-                    htmlFor={category.value}
-                    className="inline-flex w-full cursor-pointer items-center justify-between rounded-lg border-2 border-gray-200 bg-white p-2 px-3 text-gray-500 hover:bg-gray-50 hover:text-gray-600 peer-checked:border-blue-600 peer-checked:bg-blue-100 peer-checked:text-gray-600 "
-                  >
-                    <div className="flex items-center space-x-3 ">
-                      <img
-                        src={category.icon}
-                        alt={category.name}
-                        className="h-8 w-8 rounded-md bg-white p-1  "
-                      />
-                      <div className="w-full text-xs font-semibold text-black md:text-sm ">
-                        {category.name}
-                      </div>
-                    </div>
-                  </label>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="py-3">
-            <label
-              htmlFor="Amanities"
-              className="my-3 mb-5 block text-lg font-semibold text-gray-900  md:text-xl"
-            >
-              Amanities
-            </label>
-
             <div>
-              <div className="py-3 font-semibold  text-gray-700 ">
-                Necessary Amanities
-              </div>
-              <ul className="grid w-full grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4">
-                {amenities.map((amenity) => (
-                  <Amenity
-                    key={amenity.value}
-                    amenity={amenity}
-                    formData={formdata}
-                    name="necessary_amenities"
-                    onChange={(e) =>
-                      handleChange('necessary_amenities', e.target.value)
-                    }
-                  />
+              <Textarea
+                label="Description"
+                name="description"
+                value={formdata.description}
+                onChange={(e) => handleChange('description', e.target.value)}
+                placeholder="Please describe the place in detail"
+                rows="15"
+                className={`my-3`}
+              />
+            </div>
+            <p className="text-right text-sm text-gray-500 ">
+              {wordCount} / 2500 words
+            </p>
+            <Input
+              label="Address"
+              name="address"
+              value={formdata.address}
+              onChange={(e) => handleChange('address', e.target.value)}
+              placeholder="Please state the address of this place"
+              type="text"
+              className="my-3"
+            />
+            <Input
+              label="State"
+              name="state"
+              value={formdata.state}
+              onChange={(e) => handleChange('state', e.target.value)}
+              placeholder="Please state the state in which the place is located"
+              type="text"
+              className="my-3"
+            />
+            <Input
+              label="City"
+              name="city"
+              value={formdata.city}
+              onChange={(e) => handleChange('city', e.target.value)}
+              placeholder="Please state the city of this place"
+              type="text"
+              className="my-3"
+            />
+            <Input
+              label="Street"
+              name="street"
+              value={formdata.street}
+              onChange={(e) => handleChange('street', e.target.value)}
+              placeholder="Please state the street of this place"
+              type="text"
+              className="my-3"
+            />
+            <PlaceImageUpload
+              files={files}
+              setFiles={setFiles}
+              photoLink={photoLink}
+              setPhotoLink={setPhotoLink}
+              addedPhotos={addedPhotos}
+              setAddedPhotos={setAddedPhotos}
+              starredPhoto={starredPhoto}
+              setStarredPhoto={setStarredPhoto}
+              isUploading={isUploading}
+              setIsUploading={setIsUploading}
+              photosUploading={photosUploading}
+              setPhotosUploading={setPhotosUploading}
+              photos={formdata.photos}
+              setFormData={setFormData}
+              formdata={formdata}
+            />
+            <div className="py-3">
+              <label
+                htmlFor="Category"
+                className="mb-2 block text-base font-semibold text-gray-900 md:text-lg"
+              >
+                {' '}
+                Category{' '}
+              </label>
+
+              <ul class="grid w-full  grid-cols-2 gap-6 md:grid-cols-5 lg:grid-cols-6">
+                {categories.map((category) => (
+                  <li key={category.value}>
+                    <input
+                      className="peer hidden"
+                      required=""
+                      type="checkbox"
+                      id={category.value}
+                      name="category"
+                      value={category.value}
+                      checked={formdata.category.includes(category.value)}
+                      onChange={(e) => handleChange('category', e.target.value)}
+                    />
+                    <label
+                      htmlFor={category.value}
+                      className="inline-flex w-full cursor-pointer items-center justify-between rounded-lg border-2 border-gray-200 bg-white p-2 px-3 text-gray-500 hover:bg-gray-50 hover:text-gray-600 peer-checked:border-blue-600 peer-checked:bg-blue-100 peer-checked:text-gray-600 "
+                    >
+                      <div className="flex items-center space-x-3 ">
+                        <img
+                          src={category.icon}
+                          alt={category.name}
+                          className="h-8 w-8 rounded-md bg-white p-1  "
+                        />
+                        <div className="w-full text-xs font-semibold text-black md:text-sm ">
+                          {category.name}
+                        </div>
+                      </div>
+                    </label>
+                  </li>
                 ))}
               </ul>
             </div>
 
-            <div>
+            <div className="py-3">
+              <label
+                htmlFor="Amanities"
+                className="my-3 mb-5 block text-lg font-semibold text-gray-900  md:text-xl"
+              >
+                Amanities
+              </label>
+
+              <div>
+                <div className="py-3 font-semibold  text-gray-700 ">
+                  Necessary Amanities
+                </div>
+                <ul className="grid w-full grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4">
+                  {amenities.map((amenity) => (
+                    <Amenity
+                      key={amenity.value}
+                      amenity={amenity}
+                      formData={formdata}
+                      name="necessary_amenities"
+                      onChange={(e) =>
+                        handleChange('necessary_amenities', e.target.value)
+                      }
+                    />
+                  ))}
+                </ul>
+              </div>
+
+              <div>
+                <div className="py-3 font-semibold  text-gray-700 ">
+                  {' '}
+                  Standout Amanities
+                </div>
+                <ul className="grid w-full grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4">
+                  {standout_amenities.map((amenity) => (
+                    <Amenity
+                      key={amenity.value}
+                      amenity={amenity}
+                      formData={formdata}
+                      name="standout_amenities"
+                      onChange={(e) =>
+                        handleChange('standout_amenities', e.target.value)
+                      }
+                    />
+                  ))}
+                </ul>
+              </div>
+
+              <div>
+                <div className="py-3 font-semibold  text-gray-700 ">
+                  {' '}
+                  Safety Amanities
+                </div>
+                <ul className="grid w-full grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4">
+                  {safety_amenities.map((amenity) => (
+                    <Amenity
+                      key={amenity.value}
+                      amenity={amenity}
+                      name="safety_amenities"
+                      formData={formdata}
+                      onChange={(e) =>
+                        handleChange('safety_amenities', e.target.value)
+                      }
+                    />
+                  ))}
+                </ul>
+              </div>
+            </div>
+            <div className="flex flex-col items-start justify-between py-3 md:flex-row md:items-center">
+              <div className="mb-3 w-full md:mb-0 md:w-1/2 md:pr-2">
+                <Input
+                  label="Max Guests"
+                  name="maxGuests"
+                  value={formdata.maxGuests}
+                  onChange={(e) => handleChange('maxGuests', e.target.value)}
+                  placeholder=""
+                  type="number"
+                  className="w-full"
+                />
+              </div>
+
+              <div className="w-full md:w-1/2 md:pl-2">
+                <Input
+                  label="Price"
+                  name="price"
+                  value={formdata.price}
+                  onChange={(e) => handleChange('price', e.target.value)}
+                  placeholder=""
+                  type="number"
+                  className="w-full"
+                />
+              </div>
+              <div className="w-full md:w-1/2 md:pl-2">
+                <Input
+                  label="No. of Rooms"
+                  name="numberOfRooms"
+                  value={formdata.numberOfRooms}
+                  onChange={(e) =>
+                    handleChange('numberOfRooms', e.target.value)
+                  }
+                  placeholder=""
+                  type="number"
+                  className="w-full"
+                />
+              </div>
+            </div>
+            <div className="flex items-center space-x-3 py-3">
+              <div className="flex items-center space-x-1 text-base font-bold md:text-lg ">
+                <PawPrint size={24} className="h-6 w-6" />
+                <span>Pets Allowed</span>
+              </div>
+              <div className="flex  items-start space-x-3 ">
+                <label
+                  htmlFor="petsAllowedYes"
+                  className="inline-flex w-full cursor-pointer items-center justify-between rounded-lg border-2 border-gray-200 bg-white p-2 px-3 text-gray-500 hover:bg-gray-50 hover:text-gray-600 peer-checked:border-blue-600 peer-checked:bg-blue-100 peer-checked:text-gray-600"
+                >
+                  <input
+                    type="radio"
+                    id="petsAllowedYes"
+                    name="petsAllowed"
+                    value={true}
+                    checked={formdata.petsAllowed === true}
+                    onChange={(e) => handleChange('petsAllowed', true)}
+                    className="form-radio mr-2 h-5 w-5 text-blue-500"
+                  />
+                  Yes
+                </label>
+                <label
+                  htmlFor="petsAllowedNo"
+                  className="inline-flex w-full cursor-pointer items-center justify-between rounded-lg border-2 border-gray-200 bg-white p-2 px-3 text-gray-500 hover:bg-gray-50 hover:text-gray-600 peer-checked:border-blue-600 peer-checked:bg-blue-100 peer-checked:text-gray-600"
+                >
+                  <input
+                    type="radio"
+                    id="petsAllowedNo"
+                    name="petsAllowed"
+                    value={false}
+                    checked={formdata.petsAllowed === false}
+                    onChange={(e) => handleChange('petsAllowed', false)}
+                    className="form-radio mr-2 h-5 w-5 text-blue-500"
+                  />
+                  No
+                </label>
+              </div>
+            </div>
+
+            <div className="py-3">
+              <div className="my-3 mb-5 block text-lg font-semibold text-gray-900 md:text-xl">
+                Extra House Rules
+              </div>
               <div className="py-3 font-semibold  text-gray-700 ">
                 {' '}
-                Standout Amanities
+                During stay
               </div>
-              <ul className="grid w-full grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4">
-                {standout_amenities.map((amenity) => (
-                  <Amenity
-                    key={amenity.value}
-                    amenity={amenity}
-                    formData={formdata}
-                    name="standout_amenities"
-                    onChange={(e) =>
-                      handleChange('standout_amenities', e.target.value)
-                    }
-                  />
+              <ul className="grid w-full grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {houseRules.map((rule) => (
+                  <li key={rule.id}>
+                    <input
+                      className="peer hidden"
+                      type="checkbox"
+                      id={rule.value}
+                      name={rule.name}
+                      checked={formdata[rule.name]} // Changed this line
+                      onChange={(e) =>
+                        handleChange(rule.name, e.target.checked)
+                      }
+                    />
+                    <label
+                      htmlFor={rule.value}
+                      className="inline-flex w-full cursor-pointer items-center justify-between rounded-lg border-2 border-gray-200 bg-white p-2 px-3 text-gray-500 hover:bg-gray-50 hover:text-gray-600 peer-checked:border-blue-600 peer-checked:bg-blue-100 peer-checked:text-gray-600 "
+                    >
+                      <div className="flex items-center space-x-3 ">
+                        <img
+                          src={rule.image}
+                          alt={rule.title}
+                          className="h-8 w-8 rounded-md bg-white p-1  "
+                        />
+                        <div className="w-full text-xs font-semibold text-black md:text-sm ">
+                          {rule.title}
+                        </div>
+                      </div>
+                    </label>
+                  </li>
                 ))}
               </ul>
-            </div>
-
-            <div>
               <div className="py-3 font-semibold  text-gray-700 ">
                 {' '}
-                Safety Amanities
+                Checking in and out
               </div>
-              <ul className="grid w-full grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4">
-                {safety_amenities.map((amenity) => (
-                  <Amenity
-                    key={amenity.value}
-                    amenity={amenity}
-                    name="safety_amenities"
-                    formData={formdata}
-                    onChange={(e) =>
-                      handleChange('safety_amenities', e.target.value)
-                    }
-                  />
-                ))}
-              </ul>
-            </div>
-          </div>
-          <div className="flex flex-col items-start justify-between py-3 md:flex-row md:items-center">
-            <div className="mb-3 w-full md:mb-0 md:w-1/2 md:pr-2">
-              <Input
-                label="Max Guests"
-                name="maxGuests"
-                value={formdata.maxGuests}
-                onChange={(e) => handleChange('maxGuests', e.target.value)}
-                placeholder=""
-                type="number"
-                className="w-full"
-              />
-            </div>
 
-            <div className="w-full md:w-1/2 md:pl-2">
-              <Input
-                label="Price"
-                name="price"
-                value={formdata.price}
-                onChange={(e) => handleChange('price', e.target.value)}
-                placeholder=""
-                type="number"
-                className="w-full"
-              />
-            </div>
-            <div className="w-full md:w-1/2 md:pl-2">
-              <Input
-                label="No. of Rooms"
-                name="numberOfRooms"
-                value={formdata.numberOfRooms}
-                onChange={(e) => handleChange('numberOfRooms', e.target.value)}
-                placeholder=""
-                type="number"
-                className="w-full"
-              />
-            </div>
-          </div>
-          <div className="flex items-center space-x-3 py-3">
-            <div className="flex items-center space-x-1 text-base font-bold md:text-lg ">
-              <PawPrint size={24} className="h-6 w-6" />
-              <span>Pets Allowed</span>
-            </div>
-            <div className="flex  items-start space-x-3 ">
-              <label
-                htmlFor="petsAllowedYes"
-                className="inline-flex w-full cursor-pointer items-center justify-between rounded-lg border-2 border-gray-200 bg-white p-2 px-3 text-gray-500 hover:bg-gray-50 hover:text-gray-600 peer-checked:border-blue-600 peer-checked:bg-blue-100 peer-checked:text-gray-600"
-              >
+              <div>
                 <input
-                  type="radio"
-                  id="petsAllowedYes"
-                  name="petsAllowed"
-                  value={true}
-                  checked={formdata.petsAllowed === true}
-                  onChange={(e) => handleChange('petsAllowed', true)}
-                  className="form-radio mr-2 h-5 w-5 text-blue-500"
+                  className="peer hidden"
+                  required=""
+                  type="checkbox"
+                  id="customOptions"
+                  name="customOptions"
+                  onChange={() => setShowCustomOptions(!showCustomOptions)}
                 />
-                Yes
-              </label>
-              <label
-                htmlFor="petsAllowedNo"
-                className="inline-flex w-full cursor-pointer items-center justify-between rounded-lg border-2 border-gray-200 bg-white p-2 px-3 text-gray-500 hover:bg-gray-50 hover:text-gray-600 peer-checked:border-blue-600 peer-checked:bg-blue-100 peer-checked:text-gray-600"
-              >
-                <input
-                  type="radio"
-                  id="petsAllowedNo"
-                  name="petsAllowed"
-                  value={false}
-                  checked={formdata.petsAllowed === false}
-                  onChange={(e) => handleChange('petsAllowed', false)}
-                  className="form-radio mr-2 h-5 w-5 text-blue-500"
-                />
-                No
-              </label>
-            </div>
-          </div>
-
-          <div className="py-3">
-            <div className="my-3 mb-5 block text-lg font-semibold text-gray-900 md:text-xl">
-              Extra House Rules
-            </div>
-            <div className="py-3 font-semibold  text-gray-700 ">
-              {' '}
-              During stay
-            </div>
-            <ul className="grid w-full grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {houseRules.map((rule) => (
-                <li key={rule.id}>
-                  <input
-                    className="peer hidden"
-                    type="checkbox"
-                    id={rule.value}
-                    name={rule.name}
-                    checked={formdata[rule.name]} // Changed this line
-                    onChange={(e) => handleChange(rule.name, e.target.checked)}
-                  />
-                  <label
-                    htmlFor={rule.value}
-                    className="inline-flex w-full cursor-pointer items-center justify-between rounded-lg border-2 border-gray-200 bg-white p-2 px-3 text-gray-500 hover:bg-gray-50 hover:text-gray-600 peer-checked:border-blue-600 peer-checked:bg-blue-100 peer-checked:text-gray-600 "
-                  >
-                    <div className="flex items-center space-x-3 ">
-                      <img
-                        src={rule.image}
-                        alt={rule.title}
-                        className="h-8 w-8 rounded-md bg-white p-1  "
-                      />
-                      <div className="w-full text-xs font-semibold text-black md:text-sm ">
-                        {rule.title}
-                      </div>
+                <label
+                  htmlFor="customOptions"
+                  className="inline-flex w-auto cursor-pointer items-center justify-between rounded-lg border-2 border-gray-200 bg-white p-2 px-3 text-gray-500 hover:bg-gray-50 hover:text-gray-600 peer-checked:border-blue-600 peer-checked:bg-blue-100 peer-checked:text-gray-600 "
+                >
+                  <div className="flex items-center space-x-3 ">
+                    <div className="w-full text-xs font-semibold text-black md:text-sm ">
+                      Add Custom check-in/check-out times
                     </div>
-                  </label>
-                </li>
-              ))}
-            </ul>
-            <div className="py-3 font-semibold  text-gray-700 ">
-              {' '}
-              Checking in and out
-            </div>
+                  </div>
+                </label>
+                <div className="py-2 text-xs font-light text-gray-600 md:text-sm">
+                  * Without custom time, check-in/out is unrestricted.
+                </div>
+                {showCustomOptions && (
+                  <ul className="grid w-full grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                    <li>
+                      <label
+                        htmlFor="timePicker"
+                        className="block text-sm font-medium text-gray-700"
+                      >
+                        Check-in after
+                      </label>
+                      <select
+                        id="timePicker"
+                        name="timePicker"
+                        className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                        value={formdata.checkInTime}
+                        onChange={(e) =>
+                          handleChange('checkInTime', e.target.value)
+                        }
+                      >
+                        {Array.from({ length: 24 }, (_, i) => i).map((hour) => {
+                          const isPM = hour >= 12;
+                          const displayHour =
+                            hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
+                          const displayPeriod = isPM ? 'pm' : 'am';
+                          return (
+                            <option
+                              key={hour}
+                              value={hour}
+                              className="py-2"
+                            >{`${displayHour}  ${displayPeriod}`}</option>
+                          );
+                        })}
+                      </select>
+                    </li>
+                    <li>
+                      <label
+                        htmlFor="timePicker"
+                        className="block text-sm font-medium text-gray-700"
+                      >
+                        Checkout before
+                      </label>
+                      <select
+                        id="timePicker"
+                        name="timePicker"
+                        className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                        value={formdata.checkOutTime}
+                        onChange={(e) =>
+                          handleChange('checkOutTime', e.target.value)
+                        }
+                      >
+                        {Array.from({ length: 24 }, (_, i) => i).map((hour) => {
+                          const isPM = hour >= 12;
+                          const displayHour =
+                            hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
+                          const displayPeriod = isPM ? 'pm' : 'am';
+                          return (
+                            <option
+                              key={hour}
+                              value={hour}
+                              className="py-2"
+                            >{`${displayHour}  ${displayPeriod}`}</option>
+                          );
+                        })}
+                      </select>
+                    </li>
+                  </ul>
+                )}
+              </div>
 
-            <div>
+              <div className="py-3 font-semibold  text-gray-700 ">
+                {' '}
+                Other Rules
+              </div>
+
               <input
                 className="peer hidden"
                 required=""
                 type="checkbox"
-                id="customOptions"
-                name="customOptions"
-                onChange={() => setShowCustomOptions(!showCustomOptions)}
+                id="SelfCheckIn"
+                value={formdata.SelfcheckIn}
+                checked={formdata.SelfcheckIn}
+                onChange={(e) => handleChange('SelfcheckIn', e.target.checked)}
               />
               <label
-                htmlFor="customOptions"
+                htmlFor="SelfCheckIn"
                 className="inline-flex w-auto cursor-pointer items-center justify-between rounded-lg border-2 border-gray-200 bg-white p-2 px-3 text-gray-500 hover:bg-gray-50 hover:text-gray-600 peer-checked:border-blue-600 peer-checked:bg-blue-100 peer-checked:text-gray-600 "
               >
                 <div className="flex items-center space-x-3 ">
+                  <img
+                    src="/pictures/houserules/door.svg"
+                    alt=""
+                    className="h-8 w-8 rounded-md bg-white p-1  "
+                  />
                   <div className="w-full text-xs font-semibold text-black md:text-sm ">
-                    Add Custom check-in/check-out times
+                    Self check-in
                   </div>
                 </div>
               </label>
-              <div className="py-2 text-xs font-light text-gray-600 md:text-sm">
-                * Without custom time, check-in/out is unrestricted.
+
+              <div className="py-3 font-semibold  text-gray-700 ">
+                {' '}
+                Extra Rules
               </div>
-              {showCustomOptions && (
-                <ul className="grid w-full grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                  <li>
-                    <label
-                      htmlFor="timePicker"
-                      className="block text-sm font-medium text-gray-700"
-                    >
-                      Check-in after
-                    </label>
-                    <select
-                      id="timePicker"
-                      name="timePicker"
-                      className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                      value={formdata.checkInTime}
-                      onChange={(e) =>
-                        handleChange('checkInTime', e.target.value)
-                      }
-                    >
-                      {Array.from({ length: 24 }, (_, i) => i).map((hour) => {
-                        const isPM = hour >= 12;
-                        const displayHour =
-                          hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
-                        const displayPeriod = isPM ? 'pm' : 'am';
-                        return (
-                          <option
-                            key={hour}
-                            value={hour}
-                            className="py-2"
-                          >{`${displayHour}  ${displayPeriod}`}</option>
-                        );
-                      })}
-                    </select>
-                  </li>
-                  <li>
-                    <label
-                      htmlFor="timePicker"
-                      className="block text-sm font-medium text-gray-700"
-                    >
-                      Checkout before
-                    </label>
-                    <select
-                      id="timePicker"
-                      name="timePicker"
-                      className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                      value={formdata.checkOutTime}
-                      onChange={(e) =>
-                        handleChange('checkOutTime', e.target.value)
-                      }
-                    >
-                      {Array.from({ length: 24 }, (_, i) => i).map((hour) => {
-                        const isPM = hour >= 12;
-                        const displayHour =
-                          hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
-                        const displayPeriod = isPM ? 'pm' : 'am';
-                        return (
-                          <option
-                            key={hour}
-                            value={hour}
-                            className="py-2"
-                          >{`${displayHour}  ${displayPeriod}`}</option>
-                        );
-                      })}
-                    </select>
-                  </li>
-                </ul>
-              )}
+
+              <Textarea
+                className="w-full"
+                label="House Rules"
+                name="additionalRules"
+                value={formdata.additionalRules}
+                onChange={(e) =>
+                  handleChange('additionalRules', e.target.value)
+                }
+                rows="5"
+                placeholder="Enter your additional house rules here ...  "
+              />
             </div>
 
-            <div className="py-3 font-semibold  text-gray-700 ">
-              {' '}
-              Other Rules
-            </div>
-
-            <input
-              className="peer hidden"
-              required=""
-              type="checkbox"
-              id="SelfCheckIn"
-              value={formdata.SelfcheckIn}
-              checked={formdata.SelfcheckIn}
-              onChange={(e) => handleChange('SelfcheckIn', e.target.checked)}
-            />
-            <label
-              htmlFor="SelfCheckIn"
-              className="inline-flex w-auto cursor-pointer items-center justify-between rounded-lg border-2 border-gray-200 bg-white p-2 px-3 text-gray-500 hover:bg-gray-50 hover:text-gray-600 peer-checked:border-blue-600 peer-checked:bg-blue-100 peer-checked:text-gray-600 "
+            <button
+              type="submit"
+              disabled={loading}
+              className="my-5 rounded bg-blue-500 px-8 py-2 font-bold text-white hover:bg-blue-700"
             >
-              <div className="flex items-center space-x-3 ">
-                <img
-                  src="/pictures/houserules/door.svg"
-                  alt=""
-                  className="h-8 w-8 rounded-md bg-white p-1  "
-                />
-                <div className="w-full text-xs font-semibold text-black md:text-sm ">
-                  Self check-in
-                </div>
-              </div>
-            </label>
-
-            <div className="py-3 font-semibold  text-gray-700 ">
-              {' '}
-              Extra Rules
-            </div>
-
-            <Textarea
-              className="w-full"
-              label="House Rules"
-              name="additionalRules"
-              value={formdata.additionalRules}
-              onChange={(e) => handleChange('additionalRules', e.target.value)}
-              rows="5"
-              placeholder="Enter your additional house rules here ...  "
-            />
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="my-5 rounded bg-blue-500 px-8 py-2 font-bold text-white hover:bg-blue-700"
-          >
-          {pathname !== '/places/' ? (loading ? 'Loading...' : 'Update Place') : (loading ? 'Loading...' : 'Add Place')}
-            
-          </button>
-        </form>
-      </div>)
-    }
-      
+              {pathname !== '/places/add-place'
+                ? loading
+                  ? 'Loading...'
+                  : 'Update Place'
+                : loading
+                  ? 'Loading...'
+                  : 'Add Place'}
+            </button>
+          </form>
+        </div>
+      )}
     </>
   );
 }

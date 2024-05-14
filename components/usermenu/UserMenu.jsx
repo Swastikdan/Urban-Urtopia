@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
+import {useUserContext} from '@/providers/UserProvider';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,21 +26,23 @@ export default function UserMenu() {
    const { data: session } = useSession();
 
    const user = session?.user;
-  // const id = session?.user?.id;
+
 
   // const user = fetch(`/api/user/${id}`).then((res) => res.json());
 
-const [userImage, setUserImage] = useState(null);
+// const [userImage, setUserImage] = useState(null);
 
-useEffect(() => {
-  if (session) {
-    fetch(`/api/user/${session.user.id}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setUserImage(data);
-      });
-  }
-}, [session]);
+// useEffect(() => {
+//   if (session) {
+//     fetch(`/api/user/${session.user.id}`)
+//       .then((res) => res.json())
+//       .then((data) => {
+//         setUserImage(data);
+//       });
+//   }
+// }, [session]);
+
+  const {  userData } = useUserContext();
 
 
   
@@ -48,11 +51,11 @@ useEffect(() => {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger className="m-auto items-center rounded-3xl">
-          <UserMenuTrigger user={userImage} />
+          <UserMenuTrigger user={userData} />
         </DropdownMenuTrigger>
         <DropdownMenuContent className=" mr-5 rounded-xl    drop-shadow-xl ">
           <DropdownMenuLabel className="text-md ">
-            Hello ,{user?.name?.split(' ')[0] || 'Guest'}
+            Hello ,‎ {userData?.name?.split(' ')[0] || 'Guest'}
           </DropdownMenuLabel>
           <DropdownMenuSeparator className="h-[.5px]  bg-black dark:bg-white" />
 

@@ -5,16 +5,15 @@ import { toast } from 'sonner';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Eye, EyeOff, Upload, Loader2 } from 'lucide-react';
 import { Button } from './ui/button';
-
+import { useUserContext } from '@/providers/UserProvider';
 export default function ProfileEdit() {
   const { data: session, loading: sessionLoading } = useSession();
   const uploadRef = useRef(null);
   const [loading, setLoading] = useState(false);
   const [picture, setPicture] = useState('');
-  const [userData, setUserData] = useState({});
+ const { userData, setUserData , userImage, setUserImage  } = useUserContext();
   const [userLoading, setUserLoading] = useState(true);
   const [showAccountPassword, setShowAccountPassword] = useState(false);
-
   const [showNewPassword, setShowNewPassword] = useState(false);
   let userid = session?.user?.id;
   useEffect(() => {
@@ -33,6 +32,8 @@ export default function ProfileEdit() {
             passwordAvailable: user.passwordAvailable,
           });
           setUserLoading(false);
+          setUserImage(user.image);
+          
         })
         .catch((error) => {
           console.error('Error:', error);
