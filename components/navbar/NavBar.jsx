@@ -40,17 +40,14 @@ export default function NavBar({ className }) {
           className="hidden items-center space-x-2 text-sm font-bold md:flex   "
         >
           <Image
-            src="/logo.svg"
+            src="/Logo_Transparent.png"
             alt="Urban Utopia"
             width={512}
             height={512}
             priority={true}
             className="h-12 w-12"
           />
-          <h1 className="flex flex-col">
-            {' '}
-            <span>Urban</span> <span>Utopia</span>{' '}
-          </h1>
+          <h1 className="text-2xl xl:text-3xl">Stayz</h1>
         </Link>
 
         {path === '/' ? (
