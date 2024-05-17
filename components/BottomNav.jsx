@@ -5,20 +5,21 @@ import { usePathname } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { Home, LayoutDashboard, ShieldCheck } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useUserContext } from '@/providers/UserProvider';
 export default function BottomNav() {
 
   const { data: session } = useSession();
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    if (session) {
-      fetch(`/api/user/${session.user.id}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setUser(data);
-        });
-    }
-  }, [session]);
+  // const [user, setUser] = useState(null);
+  const { userData: user } = useUserContext();
+  // useEffect(() => {
+  //   if (session) {
+  //     fetch(`/api/user/${session.user.id}`)
+  //       .then((res) => res.json())
+  //       .then((data) => {
+  //         setUser(data);
+  //       });
+  //   }
+  // }, [session]);
 
    const pathname = usePathname();
 

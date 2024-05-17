@@ -1,5 +1,13 @@
 'use client';
-import React from 'react';
+import React, { useState , useEffect } from 'react';
+import {
+  addDays,
+  differenceInCalendarDays,
+  isWithinInterval,
+  parseISO,
+  format,
+  differenceInDays,
+} from 'date-fns';
 import ImageGalleryMedium from './ImageGalleryMedium';
 import { Separator } from '@/components/ui/separator';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -12,7 +20,6 @@ import {
   Heart,
 } from 'lucide-react';
 import { Calendar } from '@/components/ui/calendar';
-import { addDays, format } from 'date-fns';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,13 +37,71 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-
-export default function PlacePageDesktop({ place , onClick, isFavoritePlace}) {
-  const { id, title, address, description, photos } = place;
-  const [date, setDate] = React.useState({
-    from: new Date(2024, 3, 30),
-    to: addDays(new Date(2024, 5, 20), 20),
+import MarkdownViewer from './MarkdownViewer';
+export default function PlacePageDesktop({ place, onClick, isFavoritePlace }) {
+  const {
+    id,
+    title,
+    address,
+    description,
+    photos,
+    price,
+    owner,
+    maxGuests,
+    minimumStay,
+    bookingWindows,
+  } = place;
+  const [adults, setAdults] = useState(1);
+  const [children, setChildren] = useState(0);
+  const [infants, setInfants] = useState(0);
+  const [pets, setPets] = useState(0);
+  const [bookingdays, setBookingDays] = useState(Number(minimumStay));
+  // const [isvaidBookingdates, setIsVaidBookingdates] = useState();
+  const [isErrorDates, setIsErrorDates] = useState(false);
+  const initialFrom = new Date();
+  const initialTo = addDays(new Date(), Number(minimumStay));
+  let from = initialFrom;
+  let to = initialTo;
+  const [date, setDate] = useState({
+    from: from,
+    to: to,
   });
+
+
+
+useEffect(() => {
+  if (date?.from instanceof Date && date?.to instanceof Date) {
+    // Strip the time part from the dates
+    const fromDate = new Date(
+      date.from.getFullYear(),
+      date.from.getMonth(),
+      date.from.getDate(),
+    );
+    const toDate = new Date(
+      date.to.getFullYear(),
+      date.to.getMonth(),
+      date.to.getDate(),
+    );
+    // Use differenceInCalendarDays instead of differenceInDays
+    const days = differenceInCalendarDays(toDate, fromDate);
+    setBookingDays(days);
+    if (days < Number(minimumStay)) {
+      setIsErrorDates(true);
+    } else {
+      setIsErrorDates(false);
+    }
+  }
+}, [date]);
+
+
+
+  // add a check that the form and to cant be the same check the form is not less than the current date and the to is not less than the from . and dont set the dates  if those conditions are met and form ad to dates indivisually
+
+
+
+
+
+
   return (
     <section className="max-w-6xl px-10">
       <div className="flex items-center justify-between">
@@ -83,12 +148,18 @@ export default function PlacePageDesktop({ place , onClick, isFavoritePlace}) {
           </button>
         </div>
       </div>
-      <ImageGalleryMedium images={photos} id={id} isFavoritePlace={isFavoritePlace} onClick={onClick}/>
+      <ImageGalleryMedium
+        images={photos}
+        id={id}
+        isFavoritePlace={isFavoritePlace}
+        onClick={onClick}
+      />
       <div className="py-5">
         <div className="flex flex-col space-y-1">
           <span className="text-base font-medium xl:text-lg">{address}</span>
           <span className="text-sm font-medium">
-            4 guests &#183; 2 bedrooms &#183; 2 beds &#183; 2 bathrooms
+            <span>{maxGuests} guests</span> &#183; 2 bedrooms &#183; 2 beds
+            &#183; 2 bathrooms
           </span>
         </div>
       </div>
@@ -97,10 +168,17 @@ export default function PlacePageDesktop({ place , onClick, isFavoritePlace}) {
           <Separator className="w-full " />
           <div className="flex items-center space-x-5 py-3">
             <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>CN</AvatarFallback>
+              <AvatarImage
+                src={owner?.image}
+                className="h-full w-full object-cover"
+              />
+              <AvatarFallback>
+                {owner?.name.slice(0, 2).toUpperCase()}
+              </AvatarFallback>
             </Avatar>
-            <span className="text-lg font-medium">Hosted By Shad</span>
+            <span className="text-lg font-medium">
+              Hosted By {owner?.name.split(' ', 1)}
+            </span>
           </div>
           <Separator className="" />
           <div className="pt-3">
@@ -161,28 +239,6 @@ export default function PlacePageDesktop({ place , onClick, isFavoritePlace}) {
                 Paid parking on premises
               </span>
             </div>
-            {/* <Drawer>
-              <DrawerTrigger className="w-full">
-                <div className="mt-5 w-max px-5 rounded-lg border border-black bg-background py-2 text-base duration-200 hover:bg-accent hover:text-accent-foreground active:scale-[99%]">
-                  Show all amenities
-                </div>
-              </DrawerTrigger>
-              <DrawerContent className="h-full max-h-[90vh] px-4">
-                <DrawerClose className="flex w-full">
-                  <div className="-ml-1 items-start ">
-                    <ChevronLeft strokeWidth={1.25} size={30} />
-                  </div>
-                </DrawerClose>
-                <DrawerTitle className="pt-5 text-start text-2xl font-bold ">
-                  What this place offers
-                </DrawerTitle>
-                <DrawerDescription className="text-wrap pt-5 text-start text-base">
-                  <ScrollArea className="h-[100vh] w-full  pb-40 ">
-                    All amenities here
-                  </ScrollArea>
-                </DrawerDescription>
-              </DrawerContent>
-            </Drawer> */}
             <Dialog>
               <DialogTrigger className="w-full">
                 <div className="mt-5 w-max rounded-lg border border-black bg-background px-5 py-2 text-base duration-200 hover:bg-accent hover:text-accent-foreground active:scale-[99%]">
@@ -245,49 +301,30 @@ export default function PlacePageDesktop({ place , onClick, isFavoritePlace}) {
             <span className="pb-1  text-xl font-semibold">
               About this Place
             </span>
-            <div>
-              {description && description.length > 300
-                ? `${description.slice(0, 300)}...`
-                : description}
+            <div className="text-light">
+              <MarkdownViewer
+                markdown={
+                  description && description.length > 300
+                    ? `${description.slice(0, 300)}...`
+                    : description
+                }
+              />
             </div>
-            {/* <Drawer>
-              <DrawerTrigger>
-                {description && description.length > 150 ? (
-                  <div className="gap-.5 mt-2 flex items-center font-medium underline">
-                    Shoe More <ChevronRight strokeWidth={1.25} size={20} />
-                  </div>
-                ) : null}
-              </DrawerTrigger>
-              <DrawerContent className="h-full max-h-[90vh] px-4">
-                <DrawerClose className="flex w-full">
-                  <div className="-ml-1 items-start ">
-                    <ChevronLeft strokeWidth={1.25} size={30} />
-                  </div>
-                </DrawerClose>
-                <DrawerTitle className="pt-5 text-start text-2xl font-bold ">
-                  About this place
-                </DrawerTitle>
-                <DrawerDescription className="text-wrap pt-5 text-start text-base">
-                  <ScrollArea className="h-[100vh] w-full  pb-40 ">
-                    <div className="pb-40">{description}</div>
-                  </ScrollArea>
-                </DrawerDescription>
-              </DrawerContent>
-            </Drawer> */}
+
             <Dialog>
-              <DialogTrigger className="w-full">
+              <DialogTrigger className="text-light w-full">
                 {description && description.length > 300 ? (
                   <div className="gap-.5 mt-2 flex items-center font-medium underline">
                     Shoe More <ChevronRight strokeWidth={1.25} size={20} />
                   </div>
                 ) : null}
               </DialogTrigger>
-              <DialogContent className=" w-fit min-w-[50vw] max-w-[80vw] ">
+              <DialogContent className=" h-full max-h-[80vh] w-fit min-w-[70vw] max-w-[80vw] ">
                 <DialogHeader>
                   <DialogTitle> About this place</DialogTitle>
                   <DialogDescription className="p-5 ">
-                    <ScrollArea className="h-[50vh] w-full  ">
-                      {description}
+                    <ScrollArea className="h-[65vh] w-full text-pretty text-base leading-7 text-black ">
+                      <MarkdownViewer markdown={description} />
                     </ScrollArea>
                   </DialogDescription>
                 </DialogHeader>
@@ -298,7 +335,7 @@ export default function PlacePageDesktop({ place , onClick, isFavoritePlace}) {
         <div className="col-span-2  w-full">
           <div className="  rounded-xl border border-gray-200 p-5 shadow-md">
             <div className="py-3 text-xl font-semibold tabular-nums">
-              ₹6,726 night
+              ₹ {price} night
             </div>
             <div className="my-5  rounded-xl border-[2px] border-gray-400">
               <DropdownMenu>
@@ -306,7 +343,11 @@ export default function PlacePageDesktop({ place , onClick, isFavoritePlace}) {
                   <div className="flex justify-between">
                     <div className="flex w-full flex-col border-r-2 border-gray-200 p-3 text-left text-sm">
                       <span className="font-bold capitalize">Check-in</span>
-                      <span>4/15/2024</span>
+                      <span>
+                        {date?.from instanceof Date
+                          ? format(date.from, 'dd/MM/yyyy')
+                          : 'Add Dates '}
+                      </span>
                     </div>
 
                     <Separator
@@ -316,7 +357,11 @@ export default function PlacePageDesktop({ place , onClick, isFavoritePlace}) {
 
                     <div className="flex w-full flex-col p-3 text-left text-sm">
                       <span className="font-bold capitalize">Checkout</span>
-                      <span>4/15/2024</span>
+                      <span>
+                        {date?.to instanceof Date
+                          ? format(date.to, 'dd/MM/yyyy')
+                          : 'Add Dates'}
+                      </span>
                     </div>
                   </div>
                 </DropdownMenuTrigger>
@@ -338,7 +383,7 @@ export default function PlacePageDesktop({ place , onClick, isFavoritePlace}) {
                   <DropdownMenuTrigger className="w-full rounded-xl">
                     <div className="flex w-full flex-col  p-3 text-left text-sm">
                       <span className="font-bold capitalize">Guests</span>
-                      <span>1 Guest</span>
+                      <span>{adults + children} Guest</span>
                     </div>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="mr-5 w-[25vw] space-y-3 p-3 ">
@@ -349,13 +394,27 @@ export default function PlacePageDesktop({ place , onClick, isFavoritePlace}) {
                           <span className="text-sm font-light">Age 13+</span>
                         </div>
                         <div className="flex items-center space-x-3">
-                          <button class="rounded-full border border-input bg-background  p-2 hover:bg-accent hover:text-accent-foreground">
+                          <button
+                            className="rounded-full border border-input bg-background p-2 hover:bg-accent hover:text-accent-foreground"
+                            onClick={() => {
+                              if (adults + children < maxGuests) {
+                                setAdults(adults + 1);
+                              }
+                            }}
+                          >
                             <Plus size={14} />
                           </button>
                           <span className="text-base font-light tabular-nums">
-                            2
+                            {adults}
                           </span>
-                          <button class="rounded-full border border-input bg-background  p-2 hover:bg-accent hover:text-accent-foreground">
+                          <button
+                            class="rounded-full border border-input bg-background  p-2 hover:bg-accent hover:text-accent-foreground"
+                            onClick={() => {
+                              if (adults > 0) {
+                                setAdults(adults - 1);
+                              }
+                            }}
+                          >
                             <Minus size={14} />
                           </button>
                         </div>
@@ -370,13 +429,27 @@ export default function PlacePageDesktop({ place , onClick, isFavoritePlace}) {
                           <span className="text-sm font-light">Ages 2-12</span>
                         </div>
                         <div className="flex items-center space-x-3">
-                          <button class="rounded-full border border-input bg-background  p-2 hover:bg-accent hover:text-accent-foreground">
+                          <button
+                            class="rounded-full border border-input bg-background  p-2 hover:bg-accent hover:text-accent-foreground"
+                            onClick={() => {
+                              if (adults + children < maxGuests) {
+                                setChildren(children + 1);
+                              }
+                            }}
+                          >
                             <Plus size={14} />
                           </button>
                           <span className="text-base font-light tabular-nums">
-                            1
+                            {children}
                           </span>
-                          <button class="rounded-full border border-input bg-background  p-2 hover:bg-accent hover:text-accent-foreground">
+                          <button
+                            class="rounded-full border border-input bg-background  p-2 hover:bg-accent hover:text-accent-foreground"
+                            onClick={() => {
+                              if (children > 0) {
+                                setChildren(children - 1);
+                              }
+                            }}
+                          >
                             <Minus size={14} />
                           </button>
                         </div>
@@ -390,13 +463,27 @@ export default function PlacePageDesktop({ place , onClick, isFavoritePlace}) {
                           <span className="text-sm font-light">Under 2</span>
                         </div>
                         <div className="flex items-center space-x-3">
-                          <button class="rounded-full border border-input bg-background  p-2 hover:bg-accent hover:text-accent-foreground">
+                          <button
+                            class="rounded-full border border-input bg-background  p-2 hover:bg-accent hover:text-accent-foreground"
+                            onClick={() => {
+                              if (infants < 5) {
+                                setInfants(infants + 1);
+                              }
+                            }}
+                          >
                             <Plus size={14} />
                           </button>
                           <span className="text-base font-light tabular-nums">
-                            2
+                            {infants}
                           </span>
-                          <button class="rounded-full border border-input bg-background  p-2 hover:bg-accent hover:text-accent-foreground">
+                          <button
+                            class="rounded-full border border-input bg-background  p-2 hover:bg-accent hover:text-accent-foreground"
+                            onClick={() => {
+                              if (infants > 0) {
+                                setInfants(infants - 1);
+                              }
+                            }}
+                          >
                             <Minus size={14} />
                           </button>
                         </div>
@@ -408,13 +495,27 @@ export default function PlacePageDesktop({ place , onClick, isFavoritePlace}) {
                           <span className="text-base font-medium">Pets</span>
                         </div>
                         <div className="flex items-center space-x-3">
-                          <button class="rounded-full border border-input bg-background  p-2 hover:bg-accent hover:text-accent-foreground">
+                          <button
+                            class="rounded-full border border-input bg-background  p-2 hover:bg-accent hover:text-accent-foreground"
+                            onClick={() => {
+                              if (pets < 5) {
+                                setPets(pets + 1);
+                              }
+                            }}
+                          >
                             <Plus size={14} />
                           </button>
                           <span className="text-base font-light tabular-nums">
-                            2
+                            {pets}
                           </span>
-                          <button class="rounded-full border border-input bg-background  p-2 hover:bg-accent hover:text-accent-foreground">
+                          <button
+                            class="rounded-full border border-input bg-background  p-2 hover:bg-accent hover:text-accent-foreground"
+                            onClick={() => {
+                              if (pets > 0) {
+                                setPets(pets - 1);
+                              }
+                            }}
+                          >
                             <Minus size={14} />
                           </button>
                         </div>
@@ -432,19 +533,25 @@ export default function PlacePageDesktop({ place , onClick, isFavoritePlace}) {
                 </DropdownMenu>
               </div>
             </div>
+            {!isErrorDates ? (
+              <>
+                <button className=" w-full rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500 py-3 text-lg font-bold text-white shadow-md duration-200 active:scale-[99%] ">
+                  Reserve
+                </button>
+                <div className="pt-2 text-center text-sm font-light">
+                  You won't be charged yet
+                </div>
+              </>
+            ) : null}
 
-            <button className=" w-full rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500 py-3 text-lg font-bold text-white shadow-md duration-200 active:scale-[99%] ">
-              Reserve
-            </button>
-            <div className="pt-2 text-center text-sm font-light">
-              You won't be charged yet
-            </div>
             <Separator className="my-3 mb-5 h-[1px] bg-gray-400" />
             <div className="flex items-center justify-between  pt-2 text-base">
               <span className="font-light underline underline-offset-4">
-                ₹6,726 x 5 nights
+                {bookingdays < 30
+                  ? `₹${price} x ${bookingdays} ${bookingdays > 1 ? 'nights' : 'night'}`
+                  : `Total for ${bookingdays} nights`}
               </span>
-              <span className=" font-bold">₹33,630</span>
+              <span className=" font-medium">₹{price * bookingdays}</span>
             </div>
           </div>
         </div>

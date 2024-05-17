@@ -1,5 +1,4 @@
-
-import { Grip, ChevronLeft, Share , Heart } from 'lucide-react';
+import { Grip, ChevronLeft, Share, Heart } from 'lucide-react';
 import {
   Drawer,
   DrawerTrigger,
@@ -10,8 +9,13 @@ import {
 } from '@/components/ui/drawer';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import LikeButton from '../places/likeButton';
-export default function ImageGalleryMedium({ images, id, isFavoritePlace , onClick }) {
+import LikeButton from '../places/placecard/catagory/likeButton';
+export default function ImageGalleryMedium({
+  images,
+  id,
+  isFavoritePlace,
+  onClick,
+}) {
   return (
     <>
       <section className="mx-auto flex   w-full items-center justify-center pt-0">
@@ -79,7 +83,14 @@ export default function ImageGalleryMedium({ images, id, isFavoritePlace , onCli
   );
 }
 
-export function AllPhotos({ children, className, photos = [], id, isFavoritePlace , onClick }) {
+export function AllPhotos({
+  children,
+  className,
+  photos = [],
+  id,
+  isFavoritePlace,
+  onClick,
+}) {
   const half = Math.ceil(photos?.length / 2);
   const firstHalf = photos?.slice(0, half);
   const secondHalf = photos?.slice(half);

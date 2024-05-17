@@ -14,11 +14,9 @@ export const LikeProvider = ({ children }) => {
         .then((data) => {
           const modifiedData = data.map((item) => {
             return {
-              
                 id: item.place.id,
                 photos: item.place.photos.slice(0, 1),
                 title: item.place.title,
-              
             };
           });
           setFavorites(modifiedData);
@@ -26,6 +24,8 @@ export const LikeProvider = ({ children }) => {
         });
     }
   }, [session]);
+
+  console.log(favorites);
   return (
     <LikeContext.Provider
       value={{ favorites, favoriteLoading, setFavorites }}

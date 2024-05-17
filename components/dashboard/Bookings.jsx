@@ -170,7 +170,7 @@ export default function Bookings({ bookings }) {
                                           ? 'Completed'
                                           : 'Approved'}
                                       </span>
-                                    ) : booking.status === 'pending' ? (
+                                    ) : booking.status === 'processing' ? (
                                       <span className="inline-flex items-center gap-x-1 rounded-full bg-yellow-100 px-3 py-1 text-xs font-medium text-yellow-800 dark:bg-yellow-500/10 dark:text-yellow-500">
                                         <Badge width={20} />
                                         Processing

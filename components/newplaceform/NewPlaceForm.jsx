@@ -49,6 +49,7 @@ export default function NewPlaceForm() {
     petsAllowed: false,
     checkInTime: null,
     checkOutTime: null,
+    minimumStay:'1',
     smokingNotAllowed: false,
     partiesNotAllowed: false,
     photographyNotAllowed: false,
@@ -140,6 +141,7 @@ export default function NewPlaceForm() {
         optional: true,
       },
       { value: formdata.numberOfRooms, name: 'Number Of Rooms' },
+      { value: formdata.minimumStay, name: 'Minimum Stay'}
     ];
 
     for (let field of fields) {
@@ -182,6 +184,20 @@ export default function NewPlaceForm() {
       toast.error('Check In Time must be less than Check Out Time');
       return false;
     }
+
+    if (formdata.listTillDate && formdata.listTillDate < new Date()) {
+      toast.error('List Till Date must be a future date');
+      return false;
+    }
+    if (formdata.minimumStay < 1) {
+      toast.error('Minimum Stay must be atleast 1 day');
+      return false;
+    }
+    if (formdata.minimumStay > 30) {
+      toast.error('Minimum Stay must be less than 30 days');
+      return false;
+    }
+
 
     return true;
   };
@@ -682,7 +698,22 @@ export default function NewPlaceForm() {
                   </ul>
                 )}
               </div>
-
+              <div className='flex justify-start space-x-10 w-full items-center py-3'>
+                <div className=" font-semibold  text-gray-700 w-full max-w-max">
+                  {' '}
+                  Minium Stay (in days)
+                </div>
+                <Input
+                  className="w-full max-w-40"
+                  type="number"
+                  name="minimumStay"
+                  value={formdata.minimumStay}
+                  onChange={(e) => handleChange('minimumStay', e.target.value)}
+                  placeholder="Enter the minimum stay duration"
+                />
+              </div>
+            </div>
+            <div className="py-3">
               <div className="py-3 font-semibold  text-gray-700 ">
                 {' '}
                 Other Rules

@@ -85,6 +85,7 @@ model Places {
   SelfcheckIn         Boolean
   additionalRules     String?
   numberOfRooms       String?
+  minimumStay         String @default("1")
   bookings            Bookings[]
   favorites           UserFavorites[]
   status              String      @default("processing")

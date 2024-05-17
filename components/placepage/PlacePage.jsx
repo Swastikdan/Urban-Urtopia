@@ -5,15 +5,27 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import PlacePageDesktop from './PlacePageDesktop';
 import PlacePageMobile from './PlacePageMobile';
+import { useLikeContext } from '@/providers/LikeProvider';
 export default function PlacePage({ place }) {
   const { id, isFavorite } = place;
   const { data: session } = useSession();
   const router = useRouter();
+  const {
+    favorites,
+    setFavorites,
+    favoriteLoading: isLoading,
+  } = useLikeContext();
   const [isFavoritePlace, setIsFavoritePlace] = useState(false);
   const [favoriteLoading, setFavoriteLoading] = useState(false);
   useEffect(() => {
     if (isFavorite === true) {
       setIsFavoritePlace(true);
+      if (!favorites.find((fav) => fav.id === id)) {
+        setFavorites((prev) => [
+          ...prev,
+          { id, name: place.name, image: place.image },
+        ]);
+      }
     }
   }, [isFavorite]);
 
@@ -32,6 +44,14 @@ export default function PlacePage({ place }) {
         .then((res) => res.json())
         .then((data) => {
           setFavoriteLoading(false);
+          setFavorites((prevFavorites) =>
+            prevFavorites.find((fav) => fav.id === id)
+              ? prevFavorites.filter((favorite) => favorite.id !== id)
+              : [
+                  ...prevFavorites,
+                  { id, name: place.name, image: place.image },
+                ],
+          );
           toast.success(data.message);
         })
         .catch((error) => {
