@@ -36,7 +36,7 @@ export default function LoginForm() {
         email,
         password,
         redirect: false, // Use callback URL instead of router.push
-        callbackUrl: `${window.location.origin}/`,
+        callbackUrl: `${window.location.origin}?type=email&login=true`,
       });
 
       if (res?.error == null) {
@@ -55,15 +55,15 @@ export default function LoginForm() {
 
   async function handleOauthSignin(
     provider,
-    callbackUrl = `${window.location.origin}/`,
+    callbackUrl = `${window.location.origin}?type=${provider}&login=true`,
   ) {
     setLoading(true); // Set loading to true before calling signIn
 
     try {
       await signIn(provider, {
-        callbackUrl,
+        callbackUrl: `${window.location.origin}?type=${provider}&login=true`,
       });
-      toast.success('Logged in successfully');
+      // toast.success('Logged in successfully');
     } catch (error) {
       /// console.log(error);
       toast.error('An unexpected error occurred');

@@ -1,13 +1,23 @@
 import React, { Suspense } from 'react';
 import Places from '@/components/places/Places';
 import PlaceLoader from '@/components/places/placecard/PlaceLoader';
-export default async function page() {
+import Logintost from '@/components/Logintost';
+export default async function page({ searchParams }) {
+
+
+const logintype = await searchParams.type;
+
+const login = await searchParams.login;
+
+
+
+
   return (
     <section>
+      <Logintost logintype={logintype} login={login} />
       <Suspense fallback={<PlaceLoader />}>
         <Places />
       </Suspense>
-
     </section>
   );
 }

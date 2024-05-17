@@ -74,7 +74,7 @@ export default function BottomNav() {
           </Link>
         )}
 
-        {user ? (
+        {user && user.image && user.name ? (
           <Link
             href="/account"
             className={`inline-flex flex-col items-center justify-center ${pathname === '/account' ? ' text-primary ' : 'font-light'}`}
@@ -102,7 +102,7 @@ export default function BottomNav() {
           >
             <Avatar className="h-8 w-8 ">
               <AvatarImage
-                src="https://res.cloudinary.com/dp5tomvwb/image/upload/v1709356304/Airbnb/Users/kxw5ldjpggyauiuaycw8.jpg"
+                src="https://res.cloudinary.com/dp5tomvwb/image/upload/placeholder_guest.jpg"
                 alt="Guest profile image"
                 className="rounded-full grayscale"
               />

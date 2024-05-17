@@ -12,7 +12,7 @@ export default function UserMenuTrigger({ user }) {
           className="hidden text-gray-600 md:flex"
         />
         <Avatar>
-          {user ? (
+          {user && user.image && user.name ? (
             <>
               <AvatarImage
                 src={user.image.replace(
@@ -21,7 +21,7 @@ export default function UserMenuTrigger({ user }) {
                 )}
                 alt={`${user.name || 'user'} profile image`}
               />
-              <AvatarFallback className="bg-black text-white">
+              <AvatarFallback className="bg-gray-200 text-black">
                 {user.name.charAt(0).toUpperCase()}
               </AvatarFallback>
             </>
