@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-import { Home, LayoutDashboard, ShieldCheck } from 'lucide-react';
+import { Home, LayoutDashboard, ShieldCheck ,  Plus } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useUserContext } from '@/providers/UserProvider';
 export default function BottomNav() {
@@ -64,6 +64,7 @@ export default function BottomNav() {
           <LayoutDashboard size={28} className="my-1" />
           <span className="pt-1 text-xs ">Dashboard</span>
         </Link>
+
         {user && user.role === 'admin' && (
           <Link
             href="/admin"

@@ -43,7 +43,7 @@ export default function ImageGalleryMedium({
             />
             <span className="absolute bottom-2 right-2 hidden items-center space-x-3 rounded-md bg-white px-3 py-2 text-xs font-semibold ring-1 ring-black sm:flex md:hidden">
               <Grip size={15} />
-              <span>Show all photos</span>
+              <span className='text-sm '>Show all photos</span>
             </span>
           </AllPhotos>
           <div className="hidden grid-cols-2 gap-1.5 rounded-r-xl p-0.5 md:grid">

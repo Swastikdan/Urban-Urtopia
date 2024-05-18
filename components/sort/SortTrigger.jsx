@@ -3,7 +3,7 @@ import { ArrowDownUp } from 'lucide-react';
 export default function SortTrigger() {
   return (
     <>
-      <div className="rounded-full border-2 border-gray-300 bg-gray-50 p-4 -mb-2 md:mb-2  lg:hidden">
+      <div className="rounded-full border-2 border-gray-300 bg-gray-50 p-4 ">
         <ArrowDownUp strokeWidth={3} width={15} height={15} />
       </div>
 

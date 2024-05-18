@@ -1,5 +1,5 @@
 'use client';
-import React, { useState , useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   addDays,
   differenceInCalendarDays,
@@ -68,45 +68,36 @@ export default function PlacePageDesktop({ place, onClick, isFavoritePlace }) {
     to: to,
   });
 
-
-
-useEffect(() => {
-  if (date?.from instanceof Date && date?.to instanceof Date) {
-    // Strip the time part from the dates
-    const fromDate = new Date(
-      date.from.getFullYear(),
-      date.from.getMonth(),
-      date.from.getDate(),
-    );
-    const toDate = new Date(
-      date.to.getFullYear(),
-      date.to.getMonth(),
-      date.to.getDate(),
-    );
-    // Use differenceInCalendarDays instead of differenceInDays
-    const days = differenceInCalendarDays(toDate, fromDate);
-    setBookingDays(days);
-    if (days < Number(minimumStay)) {
-      setIsErrorDates(true);
-    } else {
-      setIsErrorDates(false);
+  useEffect(() => {
+    if (date?.from instanceof Date && date?.to instanceof Date) {
+      // Strip the time part from the dates
+      const fromDate = new Date(
+        date.from.getFullYear(),
+        date.from.getMonth(),
+        date.from.getDate(),
+      );
+      const toDate = new Date(
+        date.to.getFullYear(),
+        date.to.getMonth(),
+        date.to.getDate(),
+      );
+      // Use differenceInCalendarDays instead of differenceInDays
+      const days = differenceInCalendarDays(toDate, fromDate);
+      setBookingDays(days);
+      if (days < Number(minimumStay)) {
+        setIsErrorDates(true);
+      } else {
+        setIsErrorDates(false);
+      }
     }
-  }
-}, [date]);
-
-
+  }, [date]);
 
   // add a check that the form and to cant be the same check the form is not less than the current date and the to is not less than the from . and dont set the dates  if those conditions are met and form ad to dates indivisually
-
-
-
-
-
 
   return (
     <section className="max-w-6xl px-10">
       <div className="flex items-center justify-between">
-        <h1 className="text-pretty pb-5 pt-1 text-lg font-bold xl:text-xl">
+        <h1 className=" pb-5 pt-1 text-lg font-semibold lg:text-xl xl:text-2xl">
           {title}
         </h1>
         <div className=" flex items-center space-x-8">
@@ -345,7 +336,7 @@ useEffect(() => {
                     <div className="flex w-full flex-col border-r-2 border-gray-200 p-3 text-left text-sm">
                       <span className="font-bold capitalize">Check-in</span>
                       <span>
-                        {date?.from instanceof Date
+                        {date?.from instanceof Date && !isNaN(date.from)
                           ? format(date.from, 'dd/MM/yyyy')
                           : 'Add Dates '}
                       </span>
@@ -359,7 +350,7 @@ useEffect(() => {
                     <div className="flex w-full flex-col p-3 text-left text-sm">
                       <span className="font-bold capitalize">Checkout</span>
                       <span>
-                        {date?.to instanceof Date
+                        {date?.to instanceof Date && !isNaN(date.to)
                           ? format(date.to, 'dd/MM/yyyy')
                           : 'Add Dates'}
                       </span>

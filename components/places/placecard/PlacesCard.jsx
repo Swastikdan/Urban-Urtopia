@@ -32,7 +32,7 @@ export default function PlacesCard({ place }) {
           </div>
         </div>
       ) : (
-        <div >
+        <div>
           <div className="relative">
             <ImageSlider
               images={photos}
@@ -41,7 +41,7 @@ export default function PlacesCard({ place }) {
               isFavorite={isFavorite}
             />
 
-            <Link href={`/place/${id}`}  className="tex-sm flex flex-col px-2">
+            <Link href={`/place/${id}`} className="tex-sm flex flex-col px-2">
               <div className="flex items-center justify-between ">
                 <span className="text-base font-semibold">
                   {state}, {city}
@@ -54,15 +54,15 @@ export default function PlacesCard({ place }) {
                 </div> */}
               </div>
               <span className="  text-[15px] font-light text-gray-500">
-                {title.substring(0, 40)}
+                {title.substring(0, 60)}
               </span>
               {/* <span className="py-0.5 text-[15px] font-light text-gray-500">
                 10-12 Mar
               </span> */}
 
               <span className=" text-[15px] font-medium ">
-                <span className="">₹</span>
-                <span className="">{price}</span>
+                <span className="">₹ </span>
+                <span className="bg-white  tabular-nums">{` ${price}`}</span>
                 <span className="font-light"> night</span>
               </span>
             </Link>

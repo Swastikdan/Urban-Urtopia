@@ -11,12 +11,12 @@ export default function PlaceLoader() {
               <div className="mb-2 block h-[300px] animate-pulse overflow-hidden rounded-xl  bg-gray-200 lg:mb-3 "></div>
               <div className="flex flex-col space-y-2 px-2 ">
                 <div className="flex items-center justify-between  ">
-                  <div className="h-[18px] w-2/4 animate-pulse rounded bg-gray-200 "></div>
-                  <div className="h-[18px] w-1/4 animate-pulse rounded bg-gray-200 "></div>
+                  <div className="h-[18px] w-4/6 animate-pulse rounded bg-gray-200 "></div>
+                  {/* <div className="h-[18px] w-1/4 animate-pulse rounded bg-gray-200 "></div> */}
                 </div>
-                <div className="h-[18px] w-3/6 animate-pulse rounded bg-gray-200 "></div>
+                <div className="h-[18px] w-4/6 animate-pulse rounded bg-gray-200 "></div>
                 <div className="h-[18px] w-2/6 animate-pulse rounded bg-gray-200 "></div>
-                <div className="h-[18px] w-1/6 animate-pulse rounded bg-gray-200 "></div>
+                {/* <div className="h-[18px] w-1/6 animate-pulse rounded bg-gray-200 "></div> */}
               </div>
             </div>
           ))}

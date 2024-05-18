@@ -80,17 +80,21 @@ export default function PlaceImageUpload({
       img.src = URL.createObjectURL(file);
 
       await new Promise((resolve) => {
-        img.onload = () => {
-          const aspectRatio = img.width / img.height;
-          if (img.width < 600 || img.height < 400) {
-            toast.error('Requried minimum resolution of 600x400');
-          } else if (aspectRatio < 4 / 3) {
-            toast.error('Requried an aspect ratio of 4:3 or higher');
-          } else {
+        // img.onload = () => {
+        //   const aspectRatio = img.width / img.height;
+        //   if (img.width < 600 || img.height < 400) {
+        //     toast.error('Requried minimum resolution of 600x400');
+        //   } else if (aspectRatio < 4 / 3) {
+        //     toast.error('Requried an aspect ratio of 4:3 or higher');
+        //   } else {
+        //     validFiles.push(file);
+        //   }
+        //   resolve();
+        // };
+          img.onload = () => {
             validFiles.push(file);
-          }
-          resolve();
-        };
+            resolve();
+          };
       });
     }
     setPhotosUploading(validFiles.length);
