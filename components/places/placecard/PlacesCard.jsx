@@ -46,19 +46,19 @@ export default function PlacesCard({ place }) {
                 <span className="text-base font-semibold">
                   {state}, {city}
                 </span>
-                <div className="flex items-center space-x-1 ">
+                {/* <div className="flex items-center space-x-1 ">
                   <Star width={15} height={15} fill="black" className="" />
                   <span className="text-sm">
                     {Math.floor((Math.random() * 2.9 + 2) * 100) / 100}
                   </span>
-                </div>
+                </div> */}
               </div>
               <span className="  text-[15px] font-light text-gray-500">
                 {title.substring(0, 40)}
               </span>
-              <span className="py-0.5 text-[15px] font-light text-gray-500">
+              {/* <span className="py-0.5 text-[15px] font-light text-gray-500">
                 10-12 Mar
-              </span>
+              </span> */}
 
               <span className=" text-[15px] font-medium ">
                 <span className="">₹</span>

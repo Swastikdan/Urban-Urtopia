@@ -10,59 +10,25 @@ export default function PlacePage({ place }) {
   const { id, isFavorite } = place;
   const { data: session } = useSession();
   const router = useRouter();
-  const {
-    favorites,
-    setFavorites,
-    favoriteLoading: isLoading,
-  } = useLikeContext();
-  const [isFavoritePlace, setIsFavoritePlace] = useState(false);
-  const [favoriteLoading, setFavoriteLoading] = useState(false);
-  useEffect(() => {
-    if (isFavorite === true) {
-      setIsFavoritePlace(true);
-      if (!favorites.find((fav) => fav.id === id)) {
-        setFavorites((prev) => [
-          ...prev,
-          { id, name: place.name, image: place.image },
-        ]);
-      }
-    }
-  }, [isFavorite]);
 
-  const handleFavoriteClick = () => {
-    if (session?.user) {
-      setFavoriteLoading(true);
-      setIsFavoritePlace(!isFavoritePlace);
+    const { favorites, toggleLike } = useLikeContext();
 
-      fetch('/api/user/favorites', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ placeId: id }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          setFavoriteLoading(false);
-          setFavorites((prevFavorites) =>
-            prevFavorites.find((fav) => fav.id === id)
-              ? prevFavorites.filter((favorite) => favorite.id !== id)
-              : [
-                  ...prevFavorites,
-                  { id, name: place.name, image: place.image },
-                ],
-          );
-          toast.success(data.message);
-        })
-        .catch((error) => {
-          setFavoriteLoading(false);
-          toast.error('An error occurred');
-          setIsFavoritePlace(isFavoritePlace);
-        });
-    } else {
-      router.push('/login');
-    }
-  };
+    const [isFavoritePlace, setIsFavoritePlace] = useState(false);
+
+      useEffect(() => {
+        if (favorites.some((favorite) => favorite.id === id)) {
+          setIsFavoritePlace(true);
+        }
+      }, [favorites]);
+
+      const handleFavoriteClick = () => {
+       if(session){
+          setIsFavoritePlace(!isFavoritePlace);
+       }
+          toggleLike(id);
+     
+      };
+
   return (
     <>
       <div className="flex w-full sm:hidden">

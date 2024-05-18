@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/drawer';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import LikeButton from '../places/placecard/catagory/likeButton';
+import LikeButton from '../likeButton';
 export default function ImageGalleryMedium({
   images,
   id,

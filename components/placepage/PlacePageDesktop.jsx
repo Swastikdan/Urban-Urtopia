@@ -38,6 +38,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import MarkdownViewer from './MarkdownViewer';
+import LikeButton from '../likeButton';
 export default function PlacePageDesktop({ place, onClick, isFavoritePlace }) {
   const {
     id,

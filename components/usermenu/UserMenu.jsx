@@ -94,11 +94,11 @@ export default function UserMenu() {
 
               <DropdownMenuSeparator className="h-[.5px]  bg-black dark:bg-white" />
               <DropdownMenuItem
-                className="flex cursor-pointer items-center rounded-md font-medium text-red-500  "
+                className="flex cursor-pointer items-center rounded-md font-medium text-red-500 group hover:text-red-600 focus:text-red-600 focus:bg-red-100 "
                 onClick={() => signOut()}
               >
-                <LogOut width={15} />
-                <span className="pl-2">Logout</span>
+                <LogOut width={15} className=' ' />
+                <span className="pl-2  ">Logout</span>
               </DropdownMenuItem>
             </>
           ) : (

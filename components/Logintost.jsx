@@ -9,7 +9,7 @@ export default function Logintost({ logintype, login }) {
     useEffect(() => {
         if ((logintype === 'google' || logintype === 'github') && login === 'true') {
             toast.success('Logged in successfully');
-            router.push('/');
+            router.replace('/');
         }
     }, [logintype, login]);
 

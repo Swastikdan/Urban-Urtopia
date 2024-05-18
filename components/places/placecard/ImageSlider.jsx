@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
@@ -11,50 +12,33 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { toast } from 'sonner';
-import LikeButton from './catagory/likeButton';
-export default function ImageSlider({ customButton, images, isFavorite, id }) {
-  // const { data: session } = useSession();
-  // const router = useRouter();
-  // const [isFavoritePlace, setIsFavoritePlace] = useState(false);
-  // const [favoriteLoading, setFavoriteLoading] = useState(false);
-  // useEffect(() => {
-  //   if (isFavorite === true) {
-  //     setIsFavoritePlace(true);
-  //   }
-  // }, [isFavorite]);
+import { useLikeContext } from '@/providers/LikeProvider';
 
-  // const handleFavoriteClick = () => {
-  //   if (session?.user) {
-  //     setFavoriteLoading(true);
-  //     setIsFavoritePlace(!isFavoritePlace);
+export default function ImageSlider({ customButton, images, id }) {
+  const { data: session } = useSession();
+  const router = useRouter();
+  const { favorites, toggleLike } = useLikeContext();
 
-  //     fetch('/api/user/favorites', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({ placeId: id }),
-  //     })
-  //       .then((res) => res.json())
-  //       .then((data) => {
-  //         setFavoriteLoading(false);
-  //         toast.success(data.message);
-  //       })
-  //       .catch((error) => {
-  //         setFavoriteLoading(false);
-  //         toast.error('An error occurred');
-  //         setIsFavoritePlace(isFavoritePlace);
-  //       });
-  //   } else {
-  //     router.push('/login');
-  //   }
-  // };
+  const [isFavoritePlace, setIsFavoritePlace] = useState(false);
+
+  useEffect(() => {
+    if (favorites.some((favorite) => favorite.id === id)) {
+      setIsFavoritePlace(true);
+    }
+  }, [favorites]);
+
+  const handleFavoriteClick = () => {
+    if(session){
+ setIsFavoritePlace(!isFavoritePlace);
+    }
+ toggleLike(id);
+  };
 
   return (
     <>
-      <div className=" group relative z-0 m-1 flex h-full min-h-[300px] items-center justify-center overflow-hidden rounded-xl bg-gray-200 dark:bg-gray-600">
+      <div className="group relative z-0 m-1 flex h-full min-h-[300px] items-center justify-center overflow-hidden rounded-xl bg-gray-200 dark:bg-gray-600">
         <button
-          className={`prevButton${customButton} absolute  left-5 -z-10 -mr-10 cursor-pointer rounded-full bg-white py-[6px] pl-[5px] pr-[6px] text-black  opacity-0 shadow-xl transition-all duration-200 hover:scale-105 hover:transition-all disabled:opacity-0 group-hover:z-10 md:opacity-100`}
+          className={`prevButton${customButton} absolute left-5 -z-10 -mr-10 cursor-pointer rounded-full bg-white py-[6px] pl-[5px] pr-[6px] text-black opacity-0 shadow-xl transition-all duration-200 hover:scale-105 hover:transition-all disabled:opacity-0 group-hover:z-10 md:opacity-100`}
         >
           <ChevronLeft width={20} height={20} />
           <span className="sr-only">Previous</span>
@@ -78,14 +62,9 @@ export default function ImageSlider({ customButton, images, isFavorite, id }) {
           {images.map((img, index) => (
             <SwiperSlide key={index} className="overflow-hidden">
               <Link href={`/place/${id}`}>
-                {/* <img
-                src={img.replace('/upload/', '/upload/w_1000/')}
-                alt="property image"
-                className="h-[300px] w-full object-cover"
-              /> */}
-                <Avatar className="flex h-full w-full rounded-none ">
+                <Avatar className="flex h-full w-full rounded-none">
                   <AvatarImage
-                    className="h-[300px] w-full rounded-none object-cover "
+                    className="h-[300px] w-full rounded-none object-cover"
                     src={img.replace('/upload/', '/upload/w_800/')}
                     alt="property Image"
                   />
@@ -96,32 +75,27 @@ export default function ImageSlider({ customButton, images, isFavorite, id }) {
               </Link>
             </SwiperSlide>
           ))}
-          <div className="swiper-pagination px-3 py-1 "></div>
+          <div className="swiper-pagination px-3 py-1"></div>
         </Swiper>
-
         <button
           className={`nextButton${customButton} absolute right-5 -z-10 -ml-10 cursor-pointer rounded-full bg-white p-[6px] text-black opacity-0 shadow-xl transition-all duration-200 hover:scale-105 hover:transition-all disabled:opacity-0 group-hover:z-10 md:opacity-100`}
         >
           <ChevronRight width={20} height={20} />
           <span className="sr-only">Next</span>
         </button>
-        {/* <div
-        className="group absolute right-2 top-2 z-20  cursor-pointer rounded-full disabled:pointer-events-none disabled:cursor-none "
-        onClick={() => handleFavoriteClick()}
-      >
-        <Heart
-          width={35}
-          height={35}
-          className={`m-2  text-white transition-all duration-200  active:scale-[.8] md:h-7 md:w-7`}
-          fill={
-            isFavoritePlace === true ? 'rgb(255,56,92)' : 'rgb(0 0 0 / 0.6)'
-          }
-          focusable="true"
-          strokeWidth={1}
-        />
-      </div> */}
-
-        <LikeButton placeid={id} />
+        <div
+          className="group absolute right-2 top-2 z-20 cursor-pointer rounded-full disabled:pointer-events-none disabled:cursor-none"
+          onClick={handleFavoriteClick}
+        >
+          <Heart
+            width={35}
+            height={35}
+            className={`m-2 text-white transition-all duration-200 active:scale-[.8] md:h-7 md:w-7`}
+            fill={isFavoritePlace ? 'rgb(255,56,92)' : 'rgb(0 0 0 / 0.6)'}
+            focusable="true"
+            strokeWidth={1}
+          />
+        </div>
       </div>
     </>
   );
