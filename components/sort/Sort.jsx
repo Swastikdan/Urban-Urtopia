@@ -28,7 +28,7 @@ export default function Sort() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="m-auto items-center rounded-full sm:-mb-2 md:mb-2  lg:hidden lg:rounded-xl ">
+      <DropdownMenuTrigger className="m-auto items-center rounded-full sm:-mb-2 md:mb-2   lg:rounded-xl ">
         <SortTrigger />
       </DropdownMenuTrigger>
       <DropdownMenuContent className=" mr-5 rounded-xl drop-shadow-xl">
