@@ -69,7 +69,9 @@ export async function createPlace(request) {
      },
    },
  });
-  return NextResponse.json({ message: 'Place created successfully' });
+  return NextResponse.json({ message: 'Place created successfully' , place:{
+    id:place.id,
+  }  });
 }
 
 export { createPlace as POST };

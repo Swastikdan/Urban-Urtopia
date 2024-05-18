@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import { Input } from '../Input';
 import { Textarea } from '../Textarea';
 import { toast } from 'sonner';
@@ -16,7 +16,7 @@ import {
 } from '../places/config/amanities';
 import houseRules from '../places/config/houserules';
 import { usePathname } from 'next/navigation';
-import { useParams } from 'next/navigation';
+import { useParams , useRouter } from 'next/navigation';
 export default function NewPlaceForm() {
   const [loading, setLoading] = useState(false);
   const [prevoiusLoading, setPreviousLoading] = useState(false);
@@ -30,7 +30,7 @@ export default function NewPlaceForm() {
   const [showCustomOptions, setShowCustomOptions] = useState(false);
   const { data: session } = useSession();
   const ownerId = session?.user?.id;
-
+  const router = useRouter();
   const [formdata, setFormData] = useState({
     title: '',
     description: '',
@@ -275,6 +275,7 @@ export default function NewPlaceForm() {
         return;
       } else {
         toast.success('Place created successfully');
+        router.push(`/places/new/${formdata.id}/`);
         setLoading(false);
       }
     }

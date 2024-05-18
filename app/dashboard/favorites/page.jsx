@@ -6,39 +6,64 @@ import Link from 'next/link';
 import { toast } from 'sonner';
 import { useLikeContext } from '@/providers/LikeProvider';
 export default function page() {
-
   const {
-    favorites,
-    setFavorites,
-    favoriteLoading: isLoading,
+    favorites: favoritesFromContext,
+    setFavorites: setFavoritesFromContext,
+    favoriteLoading: favoriteLoadingFromContext,
   } = useLikeContext();
+  const [favorites, setFavorites] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleFavoriteClick = (id) => {
-    setFavorites((prevFavorites) =>
-      prevFavorites.filter((favorite) => favorite.id !== id),
-    );
-    fetch('/api/user/favorites', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ placeId: id }),
-    })
-
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error('Failed to delete favorite');
+  useEffect(() => {
+    const loadFavorites = async () => {
+      setIsLoading(true);
+      try {
+        const response = await fetch('/api/user/favorites');
+        const data = await response.json();
+        if (response.ok) {
+          setFavorites(
+            data.map((item) => ({
+              id: item.place.id,
+              title: item.place.title,
+              image: item.place.photos[0],
+            })),
+          );
+        } else {
+          throw new Error('Failed to load favorites');
         }
-        return res.json();
-      })
-      .then((data) => {
-        toast.success(data.message);
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error(error);
-        setFavorites(places);
-        toast.error('An error occurred while deleting favorite');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadFavorites();
+  }, []);
+
+  const handleFavoriteClick = async (id) => {
+    try {
+      const response = await fetch('/api/user/favorites', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ placeId: id }),
       });
+      const data = await response.json();
+      if (response.ok) {
+        setFavorites(favorites.filter((favorite) => favorite.id !== id));
+        setFavoritesFromContext(
+          favoritesFromContext.filter((favorite) => favorite.id !== id),
+        );
+      } else {
+        throw new Error(data.message || 'Failed to remove favorite');
+      }
+    } catch (error) {
+      console.error(error);
+      setFavorites(favorites);
+      setFavoritesFromContext(favoritesFromContext);
+    }
   };
 
   if (isLoading) {
@@ -61,7 +86,6 @@ export default function page() {
     );
   }
 
- 
   if (favorites.length === 0) {
     return (
       <div className="flex  flex-col items-center justify-center">
@@ -75,9 +99,7 @@ export default function page() {
   }
 
   return (
-
     <div className="mx-auto w-full py-5">
-
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {favorites.map((place, index) => (
           <div
@@ -87,7 +109,7 @@ export default function page() {
             <Avatar className="flex h-52 w-full flex-col items-center justify-center rounded-none  ">
               <AvatarImage
                 className="h-52 w-full rounded-t-xl "
-                src={place.photos[0].replace(
+                src={place.image.replace(
                   '/upload/',
                   '/upload/w_300,c_fill,g_auto/q_auto/f_auto/',
                 )}
@@ -129,11 +151,6 @@ export default function page() {
       </div>
     </div>
   );
-
-
-
-
-
 
   // return (
   //   <div className="mx-auto w-full py-5">
