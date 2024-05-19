@@ -13,7 +13,7 @@ const login = await searchParams.login;
 
 
   return (
-    <section>
+    <section className="min-h-screen">
       <Logintost logintype={logintype} login={login} />
       <Suspense fallback={<PlaceLoader />}>
         <Places />
