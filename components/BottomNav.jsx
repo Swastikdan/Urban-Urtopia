@@ -44,7 +44,7 @@ export default function BottomNav() {
 
   return (
     <div
-      className={`fixed bottom-0  left-0 z-50 h-16 w-full border-t border-gray-200 bg-white dark:border-gray-600 dark:bg-gray-700 sm:hidden ${
+      className={`fixed bottom-0  left-0 z-50 h-16 w-full border-t border-gray-200 bg-white dark:border-gray-600 dark:bg-gray-700 md:hidden ${
         isVisible ? 'slide-down' : 'slide-up'
       }`}
     >

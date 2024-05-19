@@ -41,30 +41,36 @@ export default function page() {
     loadFavorites();
   }, []);
 
-  const handleFavoriteClick = async (id) => {
-    try {
-      const response = await fetch('/api/user/favorites', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ placeId: id }),
-      });
-      const data = await response.json();
-      if (response.ok) {
-        setFavorites(favorites.filter((favorite) => favorite.id !== id));
-        setFavoritesFromContext(
-          favoritesFromContext.filter((favorite) => favorite.id !== id),
-        );
-      } else {
-        throw new Error(data.message || 'Failed to remove favorite');
-      }
-    } catch (error) {
-      console.error(error);
-      setFavorites(favorites);
-      setFavoritesFromContext(favoritesFromContext);
+const handleFavoriteClick = async (id) => {
+  // Save the current state in case we need to revert back
+  const previousFavorites = favorites;
+  const previousFavoritesFromContext = favoritesFromContext;
+
+  // Update the state immediately
+  setFavorites(favorites.filter((favorite) => favorite.id !== id));
+  setFavoritesFromContext(
+    favoritesFromContext.filter((favorite) => favorite.id !== id),
+  );
+
+  try {
+    const response = await fetch('/api/user/favorites', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ placeId: id }),
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.message || 'Failed to remove favorite');
     }
-  };
+  } catch (error) {
+    console.error(error);
+    // If the request fails, revert the state back to its previous value
+    setFavorites(previousFavorites);
+    setFavoritesFromContext(previousFavoritesFromContext);
+  }
+};
 
   if (isLoading) {
     return (

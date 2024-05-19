@@ -17,7 +17,7 @@
 - [ ] Booking Frontend
 
 ### Admin Panel
-@SuvankarSaha
+@sahasuvankar7
 - [ ] Admin Panel Api
 - [ ] Admin Panel Logic
 - [ ] Admin Panel Design
@@ -29,5 +29,5 @@
 - [ ] Search Component Design & build 
 - [ ] Search Api fix and Rewrite
 #### Bug Fixing and Testing
-- [ ] Delete Button on the Favorite Page is very slow
+- [x] Delete Button on the Favorite Page is very slow
 - **[ ] Fix Some Spellings**
