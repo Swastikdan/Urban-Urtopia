@@ -12,7 +12,6 @@
 @paulaneesh7 
 - [ ] Booking Logic
 - [ ] Calender Logic
-- [ ] Calender Api
 - [ ] Booking Api
 - [ ] Booking Frontend
 

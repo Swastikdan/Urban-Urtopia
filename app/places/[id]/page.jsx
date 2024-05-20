@@ -12,16 +12,16 @@ export default async  function page() {
 
   
   return (
-    <section className="mx-auto flex w-full max-w-screen-xl flex-col px-4 md:px-8 ">
-      <div className="flex flex-col space-y-2 pb-10 pt-5">
-        <h2 className=" text-3xl font-semibold text-gray-800  md:text-4xl xl:text-5xl">
+    <section className="flex flex-col w-full max-w-screen-xl px-4 mx-auto md:px-8">
+      <div className="flex flex-col pt-5 pb-10 space-y-2">
+        <h2 className="text-3xl font-semibold text-gray-800 md:text-4xl xl:text-5xl">
           Edit Place Details
         </h2>
-        <span className="px-3 text-right text-sm text-gray-600">
+        <span className="px-3 text-sm text-right text-gray-600">
           For more information visit{' '}
           <a
             href="#"
-            className="font-semibold text-black underline-offset-4 hover:underline "
+            className="font-semibold text-black underline-offset-4 hover:underline"
           >
             here
           </a>{' '}
