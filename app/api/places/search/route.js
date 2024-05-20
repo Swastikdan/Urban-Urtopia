@@ -1,7 +1,7 @@
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
-export async function plsces(request) {
+export async function places(request) {
   const searchParams = request.nextUrl.searchParams;
   const query = searchParams.get("query");
   const id = searchParams.get("id");
@@ -143,4 +143,4 @@ export async function plsces(request) {
   }
 }
 
-export { plsces as GET };
+export { places as GET };
