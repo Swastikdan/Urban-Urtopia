@@ -5,7 +5,16 @@ import { Input } from '../Input';
 import { Textarea } from '../Textarea';
 import { toast } from 'sonner';
 import { useSession } from 'next-auth/react';
-import { Star, Trash2, Expand, Link, PawPrint } from 'lucide-react';
+import Indian_states_cities_list from 'indian-states-cities-list';
+import {
+  Star,
+  Trash2,
+  Expand,
+  Link,
+  PawPrint,
+  Check,
+  ChevronsUpDown,
+} from 'lucide-react';
 import PlaceImageUpload from './PlaceImageUpload';
 import Amenity from './Amenity';
 import categories from '../places/config/categories';
@@ -17,6 +26,7 @@ import {
 import houseRules from '../places/config/houserules';
 import { usePathname } from 'next/navigation';
 import { useParams , useRouter } from 'next/navigation';
+import SelectScroll from './SelectScroll';
 export default function NewPlaceForm() {
   const [loading, setLoading] = useState(false);
   const [prevoiusLoading, setPreviousLoading] = useState(false);
@@ -28,7 +38,9 @@ export default function NewPlaceForm() {
   const [photosUploading, setPhotosUploading] = useState(0);
   const [wordCount, setWordCount] = useState(0);
   const [showCustomOptions, setShowCustomOptions] = useState(false);
+  const [selectedState, setSelectedState] = useState('');
   const { data: session } = useSession();
+
   const ownerId = session?.user?.id;
   const router = useRouter();
   const [formdata, setFormData] = useState({
@@ -58,6 +70,9 @@ export default function NewPlaceForm() {
     additionalRules: '',
     numberOfRooms: null,
   });
+
+  const states = Indian_states_cities_list.STATES_OBJECT;
+
 
   const pathname = usePathname();
 

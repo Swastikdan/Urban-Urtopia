@@ -35,7 +35,6 @@ export async function createPlace(request) {
 
   const data = await request.json();
 
-  console.log(data);
 
   const user = await prisma.user.findUnique({
     where: {
