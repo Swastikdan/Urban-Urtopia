@@ -12,7 +12,7 @@ export default async function placebookings(request) {
     const data = await request.json();
 
     // Validate request data
-    const { placeId, checkIn, checkOut, guests, totalPrice } = data;
+    const { placeId, checkIn, checkOut, guests, totalPrice , userId } = data;
     if (!placeId || !checkIn || !checkOut || !guests || !totalPrice) {
       return NextResponse.json({
         code: 400,
@@ -36,7 +36,7 @@ export default async function placebookings(request) {
     const newBooking = await prisma.bookings.create({
       data: {
         placeId,
-        userId: session.user.id,
+        userId,
         checkIn: checkInDate,
         checkOut: checkOutDate,
         guests,

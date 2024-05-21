@@ -41,6 +41,7 @@ export default function PlacePage({ place }) {
       </div>
       <div className="hidden px-4  sm:flex xl:px-16">
         <PlacePageDesktop
+          session={session}
           place={place}
           isFavoritePlace={isFavoritePlace}
           onClick={handleFavoriteClick}
