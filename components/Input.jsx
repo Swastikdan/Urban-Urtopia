@@ -10,7 +10,7 @@ export function Input({ label, name, type, value, onChange, placeholder, classNa
       >
         {label}
       </label>
-      <input
+        <input
         type={type}
         value={value}
         name={name}

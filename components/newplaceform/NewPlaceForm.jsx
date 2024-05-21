@@ -5,7 +5,16 @@ import { Input } from '../Input';
 import { Textarea } from '../Textarea';
 import { toast } from 'sonner';
 import { useSession } from 'next-auth/react';
-import { Star, Trash2, Expand, Link, PawPrint } from 'lucide-react';
+import Indian_states_cities_list from 'indian-states-cities-list';
+import {
+  Star,
+  Trash2,
+  Expand,
+  Link,
+  PawPrint,
+  Check,
+  ChevronsUpDown,
+} from 'lucide-react';
 import PlaceImageUpload from './PlaceImageUpload';
 import Amenity from './Amenity';
 import categories from '../places/config/categories';
@@ -17,6 +26,7 @@ import {
 import houseRules from '../places/config/houserules';
 import { usePathname } from 'next/navigation';
 import { useParams , useRouter } from 'next/navigation';
+import SelectScroll from './SelectScroll';
 export default function NewPlaceForm() {
   const [loading, setLoading] = useState(false);
   const [prevoiusLoading, setPreviousLoading] = useState(false);
@@ -28,7 +38,9 @@ export default function NewPlaceForm() {
   const [photosUploading, setPhotosUploading] = useState(0);
   const [wordCount, setWordCount] = useState(0);
   const [showCustomOptions, setShowCustomOptions] = useState(false);
+  // const [selectedState, setSelectedState] = useState('');
   const { data: session } = useSession();
+
   const ownerId = session?.user?.id;
   const router = useRouter();
   const [formdata, setFormData] = useState({
@@ -58,6 +70,29 @@ export default function NewPlaceForm() {
     additionalRules: '',
     numberOfRooms: null,
   });
+  // console.log(formdata);
+  const states = Indian_states_cities_list.STATES_OBJECT;
+
+  const handleStateChnage = (value) => {
+    setFormData({ ...formdata, state: value });
+  };
+
+  // const cities = Indian_states_cities_list.STATE_WISE_CITIES[formdata.state] || [];
+
+const [cities, setCities] = useState([]);
+
+  useEffect(() => {
+    if (formdata.state) {
+      setCities(Indian_states_cities_list.STATE_WISE_CITIES[formdata.state]);
+    }
+  }, [formdata.state]);
+
+
+  const handleCitiesChnage = (value) => {
+    setFormData({ ...formdata, city: value });
+  };
+  // console.log('states', states)
+  // console.log('cities',cities);
 
   const pathname = usePathname();
 
@@ -336,7 +371,7 @@ export default function NewPlaceForm() {
               type="text"
               className="my-3"
             />
-            <Input
+            {/* <Input
               label="State"
               name="state"
               value={formdata.state}
@@ -344,8 +379,26 @@ export default function NewPlaceForm() {
               placeholder="Please state the state in which the place is located"
               type="text"
               className="my-3"
+            /> */}
+
+            <SelectScroll
+              items={states}
+              setSelectedData={handleStateChnage}
+              label="State"
+              placeholder="Select State"
+              className="my-3"
             />
-            <Input
+
+            <SelectScroll
+              items={cities}
+              setSelectedData={handleCitiesChnage}
+              label="City"
+              placeholder="Select City"
+              className="my-3  disabled:cursor-none disabled:opacity-50  "
+              disabled={formdata.state === ''}
+            />
+
+            {/* <Input
               label="City"
               name="city"
               value={formdata.city}
@@ -353,7 +406,7 @@ export default function NewPlaceForm() {
               placeholder="Please state the city of this place"
               type="text"
               className="my-3"
-            />
+            /> */}
             <Input
               label="Street"
               name="street"
@@ -699,8 +752,8 @@ export default function NewPlaceForm() {
                   </ul>
                 )}
               </div>
-              <div className='flex justify-start space-x-10 w-full items-center py-3'>
-                <div className=" font-semibold  text-gray-700 w-full max-w-max">
+              <div className="flex w-full items-center justify-start space-x-10 py-3">
+                <div className=" w-full  max-w-max font-semibold text-gray-700">
                   {' '}
                   Minium Stay (in days)
                 </div>
