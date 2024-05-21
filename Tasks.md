@@ -10,7 +10,7 @@
 ### Booking Logic for the user front end and Api for the backend
 
 @paulaneesh7 
-- [ ] Booking Logic
+- [x] Booking Logic
 - [ ] Calender Logic
 - [ ] Booking Api
 - [ ] Booking Frontend
