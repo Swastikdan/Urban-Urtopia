@@ -38,7 +38,7 @@ export default function NewPlaceForm() {
   const [photosUploading, setPhotosUploading] = useState(0);
   const [wordCount, setWordCount] = useState(0);
   const [showCustomOptions, setShowCustomOptions] = useState(false);
-  const [selectedState, setSelectedState] = useState('');
+  // const [selectedState, setSelectedState] = useState('');
   const { data: session } = useSession();
 
   const ownerId = session?.user?.id;
@@ -70,9 +70,29 @@ export default function NewPlaceForm() {
     additionalRules: '',
     numberOfRooms: null,
   });
-
+  // console.log(formdata);
   const states = Indian_states_cities_list.STATES_OBJECT;
 
+  const handleStateChnage = (value) => {
+    setFormData({ ...formdata, state: value });
+  };
+
+  // const cities = Indian_states_cities_list.STATE_WISE_CITIES[formdata.state] || [];
+
+const [cities, setCities] = useState([]);
+
+  useEffect(() => {
+    if (formdata.state) {
+      setCities(Indian_states_cities_list.STATE_WISE_CITIES[formdata.state]);
+    }
+  }, [formdata.state]);
+
+
+  const handleCitiesChnage = (value) => {
+    setFormData({ ...formdata, city: value });
+  };
+  // console.log('states', states)
+  // console.log('cities',cities);
 
   const pathname = usePathname();
 
@@ -351,7 +371,7 @@ export default function NewPlaceForm() {
               type="text"
               className="my-3"
             />
-            <Input
+            {/* <Input
               label="State"
               name="state"
               value={formdata.state}
@@ -359,8 +379,26 @@ export default function NewPlaceForm() {
               placeholder="Please state the state in which the place is located"
               type="text"
               className="my-3"
+            /> */}
+
+            <SelectScroll
+              items={states}
+              setSelectedData={handleStateChnage}
+              label="State"
+              placeholder="Select State"
+              className="my-3"
             />
-            <Input
+
+            <SelectScroll
+              items={cities}
+              setSelectedData={handleCitiesChnage}
+              label="City"
+              placeholder="Select City"
+              className="my-3  disabled:cursor-none disabled:opacity-50  "
+              disabled={formdata.state === ''}
+            />
+
+            {/* <Input
               label="City"
               name="city"
               value={formdata.city}
@@ -368,7 +406,7 @@ export default function NewPlaceForm() {
               placeholder="Please state the city of this place"
               type="text"
               className="my-3"
-            />
+            /> */}
             <Input
               label="Street"
               name="street"
@@ -714,8 +752,8 @@ export default function NewPlaceForm() {
                   </ul>
                 )}
               </div>
-              <div className='flex justify-start space-x-10 w-full items-center py-3'>
-                <div className=" font-semibold  text-gray-700 w-full max-w-max">
+              <div className="flex w-full items-center justify-start space-x-10 py-3">
+                <div className=" w-full  max-w-max font-semibold text-gray-700">
                   {' '}
                   Minium Stay (in days)
                 </div>
