@@ -2,6 +2,14 @@ import React from 'react';
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 import NewPlaceForm from '@/components/newplaceform/NewPlaceForm';
+
+export async function generateMetadata() {
+  return {
+    title: 'Edit Place Details - Urban Utopia',
+    description: 'Edit place details on Urban Utopia.',
+  };
+}
+
 export default async  function page() {
     const session = await getServerSession();
 

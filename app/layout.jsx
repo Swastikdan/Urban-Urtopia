@@ -25,20 +25,50 @@ import BottomNav from '@/components/BottomNav';
 //   display: 'swap',
 //   // weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
 // });
-import { TooltipProvider } from '@/components/ui/tooltip';
-export const metadata = {
-  title: 'Urban Utopia | Holiday rentals, cabins, beach houses &amp; more',
-  description:
-    'Urban Utopia is a web application that helps users find the best home deals in their desired location. We offer a wide range of homes to choose from, with competitive prices and excellent customer service.',
-  twitterCard:
-    'https://res.cloudinary.com/debewnh29/image/upload/w_1200,h_630,c_fill,g_auto/q_auto/f_auto/nestly/public/OGImage.webp',
-  ogTitle: 'Urban Utopia | Holiday rentals, cabins, beach houses &amp; more',
-  ogDescription:
-    'Urban Utopia is a web application that helps users find the best home deals in their desired location. We offer a wide range of homes to choose from, with competitive prices and excellent customer service.',
-  ogUrl: 'https://urbanutopia.vercel.app/',
-  ogImage:
-    'https://res.cloudinary.com/debewnh29/image/upload/w_1200,h_630,c_fill,g_auto/q_auto/f_auto/nestly/public/OGImage.webp',
-};
+
+// export const metadata = {
+//   title: 'Urban Utopia | Holiday rentals, cabins, beach houses &amp; more',
+//   description:
+//     'Urban Utopia is a web application that helps users find the best home deals in their desired location. We offer a wide range of homes to choose from, with competitive prices and excellent customer service.',
+//   twitterCard:
+//     'https://res.cloudinary.com/debewnh29/image/upload/w_1200,h_630,c_fill,g_auto/q_auto/f_auto/nestly/public/OGImage.webp',
+//   ogTitle: 'Urban Utopia | Holiday rentals, cabins, beach houses &amp; more',
+//   ogDescription:
+//     'Urban Utopia is a web application that helps users find the best home deals in their desired location. We offer a wide range of homes to choose from, with competitive prices and excellent customer service.',
+//   ogUrl: 'https://urbanutopia.vercel.app/',
+//   ogImage:
+//     'https://res.cloudinary.com/debewnh29/image/upload/w_1200,h_630,c_fill,g_auto/q_auto/f_auto/nestly/public/OGImage.webp',
+// };
+export async function generateMetadata({ params }) {
+  return {
+    title: 'Urban Utopia | Holiday rentals, cabins, beach houses &amp; more',
+    description:
+      'Urban Utopia is a web application that helps users find the best home deals in their desired location. We offer a wide range of homes to choose from, with competitive prices and excellent customer service.',
+      openGraph: {
+        title: 'Urban Utopia | Holiday rentals, cabins, beach houses &amp; more',
+        description:
+          'Urban Utopia is a web application that helps users find the best home deals in their desired location. We offer a wide range of homes to choose from, with competitive prices and excellent customer service.',
+        url: 'https://urbanutopia.vercel.app/',
+        images: [
+          {
+            url:
+              'https://res.cloudinary.com/debewnh29/image/upload/w_1200,h_630,c_fill,g_auto/q_auto/f_auto/nestly/public/OGImage.webp',
+            width: 1200,
+            height: 630,
+            alt: 'Urban Utopia | Holiday rentals, cabins, beach houses &amp; more',
+          },
+        ],
+      },
+    // twitterCard:
+    //   'https://res.cloudinary.com/debewnh29/image/upload/w_1200,h_630,c_fill,g_auto/q_auto/f_auto/nestly/public/OGImage.webp',
+    // ogTitle: 'Urban Utopia | Holiday rentals, cabins, beach houses &amp; more',
+    // ogDescription:
+    //   'Urban Utopia is a web application that helps users find the best home deals in their desired location. We offer a wide range of homes to choose from, with competitive prices and excellent customer service.',
+    // ogUrl: 'https://urbanutopia.vercel.app/',
+    // ogImage:
+    //   'https://res.cloudinary.com/debewnh29/image/upload/w_1200,h_630,c_fill,g_auto/q_auto/f_auto/nestly/public/OGImage.webp',
+  };
+}
 import SessionProvider from '../providers/SessionProvider';
 export default function RootLayout({ children }) {
   return (
@@ -53,15 +83,15 @@ export default function RootLayout({ children }) {
           content="max-snippet:-1, max-image-preview:large, max-video-preview:-1"
         />
         <meta name="robots" content="noodp " />
-        <meta name="description" content={metadata.description} />
+        {/* <meta name="description" content={metadata.description} />
         <meta name="twitter:card" content={metadata.twitterCard} />
         <meta property="og:title" content={metadata.ogTitle} />
         <meta property="og:description" content={metadata.ogDescription} />
         <meta property="og:url" content={metadata.ogUrl} />
-        <meta property="og:image" content={metadata.ogImage} />
+        <meta property="og:image" content={metadata.ogImage} /> 
         <meta name="robots" content="index, follow" />
         <title>{metadata.title}</title>
-        <link rel="canonical" href={metadata.ogUrl} />
+        <link rel="canonical" href={metadata.ogUrl} />*/}
         <meta name="apple-mobile-web-app-title" content="Urban Utopia" />
         <meta name="application-name" content="Urban Utopia" />
         <meta name="msapplication-TileColor" content="#da532c" />
@@ -162,8 +192,8 @@ export default function RootLayout({ children }) {
           <UserProvider>
             <LikeProvider>
               <NavBar />
-              <main className="w-full mx-auto ">
-                <TooltipProvider>{children}</TooltipProvider>
+              <main className="mx-auto w-full ">
+                {children}
                 <div className="font-heading">
                   <Toaster richColors />
                 </div>
