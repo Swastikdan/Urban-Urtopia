@@ -162,7 +162,7 @@ export default function RootLayout({ children }) {
           <UserProvider>
             <LikeProvider>
               <NavBar />
-              <main className="mx-auto w-full  ">
+              <main className="w-full mx-auto ">
                 <TooltipProvider>{children}</TooltipProvider>
                 <div className="font-heading">
                   <Toaster richColors />
