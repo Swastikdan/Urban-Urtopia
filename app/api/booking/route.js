@@ -1,8 +1,7 @@
 import { getServerSession } from 'next-auth';
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-
-export default async function placebookings(request) {
+ async function placebookings(request) {
   const session = await getServerSession();
   if (!session) {
     return NextResponse.json({ code: 401, message: 'Unauthorized' });
