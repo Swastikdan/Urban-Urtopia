@@ -63,7 +63,7 @@ export default function page() {
       setLoading(false);
     }
   };
-  console.log(loading)
+
 
   return (
     <>

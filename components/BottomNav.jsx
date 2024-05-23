@@ -68,7 +68,7 @@ export default function BottomNav() {
         {user && user.role === 'admin' && (
           <Link
             href="/admin"
-            className={`inline-flex flex-col items-center justify-center ${pathname === '/admin' ? ' text-primary ' : 'font-light'}`}
+            className={`inline-flex flex-col items-center justify-center ${pathname === '/admin/bookings' ? ' text-primary ' : 'font-light'}`}
           >
             <ShieldCheck size={28} className="my-1" />
             <span className="pt-1 text-xs ">Admin</span>

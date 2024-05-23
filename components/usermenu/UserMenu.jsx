@@ -60,7 +60,7 @@ export default function UserMenu() {
           <DropdownMenuSeparator className="h-[.5px]  bg-black dark:bg-white" />
 
           {user && user?.role === 'admin' ? (
-            <Link href="/admin">
+            <Link href="/admin/bookings">
               <DropdownMenuItem className="flex cursor-pointer items-center rounded-md">
                 <ShieldCheck width={15} />
                 <span className="pl-2">Admin Pannel</span>
