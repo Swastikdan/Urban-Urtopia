@@ -102,8 +102,8 @@ export default function page() {
                         </div>
                       </div>
                     ) : (
-                      <ScrollArea className="w-auto max-w-[92vw] whitespace-nowrap  md:max-w-[80vw]">
-                        <div className="flex w-max space-x-4 ">
+                      <ScrollArea className="w-auto max-w-[92vw] whitespace-nowrap  md:max-w-[81.5vw]">
+                        <div className="flex w-max">
                           <Table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                             <TableHeader>
                               <TableRow>
@@ -228,7 +228,16 @@ export default function page() {
                                             <BadgeX width={20} />
                                             Canceled
                                           </span>
-                                        ) : null}
+                                        ) : booking.checkOut < new Date() ? (
+                                          <span className="inline-flex items-center gap-x-1 rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-800 dark:bg-gray-500/10 dark:text-gray-500">
+                                            <BadgeX width={20} />
+                                           Expired
+                                          </span>
+                                        ) :null
+                                        
+                                        
+                                        
+                                        }
                                       </div>
                                     </TableCell>
                                     <TableCell className="size-px whitespace-nowrap">
@@ -242,7 +251,7 @@ export default function page() {
                                       <div className="px-6 py-3">
                                         {booking.status === 'cancelled' ||
                                         booking.status === 'approved' ||
-                                        new Date(booking.checkOut) <
+                                        new Date(booking.checkin) <
                                           new Date() ? (
                                           <div className="flex items-center space-x-3">
                                             <button className="inline-flex items-center gap-x-2 rounded-lg border-2 border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 opacity-50 shadow-sm hover:bg-gray-50 disabled:pointer-events-none disabled:opacity-50 ">
