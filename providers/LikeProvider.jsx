@@ -21,6 +21,7 @@ export const LikeProvider = ({ children }) => {
           const modifiedData = data.map((item) => {
             return {
               id: item.place.id,
+              photos: item.place.photos.slice(0, 1),
             };
           });
           setFavorites(modifiedData);
@@ -28,7 +29,7 @@ export const LikeProvider = ({ children }) => {
         });
     }
   }, [session]);
-
+  // console.log('Favorites form Context ',favorites  );
 const toggleLike = async (roomId) => {
   if (!session) {
     router.push('/login');

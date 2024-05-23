@@ -434,7 +434,7 @@ export default function PlacePageDesktop({
                   <DropdownMenuTrigger className="w-full rounded-xl">
                     <div className="flex flex-col w-full p-3 text-sm text-left">
                       <span className="font-bold capitalize">Guests</span>
-                      <span>{adults + children + infants + pets} Guest</span>
+                      <span>{adults + children } Guest</span>
                     </div>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="mr-5 w-[25vw] space-y-3 p-3 ">

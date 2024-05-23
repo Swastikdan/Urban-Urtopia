@@ -4,19 +4,19 @@ import prisma from '@/lib/prisma';
 
 // export default async function GET() {
 //   const session = await getServerSession();
-//   if (!session) {
-//     return NextResponse.json({ message: 'you have to login' }, { status: 401 });
-//   }
-//   if(session && session.user){
-//     const user = await prisma.user.findUnique({
-//         where:{
-//             email: session.user.email
-//         }
-//     })
-//     if(user.role != 'admin'){
-//         return NextResponse.json({err:"admin not found"},{status:401});
-//     }
-//     const users = await prisma.user.findMany()
+  // if (!session) {
+  //   return NextResponse.json({ message: 'you have to login' }, { status: 401 });
+  // }
+  // if(session && session.user){
+  //   const user = await prisma.user.findUnique({
+  //       where:{
+  //           email: session.user.email
+  //       }
+  //   })
+  //   if(user.role != 'admin'){
+  //       return NextResponse.json({err:"admin not found"},{status:401});
+  //   }
+  //   const users = await prisma.user.findMany()
 //     return NextResponse.json(users, { status: 400 });
 //   }
 
@@ -25,9 +25,17 @@ import prisma from '@/lib/prisma';
 async function getBooking() {
   const session = await getServerSession();
   if (!session) {
-    return NextResponse.json({ code: 401, message: 'Unauthorized' });
+    return NextResponse.json({ message: 'you have to login' }, { status: 401 });
   }
-
+  if(session && session.user){
+    const user = await prisma.user.findUnique({
+        where:{
+            email: session.user.email
+        }
+    })
+    if(user.role != 'admin'){
+        return NextResponse.json({message:"admin not found"},{status:401});
+    }
   try {
     const booking = await prisma.bookings.findMany();
     return NextResponse.json({ booking }, { status: 200 });
@@ -37,7 +45,7 @@ async function getBooking() {
     return NextResponse.json({ message: err.message }, { status: 500 });
   }
 }
-
+}
 //
 async function statusUpdate(request) {
   const session = await getServerSession();
@@ -54,7 +62,9 @@ async function statusUpdate(request) {
       },
     });
 
-    return NextResponse.json({ booking });
+
+  const bookings = await prisma.bookings.findMany();
+    return NextResponse.json({ bookings });
   } catch (err) {
     console.log(err);
     return NextResponse.json({ message: err.message }, { status: 500 });
