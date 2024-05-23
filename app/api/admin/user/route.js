@@ -29,8 +29,25 @@ async function getBooking() {
   }
 
   try {
-    const booking = await prisma.bookings.findMany();
-    return NextResponse.json({ booking }, { status: 200 });
+    const bookings = await prisma.bookings.findMany();
+
+    // Fetch place titles for each booking
+    const bookingsWithPlaceTitles = await Promise.all(
+      bookings.map(async (booking) => {
+        const place = await prisma.places.findUnique({
+          where: { id: booking.placeId },
+        });
+        return {
+          ...booking,
+          placeTitle: place ? place.title : 'Unknown Place',
+        };
+      }),
+    );
+
+    return NextResponse.json(
+      { bookings: bookingsWithPlaceTitles },
+      { status: 200 },
+    );
     // return NextResponse.json({ message: 'hi' });
   } catch (err) {
     console.log(err);

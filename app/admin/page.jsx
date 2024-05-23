@@ -26,7 +26,7 @@ export default function Page() {
           throw new Error('Failed to fetch booking');
         }
         console.log(res.data);
-        setBookings(res.data.booking);
+        setBookings(res.data.bookings);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -97,7 +97,7 @@ export default function Page() {
             <TableHeader className="bg-gray-100 shadow-md hover:shadow-lg">
               <TableRow>
                 <TableCell className="text-base font-semibold text-left">
-                  Booking ID
+                  Booking Place
                 </TableCell>
                 <TableCell className="text-base font-semibold text-left">
                   User ID
@@ -119,7 +119,7 @@ export default function Page() {
             <TableBody>
               {bookings?.map((booking) => (
                 <TableRow key={booking.id}>
-                  <TableCell className="text-left">{booking.id}</TableCell>
+                  <TableCell className="text-left">{booking.placeTitle}</TableCell>
                   <TableCell className="text-left">{booking.userId}</TableCell>
                   <TableCell className="text-left">
                     {formatDateTime(booking.checkIn)}
