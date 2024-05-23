@@ -20,7 +20,7 @@ export default function Page() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get('http://localhost:3000/api/admin/user');
+        const res = await axios.get('/api/admin/user');
         if (!res) {
           throw new Error('Failed to fetch booking');
         }
@@ -58,7 +58,7 @@ export default function Page() {
     }
     try {
       const response = await axios.post(
-        'http://localhost:3000/api/admin/user',
+        '/api/admin/user',
         {
           bookingId: bookingId,
           status: status,
@@ -83,29 +83,29 @@ export default function Page() {
         </div>
       ) : (
         <div>
-          <h3 className="text-xl font-semibold text-black">Booking List</h3>
+          <h3 className="text-xl font-semibold text-black text-center mb-8">Booking List</h3>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableCell>Booking ID</TableCell>
-                <TableCell>User ID</TableCell>
-                <TableCell>Check-in Date</TableCell>
-                <TableCell>Check-out Date</TableCell>
-                <TableCell>Status</TableCell>
-                <TableCell>Action</TableCell>
+                <TableCell className="text-center" >Booking ID</TableCell>
+                <TableCell className="text-center">User ID</TableCell>
+                <TableCell className="text-center">Check-in Date</TableCell>
+                <TableCell className="text-center">Check-out Date</TableCell>
+                <TableCell className="text-center">Status</TableCell>
+                <TableCell className="text-center">Action</TableCell>
               </TableRow>
             </TableHeader>
             <TableBody>
               {bookings?.map((booking) => (
                 <TableRow key={booking.id}>
-                  <TableCell>{booking.id}</TableCell>
-                  <TableCell>{booking.userId}</TableCell>
-                  <TableCell>{formatDateTime(booking.checkIn)}</TableCell>
-                  <TableCell>{formatDateTime(booking.checkOut)}</TableCell>
-                  <TableCell>{booking.status}</TableCell>
-                  <TableCell className="flex flex-wrap justify-center gap-2">
+                  <TableCell className="text-center">{booking.id}</TableCell>
+                  <TableCell className="text-center">{booking.userId}</TableCell>
+                  <TableCell className="text-center">{formatDateTime(booking.checkIn)}</TableCell>
+                  <TableCell className="text-center">{formatDateTime(booking.checkOut)}</TableCell>
+                  <TableCell className="text-center">{booking.status}</TableCell>
+                  <TableCell className="flex flex-wrap justify-center gap-2 text-center">
                     <Button
-                      className="w-full sm:w-auto"
+                      className="w-full sm:w-auto bg-green-500"
                       onClick={() =>
                         handleChangeStatus(
                           booking.id,
@@ -117,7 +117,7 @@ export default function Page() {
                       Accept
                     </Button>
                     <Button
-                      className="w-full sm:w-auto"
+                      className="w-full sm:w-auto bg-red-500"
                       onClick={() =>
                         handleChangeStatus(
                           booking.id,
