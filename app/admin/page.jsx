@@ -20,7 +20,7 @@ export default function Page() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get('http://localhost:3000/api/admin/user');
+        const res = await axios.get('/api/admin/user');
         if (!res) {
           throw new Error('Failed to fetch booking');
         }
