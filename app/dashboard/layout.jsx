@@ -49,12 +49,12 @@ export default async  function layout({children}) {
           >
             Listings
           </Link>
-          <Link
+          {/* <Link
             href="/dashboard/customers"
             className="text-muted-foreground transition-colors hover:text-foreground"
           >
             Customers
-          </Link>
+          </Link> */}
         </nav>
 
         <Sheet>
@@ -99,7 +99,7 @@ export default async  function layout({children}) {
         </Sheet>
       </header>
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
-        <BreadCrumb />
+        {/* <BreadCrumb /> */}
         {children}
       </main>
     </div>
