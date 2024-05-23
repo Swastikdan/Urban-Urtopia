@@ -82,30 +82,58 @@ export default function Page() {
           <h3 className="text-2xl font-semibold">Loading...</h3>
         </div>
       ) : (
-        <div>
-          <h3 className="text-xl font-semibold text-black text-center mb-8">Booking List</h3>
+        <div className="px-8">
+          <h3 className="mb-8 text-center text-xl font-semibold text-black">
+            Booking List
+          </h3>
           <Table>
-            <TableHeader>
+            <TableHeader className="bg-gray-100 shadow-md hover:shadow-lg">
               <TableRow>
-                <TableCell className="text-center" >Booking ID</TableCell>
-                <TableCell className="text-center">User ID</TableCell>
-                <TableCell className="text-center">Check-in Date</TableCell>
-                <TableCell className="text-center">Check-out Date</TableCell>
-                <TableCell className="text-center">Status</TableCell>
-                <TableCell className="text-center">Action</TableCell>
+                <TableCell className="text-left text-base font-semibold">
+                  Booking ID
+                </TableCell>
+                <TableCell className="text-left text-base font-semibold">
+                  User ID
+                </TableCell>
+                <TableCell className="text-left text-base font-semibold">
+                  Check-in Date
+                </TableCell>
+                <TableCell className="text-left text-base font-semibold">
+                  Check-out Date
+                </TableCell>
+                <TableCell className="text-left text-base font-semibold">
+                  Status
+                </TableCell>
+                <TableCell className="text-center text-base font-semibold">
+                  Action
+                </TableCell>
               </TableRow>
             </TableHeader>
             <TableBody>
               {bookings?.map((booking) => (
                 <TableRow key={booking.id}>
-                  <TableCell className="text-center">{booking.id}</TableCell>
-                  <TableCell className="text-center">{booking.userId}</TableCell>
-                  <TableCell className="text-center">{formatDateTime(booking.checkIn)}</TableCell>
-                  <TableCell className="text-center">{formatDateTime(booking.checkOut)}</TableCell>
-                  <TableCell className="text-center">{booking.status}</TableCell>
+                  <TableCell className="text-left">{booking.id}</TableCell>
+                  <TableCell className="text-left">{booking.userId}</TableCell>
+                  <TableCell className="text-left">
+                    {formatDateTime(booking.checkIn)}
+                  </TableCell>
+                  <TableCell className="text-left">
+                    {formatDateTime(booking.checkOut)}
+                  </TableCell>
+                  <TableCell
+                    className={`text-left font-semibold text-base ${
+                      booking.status === 'approved'
+                        ? 'text-green-500'
+                        : booking.status === 'rejected'
+                          ? 'text-red-500'
+                          : 'text-yellow-500'
+                    }`}
+                  >
+                    {booking.status}
+                  </TableCell>
                   <TableCell className="flex flex-wrap justify-center gap-2 text-center">
                     <Button
-                      className="w-full sm:w-auto bg-green-500"
+                      className="w-full bg-green-500 sm:w-auto hover:bg-green-600"
                       onClick={() =>
                         handleChangeStatus(
                           booking.id,
@@ -117,7 +145,7 @@ export default function Page() {
                       Accept
                     </Button>
                     <Button
-                      className="w-full sm:w-auto bg-red-500"
+                      className="w-full bg-red-500 sm:w-auto hover:bg-red-600"
                       onClick={() =>
                         handleChangeStatus(
                           booking.id,
