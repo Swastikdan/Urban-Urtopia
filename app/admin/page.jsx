@@ -10,6 +10,7 @@ import {
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
 
 export default function Page() {
   const { data: session } = useSession();
@@ -53,9 +54,15 @@ export default function Page() {
   // updating the existing status
   const handleChangeStatus = async (bookingId, bookingStatus, status) => {
     if (bookingStatus === 'approved') {
-      alert('user has already been approved');
+      toast.error(`user's booking has been already Accepted`);
       return;
     }
+
+    if(bookingStatus === 'rejected'){
+      toast.error(`user's booking has been already Rejected`);
+      return;
+    }
+
     try {
       const response = await axios.post(
         '/api/admin/user',
@@ -78,33 +85,33 @@ export default function Page() {
   return (
     <div className="p-4 sm:p-8">
       {loading ? (
-        <div className="flex min-h-screen items-center justify-center">
+        <div className="flex items-center justify-center min-h-screen">
           <h3 className="text-2xl font-semibold">Loading...</h3>
         </div>
       ) : (
         <div className="px-8">
-          <h3 className="mb-8 text-center text-xl font-semibold text-black">
+          <h3 className="mb-8 text-xl font-semibold text-center text-black">
             Booking List
           </h3>
           <Table>
             <TableHeader className="bg-gray-100 shadow-md hover:shadow-lg">
               <TableRow>
-                <TableCell className="text-left text-base font-semibold">
+                <TableCell className="text-base font-semibold text-left">
                   Booking ID
                 </TableCell>
-                <TableCell className="text-left text-base font-semibold">
+                <TableCell className="text-base font-semibold text-left">
                   User ID
                 </TableCell>
-                <TableCell className="text-left text-base font-semibold">
+                <TableCell className="text-base font-semibold text-left">
                   Check-in Date
                 </TableCell>
-                <TableCell className="text-left text-base font-semibold">
+                <TableCell className="text-base font-semibold text-left">
                   Check-out Date
                 </TableCell>
-                <TableCell className="text-left text-base font-semibold">
+                <TableCell className="text-base font-semibold text-left">
                   Status
                 </TableCell>
-                <TableCell className="text-center text-base font-semibold">
+                <TableCell className="text-base font-semibold text-center">
                   Action
                 </TableCell>
               </TableRow>
