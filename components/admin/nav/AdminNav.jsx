@@ -2,20 +2,11 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname, redirect } from 'next/navigation';
-import { useSession } from 'next-auth/react';
+
 
 export default function AdminNav() {
-  const { data: session } = useSession();
-
-  // if(!session || session.user.role !== 'admin') {
-  //   redirect('/');
-  // }
 
   const navItems = [
-    {
-      name: 'Home',
-      href: '/admin',
-    },
     {
       name: 'Bookings',
       href: '/admin/bookings',
@@ -32,8 +23,8 @@ export default function AdminNav() {
   const pathname = usePathname();
   return (
     <div className="pb-5 ">
-      <h1 className="pb-2 pt-5 text-start text-2xl font-bold md:text-3xl ">
-        Admin Pannel
+      <h1 className="text-start text-4xl font-bold  md:text-5xl xl:text-6xl  py-5">
+        Admin
       </h1>
       <nav className="flex w-min items-start rounded-md bg-gray-200/70 p-1">
         {navItems.map((item, index) => (

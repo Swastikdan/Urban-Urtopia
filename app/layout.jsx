@@ -7,39 +7,7 @@ import { LikeProvider } from '@/providers/LikeProvider';
 import NavBar from '@/components/navbar/NavBar';
 import Footer from '@/components/Footer';
 import BottomNav from '@/components/BottomNav';
-import { TooltipProvider } from '@/components/ui/tooltip';
-// const sans = DM_Sans({
-//   subsets: ['latin'],
-//   variable: '--font-sans',
-//   display: 'swap',
-// });
 
-// const sora = Sora({
-//   subsets: ['latin'],
-//   variable: '--font-sora',
-//   display: 'swap',
-// });
-
-// const pathwayextreme = Pathway_Extreme({
-//   subsets: ['latin'],
-//   variable: '--font-pathwayextreme',
-//   display: 'swap',
-//   // weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
-// });
-
-// export const metadata = {
-//   title: 'Urban Utopia | Holiday rentals, cabins, beach houses &amp; more',
-//   description:
-//     'Urban Utopia is a web application that helps users find the best home deals in their desired location. We offer a wide range of homes to choose from, with competitive prices and excellent customer service.',
-//   twitterCard:
-//     'https://res.cloudinary.com/debewnh29/image/upload/w_1200,h_630,c_fill,g_auto/q_auto/f_auto/nestly/public/OGImage.webp',
-//   ogTitle: 'Urban Utopia | Holiday rentals, cabins, beach houses &amp; more',
-//   ogDescription:
-//     'Urban Utopia is a web application that helps users find the best home deals in their desired location. We offer a wide range of homes to choose from, with competitive prices and excellent customer service.',
-//   ogUrl: 'https://urbanutopia.vercel.app/',
-//   ogImage:
-//     'https://res.cloudinary.com/debewnh29/image/upload/w_1200,h_630,c_fill,g_auto/q_auto/f_auto/nestly/public/OGImage.webp',
-// };
 export async function generateMetadata({ params }) {
   return {
     title: 'Urban Utopia | Holiday rentals, cabins, beach houses &amp; more',
@@ -194,9 +162,9 @@ export default function RootLayout({ children }) {
             <LikeProvider>
               <NavBar />
               <main className="mx-auto w-full ">
-              <TooltipProvider>
+    
 {children}
-              </TooltipProvider>
+       
 
                 
                 <div className="font-heading">

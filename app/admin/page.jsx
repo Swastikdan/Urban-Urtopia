@@ -1,7 +1,8 @@
 import React from 'react'
-
+import { redirect } from 'next/navigation'
 export default function page() {
+  redirect('/admin/bookings')
   return (
-    <div>page</div>
+  null
   )
 }
