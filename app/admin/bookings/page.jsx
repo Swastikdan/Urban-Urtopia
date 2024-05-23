@@ -231,13 +231,9 @@ export default function page() {
                                         ) : booking.checkOut < new Date() ? (
                                           <span className="inline-flex items-center gap-x-1 rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-800 dark:bg-gray-500/10 dark:text-gray-500">
                                             <BadgeX width={20} />
-                                           Expired
+                                            Expired
                                           </span>
-                                        ) :null
-                                        
-                                        
-                                        
-                                        }
+                                        ) : null}
                                       </div>
                                     </TableCell>
                                     <TableCell className="size-px whitespace-nowrap">
@@ -266,6 +262,7 @@ export default function page() {
                                         ) : (
                                           <div className="flex items-center space-x-3">
                                             <button
+                                              disabled={loading == booking.id}
                                               className="inline-flex items-center gap-x-2 rounded-lg border-2 border-green-500 bg-white px-3 py-2 text-sm text-green-600 shadow-sm hover:bg-green-50 disabled:pointer-events-none disabled:opacity-50"
                                               onClick={() =>
                                                 handleStatusChange(
@@ -285,6 +282,7 @@ export default function page() {
                                               Approve
                                             </button>
                                             <button
+                                              disabled={loading == booking.id}
                                               className="inline-flex items-center gap-x-2 rounded-lg border-2 border-red-500 bg-white px-3 py-2 text-sm text-red-600 shadow-sm hover:bg-red-50 disabled:pointer-events-none disabled:opacity-50"
                                               onClick={() =>
                                                 handleStatusChange(
