@@ -4,19 +4,19 @@ import prisma from '@/lib/prisma';
 
 // export default async function GET() {
 //   const session = await getServerSession();
-  // if (!session) {
-  //   return NextResponse.json({ message: 'you have to login' }, { status: 401 });
-  // }
-  // if(session && session.user){
-  //   const user = await prisma.user.findUnique({
-  //       where:{
-  //           email: session.user.email
-  //       }
-  //   })
-  //   if(user.role != 'admin'){
-  //       return NextResponse.json({err:"admin not found"},{status:401});
-  //   }
-  //   const users = await prisma.user.findMany()
+// if (!session) {
+//   return NextResponse.json({ message: 'you have to login' }, { status: 401 });
+// }
+// if(session && session.user){
+//   const user = await prisma.user.findUnique({
+//       where:{
+//           email: session.user.email
+//       }
+//   })
+//   if(user.role != 'admin'){
+//       return NextResponse.json({err:"admin not found"},{status:401});
+//   }
+//   const users = await prisma.user.findMany()
 //     return NextResponse.json(users, { status: 400 });
 //   }
 
@@ -27,24 +27,41 @@ async function getBooking() {
   if (!session) {
     return NextResponse.json({ message: 'you have to login' }, { status: 401 });
   }
-  if(session && session.user){
+  if (session && session.user) {
     const user = await prisma.user.findUnique({
-        where:{
-            email: session.user.email
-        }
-    })
-    if(user.role != 'admin'){
-        return NextResponse.json({message:"admin not found"},{status:401});
+      where: {
+        email: session.user.email,
+      },
+    });
+    if (user.role != 'admin') {
+      return NextResponse.json({ message: 'admin not found' }, { status: 401 });
     }
-  try {
-    const booking = await prisma.bookings.findMany();
-    return NextResponse.json({ booking }, { status: 200 });
-    // return NextResponse.json({ message: 'hi' });
-  } catch (err) {
-    console.log(err);
-    return NextResponse.json({ message: err.message }, { status: 500 });
+    try {
+      const bookings = await prisma.bookings.findMany();
+
+      // Fetch place titles for each booking
+      const bookingsWithPlaceTitles = await Promise.all(
+        bookings.map(async (booking) => {
+          const place = await prisma.places.findUnique({
+            where: { id: booking.placeId },
+          });
+          return {
+            ...booking,
+            placeTitle: place ? place.title : 'Unknown Place',
+          };
+        }),
+      );
+
+      return NextResponse.json(
+        { bookings: bookingsWithPlaceTitles },
+        { status: 200 },
+      );
+      // return NextResponse.json({ message: 'hi' });
+    } catch (err) {
+      console.log(err);
+      return NextResponse.json({ message: err.message }, { status: 500 });
+    }
   }
-}
 }
 //
 async function statusUpdate(request) {
@@ -62,8 +79,7 @@ async function statusUpdate(request) {
       },
     });
 
-
-  const bookings = await prisma.bookings.findMany();
+    const bookings = await prisma.bookings.findMany();
     return NextResponse.json({ bookings });
   } catch (err) {
     console.log(err);

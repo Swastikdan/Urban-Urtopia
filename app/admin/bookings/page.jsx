@@ -26,7 +26,7 @@ export default function Page() {
           throw new Error('Failed to fetch booking');
         }
         console.log(res.data);
-        setBookings(res.data.booking);
+        setBookings(res.data.bookings);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -69,7 +69,7 @@ export default function Page() {
         // console.log(response);
         setBookings(response.data.bookings);
 
-        // find the id form response.data.booking this and update the status in the state wit 
+        // find the id form response.data.booking this and update the status in the state wit
 
         setLoading(false);
         // window.location.reload();
@@ -86,7 +86,7 @@ export default function Page() {
       {loading ? (
         <div>
           <div className="flex min-h-[90vh] flex-col">
-            <div className="flex flex-auto flex-col items-center justify-center p-4 md:p-5">
+            <div className="flex flex-col items-center justify-center flex-auto p-4 md:p-5">
               <div className="flex justify-center">
                 <div
                   className="inline-block size-9 animate-spin rounded-full border-[3px] border-current border-t-transparent text-blue-600 dark:text-blue-500"
@@ -101,82 +101,85 @@ export default function Page() {
         </div>
       ) : (
         <div className="px-8">
-          <h3 className="mb-8 text-center text-xl font-semibold text-black">
+          <h3 className="mb-8 text-xl font-semibold text-center text-black">
             Booking List
           </h3>
           <Table>
             <TableHeader className="bg-gray-100 shadow-md hover:shadow-lg">
               <TableRow>
-                <TableCell className="text-left text-base font-semibold">
-                  Booking ID
+                <TableCell className="text-base font-semibold text-left">
+                  Booking Place
                 </TableCell>
-                <TableCell className="text-left text-base font-semibold">
+                <TableCell className="text-base font-semibold text-left">
                   User ID
                 </TableCell>
-                <TableCell className="text-left text-base font-semibold">
+                <TableCell className="text-base font-semibold text-left">
                   Check-in Date
                 </TableCell>
-                <TableCell className="text-left text-base font-semibold">
+                <TableCell className="text-base font-semibold text-left">
                   Check-out Date
                 </TableCell>
-                <TableCell className="text-left text-base font-semibold">
+                <TableCell className="text-base font-semibold text-left">
                   Status
                 </TableCell>
-                <TableCell className="text-center text-base font-semibold">
+                <TableCell className="text-base font-semibold text-center">
                   Action
                 </TableCell>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {bookings && bookings?.map((booking) => (
-                <TableRow key={booking.id}>
-                  <TableCell className="text-left">{booking.id}</TableCell>
-                  <TableCell className="text-left">{booking.userId}</TableCell>
-                  <TableCell className="text-left">
-                    {formatDateTime(booking.checkIn)}
-                  </TableCell>
-                  <TableCell className="text-left">
-                    {formatDateTime(booking.checkOut)}
-                  </TableCell>
-                  <TableCell
-                    className={`text-left text-base font-semibold ${
-                      booking.status === 'approved'
-                        ? 'text-green-500'
-                        : booking.status === 'rejected'
-                          ? 'text-red-500'
-                          : 'text-yellow-500'
-                    }`}
-                  >
-                    {booking.status}
-                  </TableCell>
-                  <TableCell className="flex flex-wrap justify-center gap-2 text-center">
-                    <Button
-                      className="w-full bg-green-500 hover:bg-green-600 sm:w-auto"
-                      onClick={() =>
-                        handleChangeStatus(
-                          booking.id,
-                          booking.status,
-                          'approved',
-                        )
-                      }
+              {bookings &&
+                bookings?.map((booking) => (
+                  <TableRow key={booking.id}>
+                    <TableCell className="text-left">{booking.placeTitle}</TableCell>
+                    <TableCell className="text-left">
+                      {booking.userId}
+                    </TableCell>
+                    <TableCell className="text-left">
+                      {formatDateTime(booking.checkIn)}
+                    </TableCell>
+                    <TableCell className="text-left">
+                      {formatDateTime(booking.checkOut)}
+                    </TableCell>
+                    <TableCell
+                      className={`text-left text-base font-semibold ${
+                        booking.status === 'approved'
+                          ? 'text-green-500'
+                          : booking.status === 'rejected'
+                            ? 'text-red-500'
+                            : 'text-yellow-500'
+                      }`}
                     >
-                      Accept
-                    </Button>
-                    <Button
-                      className="w-full bg-red-500 hover:bg-red-600 sm:w-auto"
-                      onClick={() =>
-                        handleChangeStatus(
-                          booking.id,
-                          booking.status,
-                          'rejected',
-                        )
-                      }
-                    >
-                      Reject
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
+                      {booking.status}
+                    </TableCell>
+                    <TableCell className="flex flex-wrap justify-center gap-2 text-center">
+                      <Button
+                        className="w-full bg-green-500 hover:bg-green-600 sm:w-auto"
+                        onClick={() =>
+                          handleChangeStatus(
+                            booking.id,
+                            booking.status,
+                            'approved',
+                          )
+                        }
+                      >
+                        Accept
+                      </Button>
+                      <Button
+                        className="w-full bg-red-500 hover:bg-red-600 sm:w-auto"
+                        onClick={() =>
+                          handleChangeStatus(
+                            booking.id,
+                            booking.status,
+                            'rejected',
+                          )
+                        }
+                      >
+                        Reject
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
         </div>
