@@ -31,7 +31,7 @@ export default function AdminNav() {
   ];
   const pathname = usePathname();
   return (
-    <div className="pb-5">
+    <div className="pb-5 ">
       <h1 className="pb-2 pt-5 text-start text-2xl font-bold md:text-3xl ">
         Admin Pannel
       </h1>

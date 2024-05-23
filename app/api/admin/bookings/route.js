@@ -2,26 +2,6 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import prisma from '@/lib/prisma';
 
-// export default async function GET() {
-//   const session = await getServerSession();
-// if (!session) {
-//   return NextResponse.json({ message: 'you have to login' }, { status: 401 });
-// }
-// if(session && session.user){
-//   const user = await prisma.user.findUnique({
-//       where:{
-//           email: session.user.email
-//       }
-//   })
-//   if(user.role != 'admin'){
-//       return NextResponse.json({err:"admin not found"},{status:401});
-//   }
-//   const users = await prisma.user.findMany()
-//     return NextResponse.json(users, { status: 400 });
-//   }
-
-// }
-// delete function needs to be completed
 async function getBooking() {
   const session = await getServerSession();
   if (!session) {
@@ -37,23 +17,25 @@ async function getBooking() {
       return NextResponse.json({ message: 'admin not found' }, { status: 401 });
     }
     try {
-      const bookings = await prisma.bookings.findMany();
-
-      // Fetch place titles for each booking
-      const bookingsWithPlaceTitles = await Promise.all(
-        bookings.map(async (booking) => {
-          const place = await prisma.places.findUnique({
-            where: { id: booking.placeId },
-          });
-          return {
-            ...booking,
-            placeTitle: place ? place.title : 'Unknown Place',
-          };
-        }),
-      );
+      let bookings = await prisma.bookings.findMany({
+        include: {
+          place:{
+            select:{
+              id:true,
+              title:true,
+            }
+          },
+          user: {
+            select: {
+              name: true,
+            },
+          
+          },
+        },
+      });
 
       return NextResponse.json(
-        { bookings: bookingsWithPlaceTitles },
+        { bookings },
         { status: 200 },
       );
       // return NextResponse.json({ message: 'hi' });
@@ -71,15 +53,29 @@ async function statusUpdate(request) {
     return NextResponse.json({ code: 401, message: 'Unauthorized' });
 
   try {
-    const { bookingId, status } = await request.json();
-    const booking = await prisma.bookings.update({
-      where: { id: bookingId },
+    const { id, status } = await request.json();
+    const place = await prisma.bookings.update({
+      where: { id: id },
       data: {
         status: status,
       },
     });
 
-    const bookings = await prisma.bookings.findMany();
+   let bookings = await prisma.bookings.findMany({
+     include: {
+       place: {
+         select: {
+           id: true,
+           title: true,
+         },
+       },
+       user: {
+         select: {
+           name: true,
+         },
+       },
+     },
+   });
     return NextResponse.json({ bookings });
   } catch (err) {
     console.log(err);
