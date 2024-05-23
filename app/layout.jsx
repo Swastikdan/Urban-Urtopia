@@ -7,6 +7,7 @@ import { LikeProvider } from '@/providers/LikeProvider';
 import NavBar from '@/components/navbar/NavBar';
 import Footer from '@/components/Footer';
 import BottomNav from '@/components/BottomNav';
+import { TooltipProvider } from '@/components/ui/tooltip';
 // const sans = DM_Sans({
 //   subsets: ['latin'],
 //   variable: '--font-sans',
@@ -193,7 +194,11 @@ export default function RootLayout({ children }) {
             <LikeProvider>
               <NavBar />
               <main className="mx-auto w-full ">
-                {children}
+              <TooltipProvider>
+{children}
+              </TooltipProvider>
+
+                
                 <div className="font-heading">
                   <Toaster richColors />
                 </div>

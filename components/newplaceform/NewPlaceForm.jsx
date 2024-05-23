@@ -80,12 +80,18 @@ export default function NewPlaceForm() {
   // const cities = Indian_states_cities_list.STATE_WISE_CITIES[formdata.state] || [];
 
 const [cities, setCities] = useState([]);
-
+// console.log((formdata.state).replace(' ', ''));
   useEffect(() => {
     if (formdata.state) {
-      setCities(Indian_states_cities_list.STATE_WISE_CITIES[formdata.state]);
+      setCities(
+        Indian_states_cities_list.STATE_WISE_CITIES[
+          formdata.state.replace(' ', '')
+        ],
+      );
     }
   }, [formdata.state]);
+
+console.log(formdata)
 
 
   const handleCitiesChnage = (value) => {
@@ -387,6 +393,7 @@ const [cities, setCities] = useState([]);
               label="State"
               placeholder="Select State"
               className="my-3"
+              type='states'
             />
 
             <SelectScroll
@@ -396,6 +403,7 @@ const [cities, setCities] = useState([]);
               placeholder="Select City"
               className="my-3  disabled:cursor-none disabled:opacity-50  "
               disabled={formdata.state === ''}
+              type='cities'
             />
 
             {/* <Input
