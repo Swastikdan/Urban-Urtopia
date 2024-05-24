@@ -1,5 +1,12 @@
 'use client';
-import { Ban, Badge, BadgeCheck, BadgeX , LoaderCircle } from 'lucide-react';
+import {
+  Ban,
+  Badge,
+  BadgeCheck,
+  BadgeX,
+  LoaderCircle,
+  RefreshCw,
+} from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import {
   Table,
@@ -18,30 +25,62 @@ export default function page() {
   const [bookings, setBookings] = useState([]);
   const [pageloading, setPageLoading] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('/api/admin/bookings');
-        const data = await response.json();
-        if (response.ok) {
-          setBookings(data.bookings);
-        } else {
-          throw new Error('Failed to load bookings');
-        }
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setPageLoading(false);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await fetch('/api/admin/bookings');
+  //       const data = await response.json();
+  //       if (response.ok) {
+  //         setBookings(data.bookings);
+  //       } else {
+  //         throw new Error('Failed to load bookings');
+  //       }
+  //     } catch (error) {
+  //       setError(error.message);
+  //     } finally {
+  //       setPageLoading(false);
+  //     }
+  //   };
 
+  //   fetchData();
+  // }, []);
+
+  const fetchData = async () => {
+    setRefreshing(true);
+    try {
+      const response = await fetch('/api/admin/bookings');
+      const data = await response.json();
+      if (response.ok) {
+        setBookings(data.bookings);
+      } else {
+        throw new Error('Failed to load bookings');
+      }
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setPageLoading(false);
+      setRefreshing(false);
+    }
+  };
+
+  useEffect(() => {
     fetchData();
   }, []);
 
+  const handleRefresh = async () => {
+    try {
+      fetchData();
+      toast.success('Bookings refreshed successfully');
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
   const handleStatusChange = async (id, status) => {
-    setLoading(id);
+    setLoading({ id: id, status: status });
     try {
       const response = await fetch('/api/admin/bookings', {
         method: 'POST',
@@ -64,100 +103,110 @@ export default function page() {
     }
   };
 
-
   return (
-    <>
-      {pageloading ? (
-        <div className="flex min-h-[90vh] flex-col">
-          <div className="flex flex-auto flex-col items-center justify-center p-4 md:p-5">
-            <div className="flex justify-center">
-              <div
-                className="inline-block size-9 animate-spin rounded-full border-[3px] border-current border-t-transparent text-blue-600 dark:text-blue-500"
-                role="status"
-                aria-label="loading"
-              >
-                <span className="sr-only">Loading...</span>
+    <div className="mx-auto flex w-full  items-center py-10 sm:px-6 lg:px-8 lg:py-14">
+      <div className="flex flex-col">
+        <div className="-m-1.5 overflow-x-auto">
+          <div className="inline-block min-w-full p-1.5 align-middle">
+            <div className="w-min min-w-[85vw] overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-slate-900 ">
+              <div className="flex items-center justify-between gap-3 border-b border-gray-200 px-6 py-4 dark:border-gray-700">
+                <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
+                  Bookings
+                </h2>
+
+                <button
+                  disabled={refreshing}
+                  onClick={handleRefresh}
+                  className="inline-flex items-center gap-x-2 rounded-lg border-2 border-blue-500 bg-white px-2 py-1 text-sm text-blue-600 shadow-sm hover:bg-blue-50 disabled:pointer-events-none disabled:opacity-50"
+                >
+                  <RefreshCw
+                    width={20}
+                    className={refreshing ? 'animate-spin ' : ''}
+                  />
+                  Refresh
+                </button>
               </div>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <>
-          <div className="mx-auto w-full py-10 sm:px-6 lg:px-8 lg:py-14">
-            <div className="flex flex-col">
-              <div className="-m-1.5 overflow-x-auto">
-                <div className="inline-block min-w-full p-1.5 align-middle">
-                  <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-slate-900">
-                    <div className="flex items-center justify-between gap-3 border-b border-gray-200 px-6 py-4 dark:border-gray-700">
-                      <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
-                        Bookings
-                      </h2>
-                    </div>
-                    {!Array.isArray(bookings) || bookings.length === 0 ? (
-                      <div className="col-span-4 flex flex-1 items-center justify-center py-8 lg:py-16  ">
-                        <div className="mx-auto w-[80vw] max-w-2xl px-4 py-8 text-center">
-                          <p className=" mt-4 text-gray-500">
-                            No bookings found.
-                          </p>
-                        </div>
+              {pageloading ? (
+                <div className="flex h-56 flex-col">
+                  <div className="flex flex-auto flex-col items-center justify-center p-4 md:p-5">
+                    <div className="flex justify-center">
+                      <div
+                        className="inline-block size-9 animate-spin rounded-full border-[3px] border-current border-t-transparent text-blue-600 dark:text-blue-500"
+                        role="status"
+                        aria-label="loading"
+                      >
+                        <span className="sr-only">Loading...</span>
                       </div>
-                    ) : (
-                      <ScrollArea className="w-auto max-w-[92vw] whitespace-nowrap  md:max-w-[81.5vw]">
-                        <div className="flex w-max">
-                          <Table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                            <TableHeader>
-                              <TableRow>
-                                <TableHead
-                                  scope="col"
-                                  className="py-3 pe-6 ps-6 text-start lg:ps-3 xl:ps-0"
-                                >
-                                  <div className="flex items-center gap-x-2 ps-6">
-                                    <span className="text-sm font-semibold  tracking-wide text-gray-800 dark:text-gray-200">
-                                      Property
-                                    </span>
-                                  </div>
-                                </TableHead>
-                                <TableHead
-                                  scope="col"
-                                  className="px-6 py-3 text-start"
-                                >
-                                  <div className="flex items-center gap-x-2 ps-6">
-                                    <span className="text-sm font-semibold tracking-wide text-gray-800 dark:text-gray-200">
-                                      Customer
-                                    </span>
-                                  </div>
-                                </TableHead>
-                                <TableHead
-                                  scope="col"
-                                  className="px-6 py-3 text-start"
-                                >
-                                  <div className="flex items-center gap-x-2 ps-6">
-                                    <span className="text-sm font-semibold tracking-wide text-gray-800 dark:text-gray-200">
-                                      Check In - Check Out
-                                    </span>
-                                  </div>
-                                </TableHead>
-                                <TableHead
-                                  scope="col"
-                                  className="px-6 py-3 text-start"
-                                >
-                                  <div className="flex items-center gap-x-2 ps-6">
-                                    <span className="text-sm font-semibold tracking-wide text-gray-800 dark:text-gray-200">
-                                      Status
-                                    </span>
-                                  </div>
-                                </TableHead>
-                                <TableHead
-                                  scope="col"
-                                  className="px-6 py-3 text-start"
-                                >
-                                  <div className="flex items-center gap-x-2 ps-6">
-                                    <span className="text-sm font-semibold tracking-wide text-gray-800 dark:text-gray-200">
-                                      Price (INR)
-                                    </span>
-                                  </div>
-                                </TableHead>
-                                {/* <TableHead
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  {!Array.isArray(bookings) || bookings.length === 0 ? (
+                    <div className="col-span-4 flex   h-56 flex-1 items-center justify-center py-8 lg:py-16  ">
+                      <div className="mx-auto w-[80vw] max-w-2xl px-4 py-8 text-center">
+                        <p className=" mt-4 text-gray-500">
+                          No bookings found.
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    <ScrollArea className="w-auto max-w-[92vw]  md:max-w-[81vw] ">
+                      <div className="flex w-max  items-center justify-center ">
+                        <Table className="min-w-max divide-y divide-gray-200 dark:divide-gray-700">
+                          <TableHeader>
+                            <TableRow>
+                              <TableHead
+                                scope="col"
+                                className="py-3 pe-6 ps-6 text-start lg:ps-3 xl:ps-0"
+                              >
+                                <div className="flex items-center gap-x-2 ps-6">
+                                  <span className="text-sm font-semibold  tracking-wide text-gray-800 dark:text-gray-200">
+                                    Property
+                                  </span>
+                                </div>
+                              </TableHead>
+                              <TableHead
+                                scope="col"
+                                className="px-6 py-3 text-start"
+                              >
+                                <div className="flex items-center gap-x-2 ps-6">
+                                  <span className="text-sm font-semibold tracking-wide text-gray-800 dark:text-gray-200">
+                                    Customer
+                                  </span>
+                                </div>
+                              </TableHead>
+                              <TableHead
+                                scope="col"
+                                className="px-6 py-3 text-start"
+                              >
+                                <div className="flex items-center gap-x-2 ps-6">
+                                  <span className="text-sm font-semibold tracking-wide text-gray-800 dark:text-gray-200">
+                                    Check In - Check Out
+                                  </span>
+                                </div>
+                              </TableHead>
+                              <TableHead
+                                scope="col"
+                                className="px-6 py-3 text-start"
+                              >
+                                <div className="flex items-center gap-x-2 ps-6">
+                                  <span className="text-sm font-semibold tracking-wide text-gray-800 dark:text-gray-200">
+                                    Status
+                                  </span>
+                                </div>
+                              </TableHead>
+                              <TableHead
+                                scope="col"
+                                className="px-6 py-3 text-start"
+                              >
+                                <div className="flex items-center gap-x-2 ps-6">
+                                  <span className="text-sm font-semibold tracking-wide text-gray-800 dark:text-gray-200">
+                                    Price (INR)
+                                  </span>
+                                </div>
+                              </TableHead>
+                              {/* <TableHead
                                   scope="col"
                                   className="px-6 py-3 text-start"
                                 >
@@ -167,160 +216,160 @@ export default function page() {
                                     </span>
                                   </div>
                                 </TableHead> */}
-                              </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                              {bookings &&
-                                bookings.map((booking) => (
-                                  <TableRow>
-                                    <TableCell className="size-px whitespace-nowrap">
-                                      <div className="text-left">
-                                        <span className="text-sm font-medium">
-                                          {booking.place.title}
-                                        </span>
-                                      </div>
-                                    </TableCell>
-                                    <TableCell className="size-px whitespace-nowrap">
-                                      <div className="px-6 py-3 ">
-                                        <span className="pl-2 text-sm">
-                                          {booking.user.name}
-                                        </span>
-                                      </div>
-                                    </TableCell>
-                                    <TableCell className="size-px whitespace-nowrap">
-                                      <div className="px-6 py-3 ">
-                                        <span className="pl-2 text-sm">
-                                          {format(
-                                            new Date(booking.checkIn),
+                            </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                            {bookings &&
+                              bookings.map((booking) => (
+                                <TableRow>
+                                  <TableCell className="size-px whitespace-nowrap">
+                                    <div className="text-left">
+                                      <span className="text-sm font-medium">
+                                        {booking.place.title}
+                                      </span>
+                                    </div>
+                                  </TableCell>
+                                  <TableCell className="size-px whitespace-nowrap">
+                                    <div className="px-6 py-3 ">
+                                      <span className="pl-2 text-sm">
+                                        {booking.user.name}
+                                      </span>
+                                    </div>
+                                  </TableCell>
+                                  <TableCell className="size-px whitespace-nowrap">
+                                    <div className="px-6 py-3 ">
+                                      <span className="pl-2 text-sm">
+                                        {format(
+                                          new Date(booking.checkIn),
+                                          'dd MMM yyyy',
+                                        ) +
+                                          ' - ' +
+                                          format(
+                                            new Date(booking.checkOut),
                                             'dd MMM yyyy',
-                                          ) +
-                                            ' - ' +
-                                            format(
-                                              new Date(booking.checkOut),
-                                              'dd MMM yyyy',
-                                            )}
-                                        </span>
-                                      </div>
-                                    </TableCell>
+                                          )}
+                                      </span>
+                                    </div>
+                                  </TableCell>
 
-                                    <TableCell className="size-px whitespace-nowrap">
-                                      <div className="px-6 py-3">
-                                        {booking.status === 'approved' ? (
-                                          <span className="inline-flex items-center gap-x-1 rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-800 dark:bg-green-500/10 dark:text-green-500">
-                                            <BadgeCheck width={20} />
-                                            {new Date(booking.checkOut) <
-                                            new Date()
-                                              ? 'Completed'
-                                              : 'Approved'}
-                                          </span>
-                                        ) : booking.status === 'processing' ? (
-                                          <span className="inline-flex items-center gap-x-1 rounded-full bg-yellow-100 px-3 py-1 text-xs font-medium text-yellow-800 dark:bg-yellow-500/10 dark:text-yellow-500">
-                                            <Badge width={20} />
-                                            Processing
-                                          </span>
-                                        ) : booking.status === 'rejected' ? (
-                                          <span className="inline-flex items-center gap-x-1 rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-800 dark:bg-red-500/10 dark:text-red-500">
-                                            <BadgeX width={20} />
-                                            Rejected
-                                          </span>
-                                        ) : booking.status === 'cancelled' ? (
-                                          <span className="inline-flex items-center gap-x-1 rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-800 dark:bg-red-500/10 dark:text-red-500">
-                                            <BadgeX width={20} />
-                                            Canceled
-                                          </span>
-                                        ) : booking.checkOut < new Date() ? (
-                                          <span className="inline-flex items-center gap-x-1 rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-800 dark:bg-gray-500/10 dark:text-gray-500">
-                                            <BadgeX width={20} />
-                                            Expired
-                                          </span>
-                                        ) : null}
-                                      </div>
-                                    </TableCell>
-                                    <TableCell className="size-px whitespace-nowrap">
-                                      <div className="px-6 py-3">
-                                        <span className="pl-2 text-sm">
-                                          {booking.totalPrice}
+                                  <TableCell className="size-px whitespace-nowrap">
+                                    <div className="px-6 py-3">
+                                      {booking.status === 'approved' ? (
+                                        <span className="inline-flex items-center gap-x-1 rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-800 dark:bg-green-500/10 dark:text-green-500">
+                                          <BadgeCheck width={20} />
+                                          {new Date(booking.checkOut) <
+                                          new Date()
+                                            ? 'Completed'
+                                            : 'Approved'}
                                         </span>
-                                      </div>
-                                    </TableCell>
-                                    <TableCell className="size-px whitespace-nowrap">
-                                      <div className="px-6 py-3">
-                                        {booking.status === 'cancelled' ||
-                                        booking.status === 'approved' ||
-                                        new Date(booking.checkin) <
-                                          new Date() ? (
-                                          <div className="flex items-center space-x-3">
-                                            <button className="inline-flex items-center gap-x-2 rounded-lg border-2 border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 opacity-50 shadow-sm hover:bg-gray-50 disabled:pointer-events-none disabled:opacity-50 ">
+                                      ) : booking.status === 'processing' ? (
+                                        <span className="inline-flex items-center gap-x-1 rounded-full bg-yellow-100 px-3 py-1 text-xs font-medium text-yellow-800 dark:bg-yellow-500/10 dark:text-yellow-500">
+                                          <Badge width={20} />
+                                          Processing
+                                        </span>
+                                      ) : booking.status === 'rejected' ? (
+                                        <span className="inline-flex items-center gap-x-1 rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-800 dark:bg-red-500/10 dark:text-red-500">
+                                          <BadgeX width={20} />
+                                          Rejected
+                                        </span>
+                                      ) : booking.status === 'cancelled' ? (
+                                        <span className="inline-flex items-center gap-x-1 rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-800 dark:bg-red-500/10 dark:text-red-500">
+                                          <BadgeX width={20} />
+                                          Canceled
+                                        </span>
+                                      ) : booking.checkOut < new Date() ? (
+                                        <span className="inline-flex items-center gap-x-1 rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-800 dark:bg-gray-500/10 dark:text-gray-500">
+                                          <BadgeX width={20} />
+                                          Expired
+                                        </span>
+                                      ) : null}
+                                    </div>
+                                  </TableCell>
+                                  <TableCell className="size-px whitespace-nowrap">
+                                    <div className="px-6 py-3">
+                                      <span className="pl-2 text-sm">
+                                        {booking.totalPrice}
+                                      </span>
+                                    </div>
+                                  </TableCell>
+                                  <TableCell className="size-px whitespace-nowrap">
+                                    <div className="px-6 py-3">
+                                      {booking.status === 'cancelled' ||
+                                      booking.status === 'approved' ||
+                                      new Date(booking.checkin) < new Date() ? (
+                                        <div className="flex items-center space-x-3">
+                                          <button className="inline-flex items-center gap-x-2 rounded-lg border-2 border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 opacity-50 shadow-sm hover:bg-gray-50 disabled:pointer-events-none disabled:opacity-50 ">
+                                            <BadgeCheck width={20} />
+                                            Approve
+                                          </button>
+                                          <button className="inline-flex items-center gap-x-2 rounded-lg border-2 border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 opacity-50 shadow-sm hover:bg-gray-50 disabled:pointer-events-none disabled:opacity-50 ">
+                                            <Ban width={20} />
+                                            Cancel
+                                          </button>
+                                        </div>
+                                      ) : (
+                                        <div className="flex items-center space-x-3">
+                                          <button
+                                            disabled={loading.id == booking.id}
+                                            className="inline-flex items-center gap-x-2 rounded-lg border-2 border-green-500 bg-white px-3 py-2 text-sm text-green-600 shadow-sm hover:bg-green-50 disabled:pointer-events-none disabled:opacity-50 disabled:cursor-none"
+                                            onClick={() =>
+                                              handleStatusChange(
+                                                booking.id,
+                                                'approved',
+                                              )
+                                            }
+                                          >
+                                            {loading.id == booking.id &&
+                                            loading.status == 'approved' ? (
+                                              <LoaderCircle
+                                                width={20}
+                                                className="animate-spin"
+                                              />
+                                            ) : (
                                               <BadgeCheck width={20} />
-                                              Approve
-                                            </button>
-                                            <button className="inline-flex items-center gap-x-2 rounded-lg border-2 border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 opacity-50 shadow-sm hover:bg-gray-50 disabled:pointer-events-none disabled:opacity-50 ">
+                                            )}
+                                            Approve
+                                          </button>
+                                          <button
+                                            disabled={loading.id == booking.id}
+                                            className="inline-flex items-center gap-x-2 rounded-lg border-2 border-red-500 bg-white px-3 py-2 text-sm text-red-600 shadow-sm hover:bg-red-50 disabled:pointer-events-none disabled:opacity-50 disabled:cursor-none"
+                                            onClick={() =>
+                                              handleStatusChange(
+                                                booking.id,
+                                                'cancelled',
+                                              )
+                                            }
+                                          >
+                                            {loading.id == booking.id &&
+                                            loading.status == 'cancelled' ? (
+                                              <LoaderCircle
+                                                width={20}
+                                                className="animate-spin"
+                                              />
+                                            ) : (
                                               <Ban width={20} />
-                                              Cancel
-                                            </button>
-                                          </div>
-                                        ) : (
-                                          <div className="flex items-center space-x-3">
-                                            <button
-                                              disabled={loading == booking.id}
-                                              className="inline-flex items-center gap-x-2 rounded-lg border-2 border-green-500 bg-white px-3 py-2 text-sm text-green-600 shadow-sm hover:bg-green-50 disabled:pointer-events-none disabled:opacity-50"
-                                              onClick={() =>
-                                                handleStatusChange(
-                                                  booking.id,
-                                                  'approved',
-                                                )
-                                              }
-                                            >
-                                              {loading == booking.id ? (
-                                                <LoaderCircle
-                                                  width={20}
-                                                  className="animate-spin"
-                                                />
-                                              ) : (
-                                                <BadgeCheck width={20} />
-                                              )}
-                                              Approve
-                                            </button>
-                                            <button
-                                              disabled={loading == booking.id}
-                                              className="inline-flex items-center gap-x-2 rounded-lg border-2 border-red-500 bg-white px-3 py-2 text-sm text-red-600 shadow-sm hover:bg-red-50 disabled:pointer-events-none disabled:opacity-50"
-                                              onClick={() =>
-                                                handleStatusChange(
-                                                  booking.id,
-                                                  'cancelled',
-                                                )
-                                              }
-                                            >
-                                              {loading == booking.id ? (
-                                                <LoaderCircle
-                                                  width={20}
-                                                  className="animate-spin"
-                                                />
-                                              ) : (
-                                                <Ban width={20} />
-                                              )}
-                                              Cancel
-                                            </button>
-                                          </div>
-                                        )}
-                                      </div>
-                                    </TableCell>
-                                  </TableRow>
-                                ))}
-                            </TableBody>
-                          </Table>
-                        </div>
-                        <ScrollBar orientation="horizontal" />
-                      </ScrollArea>
-                    )}
-                  </div>
-                </div>
-              </div>
+                                            )}
+                                            Cancel
+                                          </button>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </TableCell>
+                                </TableRow>
+                              ))}
+                          </TableBody>
+                        </Table>
+                      </div>
+                      <ScrollBar orientation="horizontal" />
+                    </ScrollArea>
+                  )}
+                </>
+              )}
             </div>
           </div>
-        </>
-      )}
-    </>
+        </div>
+      </div>
+    </div>
   );
 }
 
