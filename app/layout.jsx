@@ -159,16 +159,13 @@ export default function RootLayout({ children }) {
       >
         <SessionProvider>
           <UserProvider>
-            <LikeProvider>
+            <LikeProvider >
               <NavBar />
               <main className="mx-auto w-full ">
-    
-{children}
-       
+                {children}
 
-                
                 <div className="font-heading">
-                  <Toaster richColors />
+                  <Toaster richColors position="top-center"/>
                 </div>
               </main>
               <BottomNav />

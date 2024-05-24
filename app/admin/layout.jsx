@@ -17,7 +17,7 @@ export default async function layout({ children }) {
   }
 
   return (
-    <section className="mx-auto h-full w-full max-w-screen-xl items-center justify-between  px-2">
+    <section className="mx-auto h-full w-full max-w-screen-xl items-center justify-center  px-2 min-h-screen">
       <AdminNav />
 
       {children}
