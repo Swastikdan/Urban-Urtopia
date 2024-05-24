@@ -1,35 +1,26 @@
-import React from 'react'
+import React from 'react';
 import AdminNav from '@/components/admin/nav/AdminNav';
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 import prisma from '@/lib/prisma';
-export default async function  layout({ children }) {
-
+export default async function layout({ children }) {
   const session = await getServerSession();
-  if(session && session.user){
+  if (session && session.user) {
     const user = await prisma.user.findUnique({
-        where:{
-            email: session.user.email
-        }
-    })
-    if(user.role != 'admin'){
-
-        redirect('/');
+      where: {
+        email: session.user.email,
+      },
+    });
+    if (user.role != 'admin') {
+      redirect('/');
     }
-
   }
-    
 
   return (
-    <>
-      <section className="h-full w-full max-w-screen-xl items-center justify-between mx-auto  px-2">
-        <>
-          <AdminNav />
+    <section className="mx-auto h-full w-full max-w-screen-xl items-center justify-center  px-2 min-h-screen">
+      <AdminNav />
 
-        {children}
-        </>
-        
-      </section>
-    </>
+      {children}
+    </section>
   );
 }
