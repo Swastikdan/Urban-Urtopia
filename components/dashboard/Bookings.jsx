@@ -104,7 +104,7 @@ export default function Bookings({ bookings }) {
                         <TableBody>
                           {bookings &&
                             bookings.map((booking) => (
-                              <TableRow key={booking._id}>
+                              <TableRow key={booking.id}>
                                 <TableCell className="size-px whitespace-nowrap">
                                   <div className="py-3 pe-6 ps-6 lg:ps-3 xl:ps-0">
                                     <div className="flex items-center gap-x-3">
@@ -181,13 +181,12 @@ export default function Bookings({ bookings }) {
                                         Rejected
                                       </span>
                                     ) : (
-                                      booking.status ===
-                                      'canceled'(
+                                      booking.status === 'canceled'? (
                                         <span className="inline-flex items-center gap-x-1 rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-800 dark:bg-red-500/10 dark:text-red-500">
                                           <BadgeX width={20} />
                                           Canceled
-                                        </span>,
-                                      )
+                                        </span>
+                                      ): null
                                     )}
                                   </div>
                                 </TableCell>
