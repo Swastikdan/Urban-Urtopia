@@ -19,24 +19,26 @@ if (session && session.user) {
     }
 }
     try {
-      let bookings = await prisma.bookings.findMany({
-        include: {
-          place:{
-            select:{
-              id:true,
-              title:true,
-              photos: true,
-            }
-          },
-          user: {
-            select: {
-              name: true,
-              image : true,
-            },
-          
-          },
-        },
-      });
+let bookings = await prisma.bookings.findMany({
+  include: {
+    place:{
+      select:{
+        id:true,
+        title:true,
+        photos: true,
+      }
+    },
+    user: {
+      select: {
+        name: true,
+        image : true,
+      },
+    },
+  },
+  orderBy: {
+    date: 'desc',
+  },
+});
     
       return NextResponse.json(
         { bookings },
@@ -89,6 +91,9 @@ if (session && session.user) {
            name: true,
          },
        },
+     },
+     orderBy: {
+       date: 'desc',
      },
    });
     return NextResponse.json({ bookings });

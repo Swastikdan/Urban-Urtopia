@@ -157,30 +157,6 @@ export default function page() {
                       >
                         Clear
                       </DropdownMenuItem>
-                      {/* <DropdownMenuItem
-                        className="font-semibold text-blue-800 focus:bg-blue-100 focus:text-blue-800"
-                        onClick={() => handleFilter(' ')}
-                      >
-                        Clear
-                      </DropdownMenuItem>
-
-                      <DropdownMenuItem
-                        className={` ${filter == 'approved' ? 'bg-gray-100' : ''} `}
-                        onClick={() => handleFilter('approved')}
-                      >
-                        Approved
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onClick={() => handleFilter('processing')}
-                      >
-                        Processing
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onClick={() => handleFilter('rejected')}
-                      >
-                        Rejected
-                      </DropdownMenuItem> */}
-
                       {filters &&
                         filters.map((filtername) => (
                           <DropdownMenuItem
