@@ -9,6 +9,7 @@ import {
   RefreshCw,
   ArrowDownUp,
   ListFilter,
+  CircleX,
 } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import {
@@ -31,6 +32,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
+import Link from 'next/link';
 export default function page() {
   const [bookings, setBookings] = useState([]);
   const [pageloading, setPageLoading] = useState(true);
@@ -41,10 +43,17 @@ export default function page() {
   const router = useRouter();
   const filter = searchParams.get('filter');
 
-  const isValidFilter = (filter) =>
-    ['approved', 'cancelled', 'processing', 'rejected', 'expired'].includes(
-      filter,
-    );
+  // useEffect(() => {
+  //   router.replace(`/admin/bookings?filter=processing`);
+  // }, []);
+  const filters = [
+    'approved',
+    'cancelled',
+    'processing',
+    'rejected',
+    'expired',
+  ];
+  const isValidFilter = (filter) => filters.includes(filter);
 
   const fetchData = async () => {
     setRefreshing(true);
@@ -135,7 +144,7 @@ export default function page() {
                     <DropdownMenuTrigger asChild>
                       <button
                         onClick={handleFilter}
-                        className="inline-flex items-center gap-x-2 rounded-lg border-2 border-gray-500 bg-white px-2 py-1 text-sm text-gray-600 shadow-sm hover:bg-gray-50 disabled:pointer-events-none disabled:opacity-50"
+                        className="inline-flex  select-none items-center gap-x-2 rounded-lg border-2 border-gray-500 bg-white px-2 py-1 text-sm text-gray-600 shadow-sm hover:bg-gray-50 disabled:pointer-events-none disabled:opacity-50"
                       >
                         <ListFilter width={20} />
                         <span className="hidden md:flex">Filter</span>
@@ -143,6 +152,12 @@ export default function page() {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="start">
                       <DropdownMenuItem
+                        className="font-semibold text-blue-800 focus:bg-blue-100 focus:text-blue-800"
+                        onClick={() => handleFilter(' ')}
+                      >
+                        Clear
+                      </DropdownMenuItem>
+                      {/* <DropdownMenuItem
                         className="font-semibold text-blue-800 focus:bg-blue-100 focus:text-blue-800"
                         onClick={() => handleFilter(' ')}
                       >
@@ -164,15 +179,17 @@ export default function page() {
                         onClick={() => handleFilter('rejected')}
                       >
                         Rejected
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onClick={() => handleFilter('cancelled')}
-                      >
-                        Cancelled
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => handleFilter('expired')}>
-                        Expired
-                      </DropdownMenuItem>
+                      </DropdownMenuItem> */}
+
+                      {filters &&
+                        filters.map((filtername) => (
+                          <DropdownMenuItem
+                            className={` capitalize  ${filter == `${filtername}` ? 'bg-gray-100' : ''} `}
+                            onClick={() => handleFilter(`${filtername}`)}
+                          >
+                            {filtername}
+                          </DropdownMenuItem>
+                        ))}
                     </DropdownMenuContent>
                   </DropdownMenu>
                   {/* <button className="inline-flex items-center gap-x-2 rounded-lg border-2 border-gray-500 bg-white px-2 py-1 text-sm text-gray-600 shadow-sm hover:bg-gray-50 disabled:pointer-events-none disabled:opacity-50">
@@ -182,7 +199,7 @@ export default function page() {
                   <button
                     disabled={refreshing}
                     onClick={handleRefresh}
-                    className="inline-flex items-center gap-x-2 rounded-lg border-2 border-blue-500 bg-white px-2 py-1 text-sm text-blue-600 shadow-sm hover:bg-blue-50 disabled:pointer-events-none disabled:opacity-50"
+                    className="inline-flex select-none items-center gap-x-2 rounded-lg border-2 border-blue-500 bg-white px-2 py-1 text-sm text-blue-600 shadow-sm hover:bg-blue-50 disabled:pointer-events-none disabled:opacity-50"
                   >
                     <RefreshCw
                       width={20}
@@ -225,7 +242,7 @@ export default function page() {
                             <TableRow>
                               <TableHead
                                 scope="col"
-                                className="py-1 pe-6 ps-3 text-start lg:ps-3 xl:ps-0"
+                                className="py-1 pe-6 ps-6 text-start lg:ps-3 xl:ps-0"
                               >
                                 <div className="flex items-center gap-x-2 ps-6">
                                   <span className="text-sm font-semibold  tracking-wide text-gray-800 dark:text-gray-200">
@@ -269,20 +286,20 @@ export default function page() {
                               >
                                 <div className="flex items-center gap-x-2 ps-6">
                                   <span className="text-sm font-semibold tracking-wide text-gray-800 dark:text-gray-200">
-                                    Price (INR)
+                                    Price
                                   </span>
                                 </div>
                               </TableHead>
-                              {/* <TableHead
-                                  scope="col"
-                                  className="px-2 py-1 text-start"
-                                >
-                                  <div className="flex items-center gap-x-2 ps-6">
-                                    <span className="text-sm font-semibold tracking-wide text-gray-800 dark:text-gray-200">
-                                      Action
-                                    </span>
-                                  </div>
-                                </TableHead> */}
+                              <TableHead
+                                scope="col"
+                                className="px-2 py-1 text-start"
+                              >
+                                <div className="flex items-center gap-x-2 ps-6">
+                                  <span className="text-sm font-semibold tracking-wide text-gray-800 dark:text-gray-200">
+                                    Action
+                                  </span>
+                                </div>
+                              </TableHead>
                             </TableRow>
                           </TableHeader>
                           <TableBody>
@@ -290,11 +307,15 @@ export default function page() {
                               filteredBookings.map((booking) => (
                                 <TableRow>
                                   <TableCell className="size-px whitespace-nowrap">
-                                    <div className="text-left">
+                                    <Link
+                                      href={`/place/${booking.place.id}`}
+                                      target="_blank"
+                                      className="text-left hover:opacity-80"
+                                    >
                                       <span className="text-sm font-medium">
                                         {booking.place.title}
                                       </span>
-                                    </div>
+                                    </Link>
                                   </TableCell>
                                   <TableCell className="size-px whitespace-nowrap">
                                     <div className="px-2 py-1 ">
@@ -321,7 +342,7 @@ export default function page() {
 
                                   <TableCell className="size-px whitespace-nowrap">
                                     <div className="px-2 py-1">
-                                      {booking.status === 'approved' ? (
+                                      { booking.status === 'approved' ? (
                                         <span className="inline-flex items-center gap-x-1 rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-800 dark:bg-green-500/10 dark:text-green-500">
                                           <BadgeCheck width={20} />
                                           {new Date(booking.checkOut) <
@@ -331,7 +352,7 @@ export default function page() {
                                         </span>
                                       ) : booking.status === 'processing' ? (
                                         <span className="inline-flex items-center gap-x-1 rounded-full bg-yellow-100 px-3 py-1 text-xs font-medium text-yellow-800 dark:bg-yellow-500/10 dark:text-yellow-500">
-                                          <Loader  width={20} />
+                                          <Loader width={20} />
                                           Processing
                                         </span>
                                       ) : booking.status === 'rejected' ? (
@@ -366,20 +387,26 @@ export default function page() {
                                       booking.status === 'rejected' ||
                                       new Date(booking.checkin) < new Date() ? (
                                         <div className="flex items-center space-x-3">
-                                          <div disabled className="inline-flex items-center gap-x-2 rounded-lg border-2 border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 opacity-50 shadow-sm hover:bg-gray-50 disabled:pointer-events-none disabled:cursor-none disabled:opacity-50 ">
+                                          <div
+                                            disabled
+                                            className="inline-flex select-none items-center gap-x-2 rounded-lg border-2 border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 opacity-50 shadow-sm hover:bg-gray-50 disabled:pointer-events-none disabled:cursor-none disabled:opacity-50 "
+                                          >
                                             <BadgeCheck width={20} />
                                             Approve
                                           </div>
-                                          <div disabled className="inline-flex items-center gap-x-2 rounded-lg border-2 border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 opacity-50 shadow-sm hover:bg-gray-50 disabled:pointer-events-none disabled:cursor-none disabled:opacity-50 ">
+                                          <div
+                                            disabled
+                                            className="inline-flex select-none items-center gap-x-2 rounded-lg border-2 border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 opacity-50 shadow-sm hover:bg-gray-50 disabled:pointer-events-none disabled:cursor-none disabled:opacity-50 "
+                                          >
                                             <Ban width={20} />
-                                            Cancel
+                                            Reject
                                           </div>
                                         </div>
                                       ) : (
                                         <div className="flex items-center space-x-3">
                                           <button
                                             disabled={loading.id == booking.id}
-                                            className="inline-flex items-center gap-x-2 rounded-lg border-2 border-green-500 bg-white px-3 py-2 text-sm text-green-600 shadow-sm hover:bg-green-50 disabled:pointer-events-none disabled:cursor-none disabled:opacity-50"
+                                            className="inline-flex select-none items-center gap-x-2 rounded-lg border-2 border-green-500 bg-white px-3 py-2 text-sm text-green-600 shadow-sm hover:bg-green-50 disabled:pointer-events-none disabled:cursor-none disabled:opacity-50"
                                             onClick={() =>
                                               handleStatusChange(
                                                 booking.id,
@@ -400,7 +427,7 @@ export default function page() {
                                           </button>
                                           <button
                                             disabled={loading.id == booking.id}
-                                            className="inline-flex items-center gap-x-2 rounded-lg border-2 border-red-500 bg-white px-3 py-2 text-sm text-red-600 shadow-sm hover:bg-red-50 disabled:pointer-events-none disabled:cursor-none disabled:opacity-50"
+                                            className="inline-flex select-none items-center gap-x-2 rounded-lg border-2 border-red-500 bg-white px-3 py-2 text-sm text-red-600 shadow-sm hover:bg-red-50 disabled:pointer-events-none disabled:cursor-none disabled:opacity-50"
                                             onClick={() =>
                                               handleStatusChange(
                                                 booking.id,
