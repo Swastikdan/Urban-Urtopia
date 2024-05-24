@@ -102,4 +102,9 @@ if (session && session.user) {
     return NextResponse.json({ message: err.message }, { status: 500 });
   }
 }
+
+
+
+
+
 export { getBooking as GET, statusUpdate as POST };
