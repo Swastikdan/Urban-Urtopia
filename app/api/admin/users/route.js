@@ -18,7 +18,19 @@ async function getUser() {
     }
 
     try {
-      const users = await prisma.user.findMany();
+      const users = await prisma.user.findMany({
+        select: {
+          id: true,
+          image: true,
+          name: true,
+          email: true,
+          role: true,
+          createdAt: true,
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      });
 
       return NextResponse.json({ users }, { status: 200 });
     } catch (err) {
@@ -60,7 +72,19 @@ async function deleteUser(request, { params }) {
       });
 
       // Fetch all users after the deletion
-      const users = await prisma.user.findMany();
+      const users = await prisma.user.findMany({
+        select: {
+          id: true,
+          image: true,
+          name: true,
+          email: true,
+          role: true,
+          createdAt: true,
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      });
 
       return NextResponse.json(
         { message: 'User deleted successfully', users },
@@ -73,4 +97,74 @@ async function deleteUser(request, { params }) {
   }
 }
 
-export { getUser as GET, deleteUser as DELETE };
+async function updateUserStatus(request) {
+  const session = await getServerSession();
+  if (!session) {
+    return NextResponse.json(
+      { message: 'Authentication failed. Please log in.' },
+      { status: 401 },
+    );
+  }
+  if (session && session.user) {
+    const user = await prisma.user.findUnique({
+      where: {
+        email: session.user.email,
+      },
+    });
+    if (user.role != 'admin') {
+      return NextResponse.json(
+        { message: 'Access denied. You do not have admin privileges.' },
+        { status: 401 },
+      );
+    }
+  }
+
+  // just take the id from request body and update the status to admin and if admin then update to user
+
+  try {
+    const searchParams = request.nextUrl.searchParams;
+    const id = searchParams.get('id');
+    const user = await prisma.user.findUnique({
+      where: { id: id },
+    });
+    let message = '';
+    if (user.role === 'admin') {
+      message = 'User role updated to user';
+      await prisma.user.update({
+        where: { id: id },
+        data: {
+          role: 'user',
+        },
+      });
+    } else {
+      message = 'User role updated to admin';
+      await prisma.user.update({
+        where: { id: id },
+        data: {
+          role: 'admin',
+        },
+      });
+    }
+
+    const users = await prisma.user.findMany({
+      select: {
+        id: true,
+        image: true,
+        name: true,
+        email: true,
+        role: true,
+        createdAt: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+
+    return NextResponse.json({ message, users });
+  } catch (err) {
+    console.log(err);
+    return NextResponse.json({ message: err.message }, { status: 500 });
+  }
+}
+
+export { getUser as GET, deleteUser as DELETE, updateUserStatus as POST };

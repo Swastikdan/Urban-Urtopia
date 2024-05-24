@@ -1,17 +1,20 @@
 import React from 'react';
-import AdminNav from '@/components/admin/nav/AdminNav';
+import AdminNav from '../../components/admin/nav/AdminNav';
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 import prisma from '@/lib/prisma';
 export default async function layout({ children }) {
   const session = await getServerSession();
+  if (!session) {
+    redirect('/');
+  }
   if (session && session.user) {
     const user = await prisma.user.findUnique({
       where: {
         email: session.user.email,
       },
     });
-    if (user.role != 'admin') {
+    if ( user.role != 'admin') {
       redirect('/');
     }
   }

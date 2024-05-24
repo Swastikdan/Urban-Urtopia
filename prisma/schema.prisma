@@ -50,6 +50,7 @@ model User {
   role          String    @default("user")
   image         String? 
   bio           String?
+  createdAt     DateTime?  @default(now())
   accounts      Account[]
   sessions      Session[]
   places        Places[]
