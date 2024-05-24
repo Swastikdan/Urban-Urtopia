@@ -1,5 +1,5 @@
 'use client';
-import { Ban, Badge, BadgeCheck, BadgeX , LoaderCircle } from 'lucide-react';
+import { Ban, Badge, BadgeCheck, BadgeX, LoaderCircle } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import {
   Table,
@@ -63,7 +63,7 @@ export default function page() {
       setLoading(false);
     }
   };
-  console.log(loading)
+  console.log(loading);
 
   return (
     <>
@@ -94,9 +94,9 @@ export default function page() {
                       </h2>
                     </div>
                     {!Array.isArray(bookings) || bookings.length === 0 ? (
-                      <div className="col-span-4 flex flex-1 items-center justify-center py-8 lg:py-16  ">
+                      <div className="col-span-4 flex flex-1 items-center justify-center py-8 lg:py-16 ">
                         <div className="mx-auto w-[80vw] max-w-2xl px-4 py-8 text-center">
-                          <p className=" mt-4 text-gray-500">
+                          <p className="mt-4 text-gray-500 ">
                             No bookings found.
                           </p>
                         </div>
@@ -112,7 +112,7 @@ export default function page() {
                                   className="py-3 pe-6 ps-6 text-start lg:ps-3 xl:ps-0"
                                 >
                                   <div className="flex items-center gap-x-2 ps-6">
-                                    <span className="text-sm font-semibold  tracking-wide text-gray-800 dark:text-gray-200">
+                                    <span className="text-sm font-semibold tracking-wide text-gray-800 dark:text-gray-200">
                                       Property
                                     </span>
                                   </div>
@@ -231,13 +231,9 @@ export default function page() {
                                         ) : booking.checkOut < new Date() ? (
                                           <span className="inline-flex items-center gap-x-1 rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-800 dark:bg-gray-500/10 dark:text-gray-500">
                                             <BadgeX width={20} />
-                                           Expired
+                                            Expired
                                           </span>
-                                        ) :null
-                                        
-                                        
-                                        
-                                        }
+                                        ) : null}
                                       </div>
                                     </TableCell>
                                     <TableCell className="size-px whitespace-nowrap">
