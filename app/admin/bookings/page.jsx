@@ -133,7 +133,7 @@ export default function page() {
       <div className="flex flex-col">
         <div className="-m-1.5 overflow-x-auto">
           <div className="inline-block min-w-full p-1.5 align-middle">
-            <div className="w-min min-w-[92vw] overflow-hidden  rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-slate-900 md:min-w-[70vw] ">
+            <div className="w-min overflow-hidden  rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-slate-900 ">
               <div className="flex items-center justify-between gap-3 border-b border-gray-200 px-2 py-4 dark:border-gray-700 md:px-5">
                 <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
                   Bookings
@@ -186,7 +186,7 @@ export default function page() {
                 </div>
               </div>
               {pageloading ? (
-                <div className="flex h-56 flex-col">
+                <div className="flex h-56 w-full min-w-[92vw] flex-col  md:min-w-[70vw] ">
                   <div className="flex flex-auto flex-col items-center justify-center p-4 md:p-5">
                     <div className="flex justify-center">
                       <div
@@ -318,7 +318,7 @@ export default function page() {
 
                                   <TableCell className="size-px whitespace-nowrap">
                                     <div className="px-2 py-1">
-                                      { booking.status === 'approved' ? (
+                                      {booking.status === 'approved' ? (
                                         <span className="inline-flex items-center gap-x-1 rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-800 dark:bg-green-500/10 dark:text-green-500">
                                           <BadgeCheck width={20} />
                                           {new Date(booking.checkOut) <
