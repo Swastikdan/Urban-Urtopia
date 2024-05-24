@@ -3,10 +3,11 @@ import AdminNav from '../../components/admin/nav/AdminNav';
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 import prisma from '@/lib/prisma';
+import { notFound } from 'next/navigation';
 export default async function layout({ children }) {
   const session = await getServerSession();
   if (!session) {
-    redirect('/');
+    redirect('/login');
   }
   if (session && session.user) {
     const user = await prisma.user.findUnique({
@@ -15,7 +16,7 @@ export default async function layout({ children }) {
       },
     });
     if ( user.role != 'admin') {
-      redirect('/');
+       notFound();
     }
   }
 

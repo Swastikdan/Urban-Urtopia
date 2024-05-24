@@ -31,8 +31,8 @@ import { toast } from 'sonner';
 export default function page() {
   const [users, setUsers] = useState([]);
   const [pageloading, setPageLoading] = useState(true);
-  const [deleteloading, setDeleteLoading] = useState(false);
-  const [statusloading, setStatusLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState([]);
+  const [statusLoading, setStatusLoading] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState(null);
 
@@ -70,45 +70,45 @@ export default function page() {
     }
   };
 
-  const handleDeleteUser = async (id) => {
-    setDeleteLoading(id);
-    try {
-      const res = await fetch(`/api/admin/users?id=${id}`, {
-        method: 'DELETE',
-      });
-      const data = await res.json();
-      if (res.ok) {
-        setUsers(data.users);
-        toast.success(data.message);
-      } else {
-        throw new Error(data.message);
-      }
-    } catch (error) {
-      toast.error(error.message);
-    } finally {
-      setDeleteLoading(false);
+const handleDeleteUser = async (id) => {
+  setDeleteLoading((prev) => [...prev, id]);
+  try {
+    const res = await fetch(`/api/admin/users?id=${id}`, {
+      method: 'DELETE',
+    });
+    const data = await res.json();
+    if (res.ok) {
+      setUsers(data.users);
+      toast.success(data.message);
+    } else {
+      throw new Error(data.message);
     }
-  };
+  } catch (error) {
+    toast.error(error.message);
+  } finally {
+    setDeleteLoading((prev) => prev.filter((loadingId) => loadingId !== id));
+  }
+};
 
-  const updateStatus = async (id) => {
-    setStatusLoading(id);
-    try {
-      const res = await fetch(`/api/admin/users?id=${id}`, {
-        method: 'POST',
-      });
-      const data = await res.json();
-      if (res.ok) {
-        setUsers(data.users);
-        toast.success(data.message);
-      } else {
-        throw new Error(data.message);
-      }
-    } catch (error) {
-      toast.error(error.message);
-    } finally {
-      setStatusLoading(false);
+const updateStatus = async (id) => {
+  setStatusLoading((prev) => [...prev, id]);
+  try {
+    const res = await fetch(`/api/admin/users?id=${id}`, {
+      method: 'POST',
+    });
+    const data = await res.json();
+    if (res.ok) {
+      setUsers(data.users);
+      toast.success(data.message);
+    } else {
+      throw new Error(data.message);
     }
-  };
+  } catch (error) {
+    toast.error(error.message);
+  } finally {
+    setStatusLoading((prev) => prev.filter((loadingId) => loadingId !== id));
+  }
+};
 
   return (
     <div className="mx-auto flex w-full items-center  justify-center py-10 sm:px-2 lg:px-8 lg:py-14">
@@ -122,10 +122,10 @@ export default function page() {
                 </h2>
 
                 <div className="flex items-center space-x-2">
-                  <button className="inline-flex  select-none items-center gap-x-2 rounded-lg border-2 border-gray-500 bg-white px-2 py-1 text-sm text-gray-600 shadow-sm hover:bg-gray-50 disabled:pointer-events-none disabled:opacity-50">
+                  {/* <button className="inline-flex  select-none items-center gap-x-2 rounded-lg border-2 border-gray-500 bg-white px-2 py-1 text-sm text-gray-600 shadow-sm hover:bg-gray-50 disabled:pointer-events-none disabled:opacity-50">
                     <ListFilter width={20} />
                     <span className="hidden md:flex">Filter</span>
-                  </button>
+                  </button> */}
                   {/* <button className="inline-flex items-center gap-x-2 rounded-lg border-2 border-gray-500 bg-white px-2 py-1 text-sm text-gray-600 shadow-sm hover:bg-gray-50 disabled:pointer-events-none disabled:opacity-50">
                     <ArrowDownUp width={20} />
                     <span className="hidden md:flex">Sort</span>
@@ -162,9 +162,7 @@ export default function page() {
                   {!Array.isArray(users) || users.length === 0 ? (
                     <div className="col-span-4 flex   h-56 flex-1 items-center justify-center py-8 lg:py-16  ">
                       <div className="mx-auto w-[80vw] max-w-2xl px-4 py-8 text-center">
-                        <p className=" mt-4 text-gray-500">
-                          No bookings found.
-                        </p>
+                        <p className=" mt-4 text-gray-500">No Users found.</p>
                       </div>
                     </div>
                   ) : (
@@ -284,12 +282,15 @@ export default function page() {
                                   <TableCell className="size-px whitespace-nowrap">
                                     <div className="flex items-center space-x-2 px-2 py-1">
                                       <button
+                                        disabled={deleteLoading.includes(
+                                          user.id,
+                                        )}
                                         className="inline-flex items-center gap-x-2 rounded-lg border-2 border-red-500 bg-white px-3 py-2 text-sm text-red-600 shadow-sm hover:bg-red-50 disabled:pointer-events-none disabled:opacity-50"
                                         onClick={() =>
                                           handleDeleteUser(user.id)
                                         }
                                       >
-                                        {deleteloading == user.id ? (
+                                        {deleteLoading.includes(user.id) ? (
                                           <LoaderCircle
                                             width={20}
                                             className="animate-spin"
@@ -301,10 +302,13 @@ export default function page() {
                                       </button>
                                       {user.role === 'admin' ? (
                                         <button
+                                          disabled={statusLoading.includes(
+                                            user.id,
+                                          )}
                                           className="inline-flex items-center gap-x-2 rounded-lg border-2 border-green-500 bg-white px-3 py-2 text-sm text-green-600 shadow-sm hover:bg-blue-50 disabled:pointer-events-none disabled:opacity-50"
                                           onClick={() => updateStatus(user.id)}
                                         >
-                                          {statusloading == user.id ? (
+                                          {statusLoading.includes(user.id) ? (
                                             <LoaderCircle
                                               width={20}
                                               className="animate-spin"
@@ -316,10 +320,13 @@ export default function page() {
                                         </button>
                                       ) : (
                                         <button
+                                          disabled={statusLoading.includes(
+                                            user.id,
+                                          )}
                                           className="inline-flex items-center gap-x-2 rounded-lg border-2 border-blue-500 bg-white px-3 py-2 text-sm text-blue-600 shadow-sm hover:bg-blue-50 disabled:pointer-events-none disabled:opacity-50"
                                           onClick={() => updateStatus(user.id)}
                                         >
-                                          {statusloading == user.id ? (
+                                          {statusLoading.includes(user.id) ? (
                                             <LoaderCircle
                                               width={20}
                                               className="animate-spin"

@@ -7,10 +7,21 @@ export default async function getPlacesById(id) {
   if (!id || String(id).length !== 24)
     return { code: 400, message: 'Invalid ID' };
 
-  const session = await getServerSession();
-  const statusCondition = session ? {} : { status: 'approved' };
+  // console.log('id' , id)
 
-  // if the place is in the user's favorites, set isFavorite to true and  add that to final result
+  const session = await getServerSession();
+  let loggedInUser;
+  let statusCondition = { status: 'approved' };
+
+  if(session && session.user.email != ''){
+    loggedInUser = await prisma.user.findUnique({
+      where: { email: session.user.email },
+    });
+
+    if (loggedInUser.role === 'admin') {
+      statusCondition = {};
+    }
+  }
 
   try {
     const place = await prisma.places.findUnique({
@@ -20,7 +31,7 @@ export default async function getPlacesById(id) {
           select: {
             name: true,
             image: true,
-            email: session ? true : false,
+            email: loggedInUser && loggedInUser.role === 'admin' ? true : false,
           },
         },
       },
@@ -29,13 +40,9 @@ export default async function getPlacesById(id) {
     if (!place) return { code: 404, message: 'Place not found' };
 
     if (session) {
-      const user = await prisma.user.findUnique({
-        where: { email: session?.user.email },
-      });
-
       const favorites = await prisma.userFavorites.findMany({
         where: {
-          userId: user.id,
+          userId: loggedInUser.id,
         },
       });
       place.isFavorite = favorites.some(
@@ -44,6 +51,7 @@ export default async function getPlacesById(id) {
     } else {
       place.isFavorite = false;
     }
+
     // Find bookings for the place
     const bookings = await prisma.bookings.findMany({
       where: { placeId: String(id) },
@@ -105,16 +113,19 @@ export default async function getPlacesById(id) {
     }
 
     place.bookingWindows = bookingWindows;
+
     if (
       place.status !== 'approved' &&
-      (!place.owner || place.owner.email !== session.user.email)
+      (!loggedInUser ||
+        (loggedInUser.role != 'admin' &&
+          (!place.owner || place.owner.email !== loggedInUser.email)))
     )
       return {
         code: 401,
         message: 'You are not authorized to view this place',
       };
-   
-    return place;
+
+    return {code: 200, place};
   } catch (error) {
     console.error('Error:', error);
     return { code: 500, message: 'Internal Server Error' };

@@ -92,7 +92,7 @@ async function deleteUser(request, { params }) {
       );
     } catch (err) {
       console.log(err);
-      return NextResponse.json({ message: err.message }, { status: 500 });
+      return NextResponse.json({ message: 'Something went wrong' }, { status: 500 });
     }
   }
 }
@@ -105,13 +105,14 @@ async function updateUserStatus(request) {
       { status: 401 },
     );
   }
+  let sessionuser = null;
   if (session && session.user) {
-    const user = await prisma.user.findUnique({
+    sessionuser = await prisma.user.findUnique({
       where: {
         email: session.user.email,
       },
     });
-    if (user.role != 'admin') {
+    if (sessionuser.role != 'admin') {
       return NextResponse.json(
         { message: 'Access denied. You do not have admin privileges.' },
         { status: 401 },
@@ -128,8 +129,18 @@ async function updateUserStatus(request) {
       where: { id: id },
     });
     let message = '';
+
+    if (sessionuser.id == user.id) {
+      return NextResponse.json(
+        { message: 'You cannot change your own role' },
+        { status: 400 },
+      );
+    }
+
+
+
     if (user.role === 'admin') {
-      message = 'User role updated to user';
+      message = 'Updated to User';
       await prisma.user.update({
         where: { id: id },
         data: {
@@ -137,7 +148,7 @@ async function updateUserStatus(request) {
         },
       });
     } else {
-      message = 'User role updated to admin';
+      message = 'Updated to Admin';
       await prisma.user.update({
         where: { id: id },
         data: {
