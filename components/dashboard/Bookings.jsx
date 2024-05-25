@@ -14,7 +14,6 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Ban, Badge, BadgeCheck, BadgeX } from 'lucide-react';
 
 export default function Bookings({ bookings }) {
-
   return (
     <>
       <div className="mx-auto w-full py-10 sm:px-6 lg:px-8 lg:py-14">
@@ -180,14 +179,12 @@ export default function Bookings({ bookings }) {
                                         <BadgeX width={20} />
                                         Rejected
                                       </span>
-                                    ) : (
-                                    booking.status === 'canceled' ? (
-  <span className="inline-flex items-center gap-x-1 rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-800 dark:bg-red-500/10 dark:text-red-500">
-    <BadgeX width={20} />
-    Canceled
-  </span>
-) : null
-                                    )}
+                                    ) : booking.status === 'canceled' ? (
+                                      <span className="inline-flex items-center gap-x-1 rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-800 dark:bg-red-500/10 dark:text-red-500">
+                                        <BadgeX width={20} />
+                                        Canceled
+                                      </span>
+                                    ) : null}
                                   </div>
                                 </TableCell>
                                 <TableCell className="size-px whitespace-nowrap">

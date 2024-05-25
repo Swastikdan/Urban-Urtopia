@@ -282,9 +282,10 @@ const updateStatus = async (id) => {
                                   <TableCell className="size-px whitespace-nowrap">
                                     <div className="flex items-center space-x-2 px-2 py-1">
                                       <button
-                                        disabled={deleteLoading.includes(
-                                          user.id,
-                                        )}
+                                        disabled={
+                                          statusLoading.includes(user.id) ||
+                                          deleteLoading.includes(user.id)
+                                        }
                                         className="inline-flex items-center gap-x-2 rounded-lg border-2 border-red-500 bg-white px-3 py-2 text-sm text-red-600 shadow-sm hover:bg-red-50 disabled:pointer-events-none disabled:opacity-50"
                                         onClick={() =>
                                           handleDeleteUser(user.id)
@@ -302,9 +303,10 @@ const updateStatus = async (id) => {
                                       </button>
                                       {user.role === 'admin' ? (
                                         <button
-                                          disabled={statusLoading.includes(
-                                            user.id,
-                                          )}
+                                          disabled={
+                                            statusLoading.includes(user.id) ||
+                                            deleteLoading.includes(user.id)
+                                          }
                                           className="inline-flex items-center gap-x-2 rounded-lg border-2 border-green-500 bg-white px-3 py-2 text-sm text-green-600 shadow-sm hover:bg-blue-50 disabled:pointer-events-none disabled:opacity-50"
                                           onClick={() => updateStatus(user.id)}
                                         >
@@ -320,9 +322,10 @@ const updateStatus = async (id) => {
                                         </button>
                                       ) : (
                                         <button
-                                          disabled={statusLoading.includes(
-                                            user.id,
-                                          )}
+                                          disabled={
+                                            statusLoading.includes(user.id) ||
+                                            deleteLoading.includes(user.id)
+                                          }
                                           className="inline-flex items-center gap-x-2 rounded-lg border-2 border-blue-500 bg-white px-3 py-2 text-sm text-blue-600 shadow-sm hover:bg-blue-50 disabled:pointer-events-none disabled:opacity-50"
                                           onClick={() => updateStatus(user.id)}
                                         >

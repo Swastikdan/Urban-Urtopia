@@ -53,9 +53,18 @@ body {
 }
 
 .swiper-pagination-bullet-active {
-  background: rgb(248, 248, 248) !important;
+  background: rgb(255, 255, 255) !important;
 }
 
+/* .swiper-pagination-bullet-active-prev {
+  background: rgb(129, 22, 22) !important;
+}
+.swiper-pagination-bullet-active-next{
+  background: rgb(129, 22, 22) !important;
+}
+swiper-pagination-bullet-active-prev-prev{
+  background: rgb(129, 22, 22) !important;
+} */
 @layer base {
   body {
     @apply overflow-y-auto 
