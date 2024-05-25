@@ -62,7 +62,7 @@ async function deletePlace(request) {
         },
       });
 
-      const places = await prisma.place.findMany();
+      const places = await prisma.Places.findMany();
       return NextResponse.json({ places }, { status: 200 });
     } catch (err) {
       console.log(err);
@@ -70,4 +70,4 @@ async function deletePlace(request) {
     }
   }
 }
-export { getPlaces as GET };
+export { getPlaces as GET , deletePlace as DELETE};
