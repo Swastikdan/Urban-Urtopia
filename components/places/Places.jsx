@@ -16,6 +16,12 @@ export default function Places() {
     const category = searchParams.get('category') || '';
     const sort = searchParams.get('sort') || '';
     const sortType = searchParams.get('sortType') || '';
+    const location = searchParams.get('location') || '';
+    const checkin = searchParams.get('checkin') || '';
+    const checkout = searchParams.get('checkout') || '';
+    const adults = searchParams.get('adults') || '';
+    const children = searchParams.get('children') || '';
+
     // getPlaces(category, sort, sortType)
     //   .then((data) => {
     //     setPlaces(data);
@@ -25,7 +31,7 @@ export default function Places() {
     //     console.error(error);
     //     setLoading(false);
     //   });
-    fetch(`/api/places?category=${category}&sort=${sort}&sortType=${sortType}`)
+    fetch(`/api/places?category=${category}&sort=${sort}&sortType=${sortType}&location=${location}&checkin=${checkin}&checkout=${checkout}&adults=${adults}&children=${children}`)
       .then((res) => res.json())
       .then((data) => {
         setPlaces(data);

@@ -1,8 +1,13 @@
-import { format } from 'date-fns';
+import { format, isValid, parseISO } from 'date-fns';
 
 export const formatCheckDate = (date, dateFormat) => {
-  if (!date) return '';
-  return format(date, dateFormat || 'MMM d');
+  try {
+    let parsedDate = typeof date === 'string' ? parseISO(date) : date;
+    if (!isValid(parsedDate)) throw new Error();
+    return format(parsedDate, dateFormat || 'MMM d');
+  } catch {
+    return 'Wrong date';
+  }
 };
 
 export const formatRangeDate = (startDate, endDate) => {

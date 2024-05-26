@@ -12,15 +12,15 @@ export default function SearchBarDesktop() {
   const Guests = searchParams.get('guests') || '';
   return (
     <div className="flex flex-col">
-      <div className="hidden w-auto">
+      {/* <div className="hidden w-auto">
         <SearchBarTriggerDesktop
           Location={Location}
           CheckIn={CheckIn}
           CheckOut={CheckOut}
           Guests={Guests}
         />
-      </div>
-      <div className="pt-5">
+      </div> */}
+      <div className="">
         <div className="visible px-4">
           <div className="false mx-auto mt-2 hidden max-w-[850px] rounded-full border border-gray-200 bg-white duration-300 md:flex">
             <form

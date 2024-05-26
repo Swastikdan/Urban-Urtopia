@@ -53,7 +53,10 @@ export default function UserMenu() {
         <DropdownMenuTrigger className="m-auto items-center rounded-3xl">
           <UserMenuTrigger user={userData} />
         </DropdownMenuTrigger>
-        <DropdownMenuContent className=" mr-5 rounded-xl    drop-shadow-xl ">
+        <DropdownMenuContent
+          align="end"
+          className=" rounded-xl    drop-shadow-xl "
+        >
           <DropdownMenuLabel className="text-md ">
             Hello ,‎ {userData?.name?.split(' ')[0] || 'Guest'}
           </DropdownMenuLabel>
@@ -94,10 +97,10 @@ export default function UserMenu() {
 
               <DropdownMenuSeparator className="h-[.5px]  bg-black dark:bg-white" />
               <DropdownMenuItem
-                className="flex cursor-pointer items-center rounded-md font-medium text-red-500 group hover:text-red-600 focus:text-red-600 focus:bg-red-100 "
+                className="group flex cursor-pointer items-center rounded-md font-medium text-red-500 hover:text-red-600 focus:bg-red-100 focus:text-red-600 "
                 onClick={() => signOut()}
               >
-                <LogOut width={15} className=' ' />
+                <LogOut width={15} className=" " />
                 <span className="pl-2  ">Logout</span>
               </DropdownMenuItem>
             </>

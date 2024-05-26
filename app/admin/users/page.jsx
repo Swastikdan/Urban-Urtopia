@@ -3,7 +3,9 @@
 import { useEffect, useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
-import { Trash ,Ban,
+import {
+  Trash,
+  Ban,
   Badge,
   Loader,
   BadgeCheck,
@@ -12,9 +14,10 @@ import { Trash ,Ban,
   RefreshCw,
   ArrowDownUp,
   ListFilter,
-   CircleUserRound,
-   ShieldCheck,
-  CircleX, } from 'lucide-react';
+  CircleUserRound,
+  ShieldCheck,
+  CircleX,
+} from 'lucide-react';
 import {
   Table,
   TableBody,
@@ -27,7 +30,6 @@ import {
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { toast } from 'sonner';
 
-
 export default function page() {
   const [users, setUsers] = useState([]);
   const [pageloading, setPageLoading] = useState(true);
@@ -39,12 +41,12 @@ export default function page() {
   const [bookings, setBookings] = useState([]);
 
   const fetchUsers = async () => {
-      setRefreshing(true);
+    setRefreshing(true);
     try {
       const res = await fetch('/api/admin/users');
       const data = await res.json();
       if (res.ok) {
-        setUsers(data.users);;
+        setUsers(data.users);
       } else {
         throw new Error('Failed to load bookings');
       }
@@ -62,53 +64,52 @@ export default function page() {
   const handleRefresh = async () => {
     try {
       fetchUsers();
-    
     } catch (error) {
       setError(error.message);
     } finally {
-        toast.success('Users refreshed successfully');
+      toast.success('Users refreshed successfully');
     }
   };
 
-const handleDeleteUser = async (id) => {
-  setDeleteLoading((prev) => [...prev, id]);
-  try {
-    const res = await fetch(`/api/admin/users?id=${id}`, {
-      method: 'DELETE',
-    });
-    const data = await res.json();
-    if (res.ok) {
-      setUsers(data.users);
-      toast.success(data.message);
-    } else {
-      throw new Error(data.message);
+  const handleDeleteUser = async (id) => {
+    setDeleteLoading((prev) => [...prev, id]);
+    try {
+      const res = await fetch(`/api/admin/users?id=${id}`, {
+        method: 'DELETE',
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setUsers(data.users);
+        toast.success(data.message);
+      } else {
+        throw new Error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setDeleteLoading((prev) => prev.filter((loadingId) => loadingId !== id));
     }
-  } catch (error) {
-    toast.error(error.message);
-  } finally {
-    setDeleteLoading((prev) => prev.filter((loadingId) => loadingId !== id));
-  }
-};
+  };
 
-const updateStatus = async (id) => {
-  setStatusLoading((prev) => [...prev, id]);
-  try {
-    const res = await fetch(`/api/admin/users?id=${id}`, {
-      method: 'POST',
-    });
-    const data = await res.json();
-    if (res.ok) {
-      setUsers(data.users);
-      toast.success(data.message);
-    } else {
-      throw new Error(data.message);
+  const updateStatus = async (id) => {
+    setStatusLoading((prev) => [...prev, id]);
+    try {
+      const res = await fetch(`/api/admin/users?id=${id}`, {
+        method: 'POST',
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setUsers(data.users);
+        toast.success(data.message);
+      } else {
+        throw new Error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setStatusLoading((prev) => prev.filter((loadingId) => loadingId !== id));
     }
-  } catch (error) {
-    toast.error(error.message);
-  } finally {
-    setStatusLoading((prev) => prev.filter((loadingId) => loadingId !== id));
-  }
-};
+  };
 
   return (
     <div className="mx-auto flex w-full items-center  justify-center py-10 sm:px-2 lg:px-8 lg:py-14">
@@ -240,11 +241,14 @@ const updateStatus = async (id) => {
                                   <TableCell className="size-px whitespace-nowrap">
                                     <Avatar>
                                       <AvatarImage
-                                        src={user.image}
+                                        src={user.image.replace(
+                                          '/upload/',
+                                          '/upload/w_200,h_200,c_fill,g_auto/q_auto/f_auto/',
+                                        )}
                                         alt="User Image"
                                       />
                                       <AvatarFallback>
-                                        {user.name}
+                                        {user.name.charAt(0).toUpperCase()}
                                       </AvatarFallback>
                                     </Avatar>
                                   </TableCell>

@@ -6,8 +6,9 @@ import { usePathname, useSearchParams } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import Sort from '../sort/Sort';
 import UserMenu from '../usermenu/UserMenu';
-import SearchBarTriggerDesktop from '../searchbar/SearchBarTriggerDesktop';
-import SearchBarMobile from '../searchbar/SearchBarMobile';
+// import SearchBarTriggerDesktop from '../searchbar/SearchBarTriggerDesktop';
+// import SearchBarMobile from '../searchbar/SearchBarMobile';
+import SearchBar from '../searchbar/SearchBar';
 import CatagoryWithSort from '../places/placecard/catagory/CatagoryWithSort';
 export default function NavBar({ className }) {
   const path = usePathname();
@@ -52,7 +53,8 @@ export default function NavBar({ className }) {
 
         {path === '/' ? (
           <div className="w-full md:w-auto">
-            <div className="hidden md:flex">
+           <SearchBar />
+            {/* <div className="hidden md:flex">
               <Suspense
                 fallback={
                   <div className="-ml-2 flex h-[50px] w-full  min-w-[315px] animate-pulse items-center rounded-full bg-gray-200 p-1"></div>
@@ -71,7 +73,7 @@ export default function NavBar({ className }) {
                   <SearchBarMobile />
                 </Suspense>
               </div>
-            </div>
+            </div> */}
           </div>
         ) : (
           <div className="w-full md:w-auto "></div>
