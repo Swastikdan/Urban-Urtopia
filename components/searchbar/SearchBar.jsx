@@ -81,113 +81,186 @@ const handleSearch = () => {
   });
   router.push(`/?${search}`);
 };
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    });
 
-    return () => clearTimeout(timer);
-  }, []);
 
-  console.log(searchState);
 
-  return loading ? (
-    <>
-      {/* Desktop SearchBar   */}
-      <div className="hidden w-auto md:flex">
-        <div className="hidden w-full  items-center justify-between  rounded-full border-2 border-gray-300 p-1 md:flex ">
-          <div className="  flex justify-between text-sm  ">
-            <div className="items-center  border-r-2 border-gray-300 px-2 py-1 ">
-              <div className="h-6 w-20  animate-pulse   rounded-l-full rounded-r-md bg-gray-200"></div>
-            </div>
-
-            <div className="items-center  border-r-2 border-gray-300 px-2 py-1 ">
-              <div className="h-6 w-20  animate-pulse rounded-md bg-gray-200"></div>
-            </div>
-
-            <div className=" items-center border-gray-300  py-1 pl-2 ">
-              <div className="h-6 w-20  animate-pulse rounded-md bg-gray-200"></div>
-            </div>
-          </div>
-
-          <div className="ml-3 rounded-full bg-blue-600 p-2.5 text-white  ">
-            <Search width={20} height={20} className="text-white" />
-          </div>
-        </div>
-      </div>
-      {/* Mobile SearchBar   */}
-      <div className="flex w-full pt-4 md:hidden">
-        <div className="ml-2 flex w-full items-center  rounded-full bg-gray-100  p-1 md:hidden md:w-auto">
-          <div className="mr-2 rounded-full bg-white px-3 py-3">
-            <Search width={20} height={20} />
-          </div>
-          <div className="my-1 mr-4 h-8 w-full animate-pulse rounded-sm bg-gray-200"></div>
-        </div>
-      </div>
-    </>
-  ) : (
-    <>
-      {/* Desktop SearchBar   */}
-      <div className="hidden w-auto md:flex">
-        <div className="hidden w-full  items-center justify-between  rounded-full border-2 border-gray-300 p-1 md:flex ">
-          <div className="  flex justify-between text-sm  ">
-            <div className="items-center  border-r-2 border-gray-300 px-2 py-1 ">
-              <div className="flex  h-8 w-auto min-w-20 items-center justify-center text-center text-[14px]  font-semibold">
-                <span className="">
-                  {/* {searchState.location.charAt(0).toUpperCase() +
+    return (
+      <>
+        {/* Desktop SearchBar   */}
+        <div className="hidden w-auto md:flex">
+          <div className="hidden w-full  items-center justify-between  rounded-full border-2 border-gray-300 p-1 md:flex ">
+            <div className="  flex justify-between text-sm  ">
+              <div className="items-center  border-r-2 border-gray-300 px-2 py-1 ">
+                <div className="flex  h-8 w-auto min-w-20 items-center justify-center text-center text-[14px]  font-semibold">
+                  <span className="">
+                    {/* {searchState.location.charAt(0).toUpperCase() +
                     searchState.location.slice(1) || } */}
-                  {searchState.location
-                    ? searchState.location.charAt(0).toUpperCase() +
-                      searchState.location.slice(1)
-                    : 'Anywhere'}
-                </span>
+                    {searchState.location
+                      ? searchState.location.charAt(0).toUpperCase() +
+                        searchState.location.slice(1)
+                      : 'Anywhere'}
+                  </span>
+                </div>
+              </div>
+
+              <div className="items-center  border-r-2 border-gray-300 px-2 py-1 ">
+                {' '}
+                <div className="flex  h-8 w-auto min-w-20 items-center justify-center text-center text-[14px]  font-semibold">
+                  <span className="">
+                    {searchState.checkin && searchState.checkout
+                      ? formatRangeDate(
+                          searchState.checkin,
+                          searchState.checkout,
+                        )
+                      : 'Any Date'}
+                  </span>
+                </div>
+              </div>
+
+              <div className=" items-center border-gray-300  py-1 pl-2 ">
+                <div
+                  className={`flex  h-8 w-auto min-w-20 items-center justify-center text-center text-[14px] ${searchState.adults || searchState.children ? 'font-semibold' : ''}  `}
+                >
+                  <span className="">
+                    {searchState.adults || searchState.children
+                      ? Number(searchState.adults) +
+                        Number(searchState.children) +
+                        ' guests'
+                      : 'Add Guests'}
+                  </span>
+                </div>
               </div>
             </div>
 
-            <div className="items-center  border-r-2 border-gray-300 px-2 py-1 ">
-              {' '}
-              <div className="flex  h-8 w-auto min-w-20 items-center justify-center text-center text-[14px]  font-semibold">
-                <span className="">
-                  {searchState.checkin && searchState.checkout
-                    ? formatRangeDate(searchState.checkin, searchState.checkout)
-                    : 'Any Date'}
-                </span>
-              </div>
-            </div>
-
-            <div className=" items-center border-gray-300  py-1 pl-2 ">
-              <div
-                className={`flex  h-8 w-auto min-w-20 items-center justify-center text-center text-[14px] ${searchState.adults || searchState.children ? 'font-semibold' : ''}  `}
-              >
-                <span className="">
-                  {searchState.adults || searchState.children
-                    ? Number(searchState.adults) +
-                      Number(searchState.children) +
-                      ' guests'
-                    : 'Add Guests'}
-                </span>
-              </div>
-            </div>
+            <button
+              onClick={() => handleSearch()}
+              className="ml-3 rounded-full bg-blue-600 p-2.5 text-white hover:bg-blue-600/90  "
+            >
+              <Search width={20} height={20} className="text-white" />
+            </button>
           </div>
-
-          <button
-            onClick={() => handleSearch()}
-            className="ml-3 rounded-full bg-blue-600 p-2.5 text-white hover:bg-blue-600/90  "
-          >
-            <Search width={20} height={20} className="text-white" />
-          </button>
         </div>
-      </div>
 
-      {/* Mobile SearchBar   */}
-      <div className="flex w-full pt-4 md:hidden">
-        <div className="ml-2 flex w-full items-center  rounded-full bg-gray-100  p-1 md:hidden md:w-auto">
-          <div className="mr-2 rounded-full bg-white px-3 py-3">
-            <Search width={20} height={20} />
+        {/* Mobile SearchBar   */}
+        <div className="flex w-full pt-4 md:hidden">
+          <div className="ml-2 flex w-full items-center  rounded-full bg-gray-100  p-1 md:hidden md:w-auto">
+            <div className="mr-2 rounded-full bg-white px-3 py-3">
+              <Search width={20} height={20} />
+            </div>
+            <div className="my-1 mr-4 h-8 w-full animate-pulse rounded-sm bg-gray-200"></div>
           </div>
-          <div className="my-1 mr-4 h-8 w-full animate-pulse rounded-sm bg-gray-200"></div>
         </div>
-      </div>
-    </>
-  );
+      </>
+    );
+
+
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     setLoading(false);
+  //   });
+
+  //   return () => clearTimeout(timer);
+  // }, []);
+
+  // console.log(searchState);
+
+  // return loading ? (
+  //   <>
+  //     {/* Desktop SearchBar   */}
+  //     <div className="hidden w-auto md:flex">
+  //       <div className="hidden w-full  items-center justify-between  rounded-full border-2 border-gray-300 p-1 md:flex ">
+  //         <div className="  flex justify-between text-sm  ">
+  //           <div className="items-center  border-r-2 border-gray-300 px-2 py-1 ">
+  //             <div className="h-6 w-20  animate-pulse   rounded-l-full rounded-r-md bg-gray-200"></div>
+  //           </div>
+
+  //           <div className="items-center  border-r-2 border-gray-300 px-2 py-1 ">
+  //             <div className="h-6 w-20  animate-pulse rounded-md bg-gray-200"></div>
+  //           </div>
+
+  //           <div className=" items-center border-gray-300  py-1 pl-2 ">
+  //             <div className="h-6 w-20  animate-pulse rounded-md bg-gray-200"></div>
+  //           </div>
+  //         </div>
+
+  //         <div className="ml-3 rounded-full bg-blue-600 p-2.5 text-white  ">
+  //           <Search width={20} height={20} className="text-white" />
+  //         </div>
+  //       </div>
+  //     </div>
+  //     {/* Mobile SearchBar   */}
+  //     <div className="flex w-full pt-4 md:hidden">
+  //       <div className="ml-2 flex w-full items-center  rounded-full bg-gray-100  p-1 md:hidden md:w-auto">
+  //         <div className="mr-2 rounded-full bg-white px-3 py-3">
+  //           <Search width={20} height={20} />
+  //         </div>
+  //         <div className="my-1 mr-4 h-8 w-full animate-pulse rounded-sm bg-gray-200"></div>
+  //       </div>
+  //     </div>
+  //   </>
+  // ) : (
+  //   <>
+  //     {/* Desktop SearchBar   */}
+  //     <div className="hidden w-auto md:flex">
+  //       <div className="hidden w-full  items-center justify-between  rounded-full border-2 border-gray-300 p-1 md:flex ">
+  //         <div className="  flex justify-between text-sm  ">
+  //           <div className="items-center  border-r-2 border-gray-300 px-2 py-1 ">
+  //             <div className="flex  h-8 w-auto min-w-20 items-center justify-center text-center text-[14px]  font-semibold">
+  //               <span className="">
+  //                 {/* {searchState.location.charAt(0).toUpperCase() +
+  //                   searchState.location.slice(1) || } */}
+  //                 {searchState.location
+  //                   ? searchState.location.charAt(0).toUpperCase() +
+  //                     searchState.location.slice(1)
+  //                   : 'Anywhere'}
+  //               </span>
+  //             </div>
+  //           </div>
+
+  //           <div className="items-center  border-r-2 border-gray-300 px-2 py-1 ">
+  //             {' '}
+  //             <div className="flex  h-8 w-auto min-w-20 items-center justify-center text-center text-[14px]  font-semibold">
+  //               <span className="">
+  //                 {searchState.checkin && searchState.checkout
+  //                   ? formatRangeDate(searchState.checkin, searchState.checkout)
+  //                   : 'Any Date'}
+  //               </span>
+  //             </div>
+  //           </div>
+
+  //           <div className=" items-center border-gray-300  py-1 pl-2 ">
+  //             <div
+  //               className={`flex  h-8 w-auto min-w-20 items-center justify-center text-center text-[14px] ${searchState.adults || searchState.children ? 'font-semibold' : ''}  `}
+  //             >
+  //               <span className="">
+  //                 {searchState.adults || searchState.children
+  //                   ? Number(searchState.adults) +
+  //                     Number(searchState.children) +
+  //                     ' guests'
+  //                   : 'Add Guests'}
+  //               </span>
+  //             </div>
+  //           </div>
+  //         </div>
+
+  //         <button
+  //           onClick={() => handleSearch()}
+  //           className="ml-3 rounded-full bg-blue-600 p-2.5 text-white hover:bg-blue-600/90  "
+  //         >
+  //           <Search width={20} height={20} className="text-white" />
+  //         </button>
+  //       </div>
+  //     </div>
+
+  //     {/* Mobile SearchBar   */}
+  //     <div className="flex w-full pt-4 md:hidden">
+  //       <div className="ml-2 flex w-full items-center  rounded-full bg-gray-100  p-1 md:hidden md:w-auto">
+  //         <div className="mr-2 rounded-full bg-white px-3 py-3">
+  //           <Search width={20} height={20} />
+  //         </div>
+  //         <div className="my-1 mr-4 h-8 w-full animate-pulse rounded-sm bg-gray-200"></div>
+  //       </div>
+  //     </div>
+  //   </>
+  // );
 }
