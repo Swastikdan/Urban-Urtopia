@@ -76,7 +76,7 @@ model Places {
   safety_amenities    String[]
   price               String?
   listTillDate        DateTime?
-  maxGuests           String?
+  maxGuests           Int?
   petsAllowed         Boolean
   checkInTime         DateTime?
   checkOutTime        DateTime?

@@ -10,76 +10,37 @@ export async function places(request) {
       return NextResponse.json("Invalid ID", { status: 401 });
 
     try {
-      const place = await prisma.places.findUnique({
-        where: { id: String(id), status: "approved" },
-      });
+  const place = await prisma.places.findUnique({
+    where: { id: String(id), status: 'approved' },
+  });
 
-      if (!place || place.length === 0)
-        return new Response("Place not found", { status: 404 });
+  if (!place) return new Response('Place not found', { status: 404 });
 
-      // Find bookings for the place
-      const bookings = await prisma.bookings.findMany({
-        where: { placeId: String(id) },
-        orderBy: { checkIn: 'asc' },
-      });
+  // Find bookings for the place
+  const bookings = await prisma.bookings.findMany({
+    where: { placeId: String(id) },
+    orderBy: { checkIn: 'asc' },
+  });
 
-      let bookingWindows = [];
+  let bookingWindows = [];
 
-      if (bookings.length === 0) {
-        // If no bookings, set availableFrom to today and availableTo to listTillDate
-        const availableFrom = new Date();
-        const availableTo = new Date(place.listTillDate);
-        const diffTime = Math.abs(availableTo - availableFrom);
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+  for (let i = 0; i < bookings.length; i++) {
+    const availableFrom = new Date(bookings[i].checkOut);
+    const availableTo =
+      i < bookings.length - 1
+        ? new Date(bookings[i + 1].checkIn)
+        : new Date(place.listTillDate);
+    let diffTime = Math.abs(availableTo - availableFrom);
+    let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-        if(diffDays >= place.minimumStay) {
-          bookingWindows.push({
-            availableFrom,
-            availableTo,
-          });
-        }
-      } else {
-        // If bookings, create booking windows
-        const availableFrom = new Date();
-        const availableTo = new Date(bookings[0].checkIn);
-        let diffTime = Math.abs(availableTo - availableFrom);
-        let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+    if (diffDays >= place.minimumStay) {
+      bookingWindows.push({ availableFrom, availableTo });
+    }
+  }
 
-        if(diffDays >= place.minimumStay) {
-          bookingWindows.push({
-            availableFrom,
-            availableTo,
-          });
-        }
+  place.bookingWindows = bookingWindows;
 
-        for (let i = 1; i < bookings.length; i++) {
-          const window = {
-            availableFrom: new Date(bookings[i - 1].checkOut),
-            availableTo: new Date(bookings[i].checkIn),
-          };
-          diffTime = Math.abs(window.availableTo - window.availableFrom);
-          diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
-
-          if(diffDays >= place.minimumStay) {
-            bookingWindows.push(window);
-          }
-        }
-
-        const lastWindow = {
-          availableFrom: new Date(bookings[bookings.length - 1].checkOut),
-          availableTo: place.listTillDate,
-        };
-        diffTime = Math.abs(lastWindow.availableTo - lastWindow.availableFrom);
-        diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
-
-        if(diffDays >= place.minimumStay) {
-          bookingWindows.push(lastWindow);
-        }
-      }
-
-      place.bookingWindows = bookingWindows;
-
-      return NextResponse.json(place);
+  return NextResponse.json(place);
     } catch (error) {
       console.error("Error:", error);
       return NextResponse.json({ status: 500 });

@@ -16,6 +16,12 @@ export default function Places() {
     const category = searchParams.get('category') || '';
     const sort = searchParams.get('sort') || '';
     const sortType = searchParams.get('sortType') || '';
+    const location = searchParams.get('location') || '';
+    const checkin = searchParams.get('checkin') || '';
+    const checkout = searchParams.get('checkout') || '';
+    const adults = searchParams.get('adults') || '';
+    const children = searchParams.get('children') || '';
+
     // getPlaces(category, sort, sortType)
     //   .then((data) => {
     //     setPlaces(data);
@@ -25,7 +31,22 @@ export default function Places() {
     //     console.error(error);
     //     setLoading(false);
     //   });
-    fetch(`/api/places?category=${category}&sort=${sort}&sortType=${sortType}`)
+
+
+let query = '';
+if (category) query += `category=${category}&`;
+if (sort) query += `sort=${sort}&`;
+if (sortType) query += `sortType=${sortType}&`;
+if (location) query += `location=${location}&`;
+if (checkin) query += `checkin=${checkin}&`;
+if (checkout) query += `checkout=${checkout}&`;
+if (adults) query += `adults=${adults}&`;
+if (children) query += `children=${children}&`;
+
+// Remove the trailing '&' if present
+query = query.endsWith('&') ? query.slice(0, -1) : query;
+
+    fetch(`/api/places?${query}`)
       .then((res) => res.json())
       .then((data) => {
         setPlaces(data);

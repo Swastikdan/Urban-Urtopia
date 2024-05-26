@@ -31,7 +31,10 @@ export default function Sort() {
       <DropdownMenuTrigger className="m-auto items-center rounded-full sm:-mb-2 md:mb-2   lg:rounded-xl ">
         <SortTrigger />
       </DropdownMenuTrigger>
-      <DropdownMenuContent className=" mr-5 rounded-xl drop-shadow-xl">
+      <DropdownMenuContent
+        align="end"
+        className="  rounded-xl drop-shadow-xl"
+      >
         <DropdownMenuItem
           className=" hidden cursor-pointer items-center rounded-md py-3"
           onClick={() => handleClick('')}
