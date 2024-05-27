@@ -117,7 +117,8 @@ model Bookings {
   totalPrice Float
   status    String @default("processing")
   date     DateTime @default(now())
-  cancelRequest  Boolean  @default(false)
+  cancelRequest  Boolean?  @default(false)
+  cancelRejection  Boolean?  @default(false)
   payment   Payments[]
 
 }

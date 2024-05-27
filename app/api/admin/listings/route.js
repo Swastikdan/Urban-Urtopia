@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import prisma from '@/lib/prisma';
+
 async function getPlaces() {
   const session = await getServerSession();
   if (!session) {
@@ -17,7 +18,23 @@ async function getPlaces() {
     }
 
     try {
-      const places = await prisma.Places.findMany();
+      const places = await prisma.Places.findMany({
+        select: {
+          id: true,
+          state: true,
+          city: true,
+          price: true,
+          photos: true,
+          status: true,
+          title: true,
+          owner: {
+            select: {
+              name: true,
+              image: true,
+            },
+          },
+        },
+      });
       if (!places) {
         return NextResponse.json(
           { message: 'places not found' },
@@ -32,7 +49,8 @@ async function getPlaces() {
   }
 }
 
-async function deletePlace(request) {
+async  function updateListing(request){
+
   const session = await getServerSession();
   if (!session) {
     return NextResponse.json({ message: 'you have to login' }, { status: 401 });
@@ -47,27 +65,48 @@ async function deletePlace(request) {
       return NextResponse.json({ message: 'admin not found' }, { status: 401 });
     }
 
-    try {
-      const searchParams = request.nextUrl.searchParams;
-      const id = searchParams.get('id');
-      if (!id) {
-        return NextResponse.json(
-          { message: 'Place id is required' },
-          { status: 400 },
-        );
-      }
-      const place = await prisma.Places.delete({
+    try{
+
+      const {status , id } = await request.json();
+
+      const place = await prisma.Places.update({
         where: {
           id: id,
         },
+        data: {
+          status: status,
+        },
       });
 
-      const places = await prisma.Places.findMany();
+      let places = await prisma.Places.findMany({
+        select: {
+          id: true,
+          state: true,
+          city: true,
+          price: true,
+          photos: true,
+          status: true,
+          title: true,
+          owner: {
+            select: {
+              name: true,
+              image: true,
+            },
+          },
+        },
+      });
       return NextResponse.json({ places }, { status: 200 });
+    
     } catch (err) {
       console.log(err);
       return NextResponse.json({ message: err.message }, { status: 500 });
     }
   }
+
+
 }
-export { getPlaces as GET , deletePlace as DELETE};
+
+
+
+
+export { getPlaces as GET , updateListing as POST};

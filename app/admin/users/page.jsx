@@ -123,14 +123,6 @@ export default function page() {
                 </h2>
 
                 <div className="flex items-center space-x-2">
-                  {/* <button className="inline-flex  select-none items-center gap-x-2 rounded-lg border-2 border-gray-500 bg-white px-2 py-1 text-sm text-gray-600 shadow-sm hover:bg-gray-50 disabled:pointer-events-none disabled:opacity-50">
-                    <ListFilter width={20} />
-                    <span className="hidden md:flex">Filter</span>
-                  </button> */}
-                  {/* <button className="inline-flex items-center gap-x-2 rounded-lg border-2 border-gray-500 bg-white px-2 py-1 text-sm text-gray-600 shadow-sm hover:bg-gray-50 disabled:pointer-events-none disabled:opacity-50">
-                    <ArrowDownUp width={20} />
-                    <span className="hidden md:flex">Sort</span>
-                  </button> */}
                   <button
                     disabled={refreshing}
                     onClick={handleRefresh}

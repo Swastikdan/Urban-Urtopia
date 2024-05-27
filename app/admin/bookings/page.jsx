@@ -21,6 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -276,6 +277,16 @@ export default function page() {
                                   </span>
                                 </div>
                               </TableHead>
+                              <TableHead
+                                scope="col"
+                                className="px-2 py-1 text-start"
+                              >
+                                <div className="flex items-center gap-x-2 ps-6">
+                                  <span className="text-sm font-semibold tracking-wide text-gray-800 dark:text-gray-200">
+                                    Cancel Request
+                                  </span>
+                                </div>
+                              </TableHead>
                             </TableRow>
                           </TableHeader>
                           <TableBody>
@@ -283,18 +294,52 @@ export default function page() {
                               filteredBookings.map((booking) => (
                                 <TableRow>
                                   <TableCell className="size-px whitespace-nowrap">
-                                    <Link
-                                      href={`/place/${booking.place.id}`}
-                                      target="_blank"
-                                      className="text-left hover:opacity-80"
-                                    >
-                                      <span className="text-sm font-medium">
-                                        {booking.place.title}
-                                      </span>
-                                    </Link>
+                                    <div className="py-3 pe-6 ps-6 lg:ps-3 xl:ps-0">
+                                      <Link
+                                        target="_blank"
+                                        href={`/place/${booking.place.id}`}
+                                        className="flex items-center gap-x-3"
+                                      >
+                                        <Avatar className="h-10 w-12 rounded-lg md:h-12 md:w-16 xl:h-16 xl:w-20">
+                                          <AvatarImage
+                                            className="h-10 w-12 md:h-12 md:w-16 xl:h-16 xl:w-20 "
+                                            src={booking.place.photos[0]}
+                                            alt="property Image"
+                                            width={100}
+                                            height={80}
+                                          />
+                                          <AvatarFallback>
+                                            <div className="h-10  w-12 animate-pulse bg-gray-400 md:h-12 md:w-16 xl:h-16 xl:w-20"></div>
+                                          </AvatarFallback>
+                                        </Avatar>
+                                        <div className="grow">
+                                          <span className="block text-sm font-semibold text-gray-800 dark:text-gray-200 md:text-base xl:text-lg">
+                                            {booking.place.title}
+                                          </span>
+                                          <span className="block text-xs text-gray-500 md:text-sm">
+                                            {booking.place.city} ,{' '}
+                                            {booking.place.state}
+                                          </span>
+                                        </div>
+                                      </Link>
+                                    </div>
                                   </TableCell>
                                   <TableCell className="size-px whitespace-nowrap">
-                                    <div className="px-2 py-1 ">
+                                    <div className="flex items-center space-x-2 px-2 py-1 font-medium">
+                                      <Avatar>
+                                        <AvatarImage
+                                          src={booking.user.image.replace(
+                                            '/upload/',
+                                            '/upload/w_200,h_200,c_fill,g_auto/q_auto/f_auto/',
+                                          )}
+                                          alt="User Image"
+                                        />
+                                        <AvatarFallback>
+                                          {booking.user.name
+                                            .charAt(0)
+                                            .toUpperCase()}
+                                        </AvatarFallback>
+                                      </Avatar>
                                       <span className="pl-2 text-sm">
                                         {booking.user.name}
                                       </span>
@@ -336,15 +381,15 @@ export default function page() {
                                           <BadgeX width={20} />
                                           Rejected
                                         </span>
-                                      ) : booking.status === 'cancelled' ? (
+                                      ) : booking.status === 'canceled' ? (
                                         <span className="inline-flex items-center gap-x-1 rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-800 dark:bg-red-500/10 dark:text-red-500">
                                           <BadgeX width={20} />
                                           Canceled
                                         </span>
                                       ) : booking.checkOut < new Date() ? (
                                         <span className="inline-flex items-center gap-x-1 rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-800 dark:bg-gray-500/10 dark:text-gray-500">
-                                          <BadgeX width={20} />
-                                          Expired
+                                          <Badge width={20} />
+                                          Completed
                                         </span>
                                       ) : null}
                                     </div>
@@ -358,7 +403,7 @@ export default function page() {
                                   </TableCell>
                                   <TableCell className="size-px whitespace-nowrap">
                                     <div className="px-2 py-1">
-                                      {booking.status === 'cancelled' ||
+                                      {booking.status === 'canceled' ||
                                       booking.status === 'approved' ||
                                       booking.status === 'rejected' ||
                                       new Date(booking.checkin) < new Date() ? (
@@ -413,6 +458,75 @@ export default function page() {
                                           >
                                             {loading.id == booking.id &&
                                             loading.status == 'rejected' ? (
+                                              <LoaderCircle
+                                                width={20}
+                                                className="animate-spin"
+                                              />
+                                            ) : (
+                                              <Ban width={20} />
+                                            )}
+                                            Reject
+                                          </button>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </TableCell>
+
+                                  <TableCell className="size-px whitespace-nowrap">
+                                    <div className="px-2 py-1">
+                                      {booking.cancelRequest == false ||
+                                      booking.status === 'canceled' ||
+                                      booking.cancelRejection === true ||
+                                      new Date(booking.checkin) < new Date() ? (
+                                        <div className="flex items-center space-x-3">
+                                          <div
+                                            disabled
+                                            className="inline-flex select-none items-center gap-x-2 rounded-lg border-2 border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 opacity-50 shadow-sm hover:bg-gray-50 disabled:pointer-events-none disabled:cursor-none disabled:opacity-50 "
+                                          >
+                                            <BadgeCheck width={20} />
+                                            Approve
+                                          </div>
+                                          <div
+                                            disabled
+                                            className="inline-flex select-none items-center gap-x-2 rounded-lg border-2 border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 opacity-50 shadow-sm hover:bg-gray-50 disabled:pointer-events-none disabled:cursor-none disabled:opacity-50 "
+                                          >
+                                            <Ban width={20} />
+                                            Reject
+                                          </div>
+                                        </div>
+                                      ) : (
+                                        <div className="flex items-center space-x-3">
+                                          <button
+                                            disabled={loading.id == booking.id}
+                                            className="inline-flex select-none items-center gap-x-2 rounded-lg border-2 border-green-500 bg-white px-3 py-2 text-sm text-green-600 shadow-sm hover:bg-green-50 disabled:pointer-events-none disabled:cursor-none disabled:opacity-50"
+                                            onClick={() =>
+                                              handleStatusChange(
+                                                booking.id,
+                                                'canceled',
+                                              )
+                                            }
+                                          >
+                                            {loading.id == booking.id ? (
+                                              <LoaderCircle
+                                                width={20}
+                                                className="animate-spin"
+                                              />
+                                            ) : (
+                                              <BadgeCheck width={20} />
+                                            )}
+                                            Approve
+                                          </button>
+                                          <button
+                                            disabled={loading.id == booking.id}
+                                            className="inline-flex select-none items-center gap-x-2 rounded-lg border-2 border-red-500 bg-white px-3 py-2 text-sm text-red-600 shadow-sm hover:bg-red-50 disabled:pointer-events-none disabled:cursor-none disabled:opacity-50"
+                                            onClick={() =>
+                                              handleStatusChange(
+                                                booking.id,
+                                                'cancelrejected',
+                                              )
+                                            }
+                                          >
+                                            {loading.id == booking.id ? (
                                               <LoaderCircle
                                                 width={20}
                                                 className="animate-spin"
