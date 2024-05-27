@@ -42,14 +42,14 @@ import Link from 'next/link';
 export default function SearchBar() {
   const searchParams = useSearchParams();
   const router = useRouter();
-    const [activeMobileSearchDiv, setActiveMobileSearchDiv] =
-      useState('location');
+  const [activeMobileSearchDiv, setActiveMobileSearchDiv] =
+    useState('location');
 
-    const MobileSearchDisplay = (id) => {
-      setActiveMobileSearchDiv(id);
-    };
+  const MobileSearchDisplay = (id) => {
+    setActiveMobileSearchDiv(id);
+  };
 
-    console.log(activeMobileSearchDiv);
+  console.log(activeMobileSearchDiv);
   const params = [
     'location',
     'checkin',
@@ -737,17 +737,147 @@ export default function SearchBar() {
               </div>
             </div>
           </DrawerTrigger>
-          <DrawerContent className="rounded-none bg-gray-100 h-full ">
+          <DrawerContent className="h-full rounded-none bg-gray-200 ">
             <div className="flex items-end justify-end p-3 px-5">
               <DrawerClose className="rounded-full bg-white p-2 ring-2 ring-black">
                 <X size={24} />
               </DrawerClose>
             </div>
 
-            <div className="flex flex-col space-y-5 px-3 py-3">
+            <div className="flex flex-col space-y-2 px-3 py-3 ">
               {activeMobileSearchDiv === 'location' ? (
-                <div className="h-96 w-full rounded-2xl bg-white p-1 text-center shadow-md shadow-gray-300">
-                  this is for the location
+                <div className="h-auto w-full rounded-2xl bg-white px-5 py-3 shadow-md shadow-gray-300">
+                  <span className="text-start text-[20px] font-semibold">
+                    Where to ?
+                  </span>
+                  <div className="py-3">
+                    <Drawer>
+                      <DrawerTrigger className="h-auto w-full">
+                        {' '}
+                        <div class="relative h-full">
+                          <div class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3">
+                            <Search size={20} />
+                          </div>
+                          <input
+                            type="search"
+                            name="search-location"
+                            class="block w-full rounded-xl border border-gray-300 bg-gray-50 p-3 ps-10 text-sm text-gray-900 focus:border focus:outline-none "
+                            placeholder="Search destinations"
+                            readOnly
+                          />
+                        </div>
+                      </DrawerTrigger>
+                      <DrawerContent className="h-full bg-gray-200">
+                        <div className="mb-5 flex items-start justify-start p-3 px-5">
+                          <DrawerClose className="rounded-full bg-white p-2 ring-2 ring-black">
+                            <ArrowLeft size={24} />
+                          </DrawerClose>
+                        </div>
+                        <div className="h-full rounded-t-3xl bg-white p-5 shadow-sm">
+                          <div class="relative h-auto">
+                            <div class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3">
+                              <Search size={24} className="text-black" />
+                            </div>
+                            <input
+                              type="search"
+                              name="search-location"
+                              id="search-location"
+                              value={inputValue}
+                              onInput={(e) => {
+                                const value = e.target.value;
+                                setInputValue(value);
+                                handleLLocationSearch(value);
+                              }}
+                              class="block w-full rounded-xl  bg-gray-100 p-3.5 ps-10 text-base text-gray-900 focus:border focus:outline-none "
+                              placeholder="Search destinations"
+                            />
+                            <div>
+                              {inputValue ? (
+                                <X
+                                  size={28}
+                                  className="absolute bottom-3.5 end-2.5 mr-1 cursor-pointer rounded-3xl bg-gray-200 p-1 text-black"
+                                  onClick={() => {
+                                    setInputValue('');
+                                    setSearchCities([]);
+                                  }}
+                                />
+                              ) : null}
+                            </div>
+                          </div>
+
+                          {inputValue ? (
+                            <ScrollArea className="mr-2 h-[70vh]  w-full select-none">
+                              <div className="flex flex-col p-1">
+                                {searchCities.length >= 1 ? (
+                                  searchCities.map((city, index) => (
+                                    <DrawerClose
+                                      key={index}
+                                      onClick={() => {
+                                        setSearchState((prevState) => ({
+                                          ...prevState,
+                                          location: city.city,
+                                        }));
+                                        MobileSearchDisplay('dates');
+                                      }}
+                                      className={`flex cursor-pointer items-center space-x-3 rounded-xl p-2 text-sm font-semibold hover:bg-gray-200/70  ${searchState.location == city.city ? 'bg-gray-200' : ''} `}
+                                    >
+                                      <MapPin
+                                        size={32}
+                                        className="rounded-xl bg-gray-100 p-1 text-gray-600 "
+                                      />
+                                      <span>{`${city.city} , ${city.state}`}</span>
+                                    </DrawerClose>
+                                  ))
+                                ) : (
+                                  <div className="flex items-center space-x-3 rounded-xl p-2 text-sm font-semibold ">
+                                    <MapPin
+                                      size={32}
+                                      className="rounded-3xl bg-gray-300 p-1 "
+                                    />
+                                    <span>No Results Found</span>
+                                  </div>
+                                )}
+                              </div>
+                            </ScrollArea>
+                          ) : null}
+                        </div>
+                      </DrawerContent>
+                    </Drawer>
+
+                    <div
+                      className="flex overflow-auto pt-3"
+                      style={{
+                        overflow: 'auto',
+                        scrollbarWidth: 'none' /* For Firefox */,
+                        '-ms-overflow-style':
+                          'none' /* For Internet Explorer and Edge */,
+                      }}
+                    >
+                      {topcities.map((city, index) => (
+                        <div
+                          key={index}
+                          onClick={() => {
+                            setSearchState((prevState) => ({
+                              ...prevState,
+                              location: city.value,
+                            }));
+                            MobileSearchDisplay('dates');
+                          }}
+                          className="group flex h-full w-max cursor-pointer flex-col space-y-1 rounded-xl p-2 hover:bg-gray-200/70"
+                        >
+                          {/* <div className="h-24 w-24 rounded-xl bg-gray-200"></div> */}
+                          <img
+                            src={city.img}
+                            alt={city.title}
+                            className="h-full min-h-24 w-full min-w-24 rounded-xl border border-gray-300 bg-gray-100 object-cover object-center group-active:scale-95 "
+                          />
+                          <span className="text-xs font-semibold">
+                            {city.title}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               ) : (
                 <div
@@ -759,13 +889,64 @@ export default function SearchBar() {
                     Where
                   </span>
 
-                  <span className="text-sm font-semibold ">I'm Flexible</span>
+                  <span className="text-sm font-semibold ">
+                    {' '}
+                    {searchState.location
+                      ? searchState.location.charAt(0).toUpperCase() +
+                        searchState.location.slice(1)
+                      : `I'm Flexible`}
+                  </span>
                 </div>
               )}
 
               {activeMobileSearchDiv === 'dates' ? (
-                <div className="h-96 w-full rounded-2xl bg-white p-1 text-center shadow-md shadow-gray-300">
-                  this is for the dates
+                <div className="h-auto w-full rounded-2xl bg-white px-5 py-3 shadow-md shadow-gray-300">
+                  <span className="text-start text-[20px] font-semibold">
+                    When’s your trip?
+                  </span>
+                  <div className="flex w-full  flex-col items-center  pt-3">
+                    <Calendar
+                      initialFocus
+                      mode="range"
+                      pagedNavigation={true}
+                      defaultMonth={date?.from}
+                      fromMonth={new Date()}
+                      disabled={{ before: new Date() }}
+                      selected={date}
+                      onSelect={setDate}
+                      className="w-full"
+                    />
+
+                    <div className="flex w-full items-center justify-between px-1 pt-3">
+                      <span
+                        onClick={() => {
+                          setSearchState({
+                            location: '',
+                            checkin: '',
+                            checkout: '',
+                            adults: 0,
+                            children: 0,
+                            infants: 0,
+                            pets: 0,
+                          });
+                          setDate(null);
+                          MobileSearchDisplay('guests');
+                        }}
+                        className="font-semibold underline underline-offset-4"
+                      >
+                        Skip
+                      </span>
+                      <button
+                        onClick={() => {
+                          date ? MobileSearchDisplay('guests') : null;
+                        }}
+                        disabled={!date}
+                        className="rounded-xl bg-gray-800 px-6 py-2.5 text-white"
+                      >
+                        Next
+                      </button>
+                    </div>
+                  </div>
                 </div>
               ) : (
                 <div
@@ -777,12 +958,165 @@ export default function SearchBar() {
                     When
                   </span>
 
-                  <span className="text-sm font-semibold ">Add Dates</span>
+                  <span className="text-sm font-semibold ">
+                    {searchState.checkin && searchState.checkout
+                      ? formatRangeDate(
+                          searchState.checkin,
+                          searchState.checkout,
+                        )
+                      : 'Add Dates'}
+                  </span>
                 </div>
               )}
               {activeMobileSearchDiv === 'guests' ? (
-                <div className="h-96 w-full rounded-2xl bg-white p-1 text-center shadow-md shadow-gray-300">
-                  this is for the guests
+                <div className="h-auto w-full rounded-2xl bg-white px-5 py-3 shadow-md shadow-gray-300">
+                  <span className="text-start text-[20px] font-semibold">
+                    Who's coming?
+                  </span>
+                  <div className=" space-y-3 pt-3">
+                    <div className="w-full">
+                      <div className="flex w-full justify-between">
+                        <div className="flex flex-col">
+                          <span className="text-base font-medium">Adults</span>
+                          <span className="text-sm font-light">Age 13+</span>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <button
+                            disabled={searchState.adults === 0}
+                            className="hover:text-accent-foregroun rounded-full border border-input bg-background p-2 hover:bg-accent disabled:cursor-not-allowed disabled:opacity-30"
+                            onClick={() => {
+                              if (searchState.adults > 0) {
+                                setAdults(searchState.adults - 1);
+                              }
+                            }}
+                          >
+                            <Minus size={14} />
+                          </button>
+                          <span className="w-4 text-center text-base font-light tabular-nums">
+                            {searchState.adults}
+                          </span>
+                          <button
+                            disabled={
+                              searchState.adults + searchState.children >= 16
+                            }
+                            className="rounded-full border border-input bg-background p-2 hover:bg-accent hover:text-accent-foreground  disabled:cursor-not-allowed disabled:opacity-30"
+                            onClick={() => setAdults(searchState.adults + 1)}
+                          >
+                            <Plus size={14} />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="w-full">
+                      <div className="flex w-full justify-between">
+                        <div className="flex flex-col">
+                          <span className="text-base font-medium">
+                            Children
+                          </span>
+                          <span className="text-sm font-light">Ages 2-12</span>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <button
+                            disabled={searchState.children === 0}
+                            className="rounded-full border border-input bg-background p-2 hover:bg-accent hover:text-accent-foreground  disabled:cursor-not-allowed disabled:opacity-30"
+                            onClick={() => {
+                              if (searchState.children > 0) {
+                                setChildren(searchState.children - 1);
+                              }
+                            }}
+                          >
+                            <Minus size={14} />
+                          </button>
+                          <span className="w-4 text-center text-base font-light tabular-nums">
+                            {searchState.children}
+                          </span>
+                          <button
+                            disabled={
+                              searchState.adults + searchState.children >= 16
+                            }
+                            className="rounded-full border border-input bg-background p-2 hover:bg-accent hover:text-accent-foreground  disabled:cursor-not-allowed disabled:opacity-30"
+                            onClick={() =>
+                              setChildren(searchState.children + 1)
+                            }
+                          >
+                            <Plus size={14} />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="w-full">
+                      <div className="flex w-full justify-between">
+                        <div className="flex flex-col">
+                          <span className="text-base font-medium">Infants</span>
+                          <span className="text-sm font-light">Under 2</span>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <button
+                            disabled={searchState.infants === 0}
+                            className="rounded-full border border-input bg-background p-2 hover:bg-accent hover:text-accent-foreground  disabled:cursor-not-allowed disabled:opacity-30"
+                            onClick={() => {
+                              if (searchState.infants > 0) {
+                                setInfants(searchState.infants - 1);
+                              }
+                            }}
+                          >
+                            <Minus size={14} />
+                          </button>
+                          <span className="w-4 text-center text-base font-light tabular-nums">
+                            {searchState.infants}
+                          </span>
+                          <button
+                            disabled={searchState.infants >= 5}
+                            className="rounded-full border border-input bg-background p-2 hover:bg-accent hover:text-accent-foreground  disabled:cursor-not-allowed disabled:opacity-30"
+                            onClick={() => {
+                              if (searchState.infants < 5) {
+                                setInfants(searchState.infants + 1);
+                              }
+                            }}
+                          >
+                            <Plus size={14} />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="w-full">
+                      <div className="flex w-full justify-between">
+                        <div className="flex flex-col">
+                          <span className="text-base font-medium">Pets</span>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <button
+                            disabled={searchState.pets === 0}
+                            className="rounded-full border border-input bg-background p-2 hover:bg-accent hover:text-accent-foreground  disabled:cursor-not-allowed disabled:opacity-30"
+                            onClick={() => {
+                              if (searchState.pets > 0) {
+                                setPets(searchState.pets - 1);
+                              }
+                            }}
+                          >
+                            <Minus size={14} />
+                          </button>
+                          <span className="w-4 text-center text-base font-light tabular-nums">
+                            {searchState.pets}
+                          </span>
+                          <button
+                            disabled={searchState.pets >= 5}
+                            className="rounded-full border border-input bg-background p-2 hover:bg-accent hover:text-accent-foreground  disabled:cursor-not-allowed disabled:opacity-30"
+                            onClick={() => {
+                              if (searchState.pets < 5) {
+                                setPets(searchState.pets + 1);
+                              }
+                            }}
+                          >
+                            <Plus size={14} />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               ) : (
                 <div
@@ -794,19 +1128,53 @@ export default function SearchBar() {
                     Who
                   </span>
 
-                  <span className="text-sm font-semibold ">Add Guests</span>
+                  <span className="text-sm font-semibold ">
+                    {' '}
+                    {Number(searchState.adults) +
+                      Number(searchState.children) >=
+                    16
+                      ? `16+  Guests`
+                      : Number(searchState.adults) +
+                            Number(searchState.children) >
+                          1
+                        ? Number(searchState.adults) +
+                          Number(searchState.children) +
+                          ' Guests'
+                        : Number(searchState.adults) +
+                              Number(searchState.children) ===
+                            1
+                          ? '1 Guest'
+                          : 'Add Guests'}
+                  </span>
                 </div>
               )}
             </div>
 
-            <div className="fixed w-full h-auto bottom-0 flex items-center justify-between border-t border-gray-300 bg-white px-5 py-3 ">
-              <span className="text-base font-semibold underline underline-offset-4">
+            <div className="fixed bottom-0 flex h-auto w-full items-center justify-between border-t border-gray-300 bg-white px-5 py-3 ">
+              <span
+                className="text-base font-semibold underline underline-offset-4"
+                onClick={() => {
+                  setSearchState({
+                    location: '',
+                    checkin: '',
+                    checkout: '',
+                    adults: 0,
+                    children: 0,
+                    infants: 0,
+                    pets: 0,
+                  });
+                  setDate(null);
+                }}
+              >
                 Clear all
               </span>
-              <button className="flex items-center space-x-1 rounded-md bg-blue-500 px-4 py-2 font-semibold text-white ">
+              <DrawerClose
+                onClick={() => handleSearch()}
+                className="flex items-center space-x-1 rounded-md bg-blue-500 px-4 py-2 font-semibold text-white "
+              >
                 <Search size={24} />
                 <span>Search</span>
-              </button>
+              </DrawerClose>
             </div>
           </DrawerContent>
         </Drawer>
