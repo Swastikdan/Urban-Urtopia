@@ -127,33 +127,70 @@ export default function PlacePageDesktop({
   }, [date]);
 
   // add a check that the "from" and "to" cant be the same check the "from" is not less than the current date and the "to" is not less than the "from" . and dont set the dates  if those conditions are met and "from" and "to" dates indivisually
+  const [isRazorpayLoaded, setIsRazorpayLoaded] = useState(false);
 
-  const handleBooking = async (e) => {
-    e.preventDefault();
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.onload = () => setIsRazorpayLoaded(true);
+    script.onerror = () => setIsRazorpayLoaded(false);
+    document.body.appendChild(script);
+  }, []);
 
-    const reserve = {
-      userId: session.user.id,
-      placeId,
-      checkIn: date.from,
-      checkOut: date.to,
-      guests: adults + children + infants + pets,
-      totalPrice: price * bookingdays,
-    };
+ const makePayment = async () => {
+  if (!isRazorpayLoaded) {
+    alert('Razorpay SDK Failed to load');
+    return;
+  }
 
-    try {
-      const res = await axios.post('/api/booking', reserve);
+  const response = await fetch('/api/order', { method: 'POST' });
+  const data = await response.json();
 
-      if (res.data.code === 200) {
-        toast.success('Booking created successfully');
-      } else {
-        toast.error('Booking Unsuccessful');
+  const options = {
+    key: process.env.NEXT_PUBLIC_key_id,
+    name: 'Urban Utopia',
+    currency: data.currency,
+    amount: data.amount,
+    order_id: data.id,
+    description: 'Thankyou for your test donation',
+    image: 'https://urbanutopia.vercel.app/logo.png',
+    handler: async function (response) {
+      const reserve = {
+        userId: session.user.id,
+        placeId,
+        checkIn: date.from,
+        checkOut: date.to,
+        guests: adults + children + infants + pets,
+        totalPrice: price * bookingdays,
+        razorpayPaymentId: response.razorpay_payment_id,
+        razorpayOrderId: response.razorpay_order_id,
+        razorpaySignature: response.razorpay_signature,
+      };
+
+      try {
+        const res = await axios.post('/api/booking', reserve);
+
+        if (res.data.code === 200) {
+          toast.success('Booking created successfully');
+        } else {
+          toast.error('Booking Unsuccessful');
+        }
+
+        console.log(res);
+      } catch (error) {
+        console.log('Error creating booking: ' + error.response.data.message);
       }
-
-      console.log(res);
-    } catch (error) {
-      console.log('Error creating booking: ' + error.response.data.message);
-    }
+    },
+    prefill: {
+      name: 'Swastik Dan',
+      email: 'thisisswastikdan@gmail.com',
+      contact: '9609591515',
+    },
   };
+
+  const paymentObject = new window.Razorpay(options);
+  paymentObject.open();
+};
 
   return (
     <section className="max-w-6xl px-10">
@@ -442,7 +479,7 @@ export default function PlacePageDesktop({
                   </DropdownMenuTrigger>
                   <DropdownMenuContent
                     align="end"
-                    className="lg:w-[20vw] w-[30vw] space-y-3 p-3 "
+                    className="w-[30vw] space-y-3 p-3 lg:w-[20vw] "
                   >
                     <div className="w-full">
                       <div className="flex w-full justify-between">
@@ -594,7 +631,7 @@ export default function PlacePageDesktop({
               <>
                 <button
                   className=" w-full rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500 py-3 text-lg font-bold text-white shadow-md duration-200 active:scale-[99%] "
-                  onClick={handleBooking}
+                  onClick={makePayment}
                 >
                   Reserve
                 </button>

@@ -9,10 +9,17 @@ import prisma from '@/lib/prisma';
 
   try {
     const data = await request.json();
-
-    // Validate request data
-    const { placeId, checkIn, checkOut, guests, totalPrice , userId } = data;
-    if (!placeId || !checkIn || !checkOut || !guests || !totalPrice) {
+ 
+    const {
+      placeId,
+      checkIn,
+      checkOut,
+      guests,
+      totalPrice,
+      userId,
+      razorpaySignature,
+       razorpayOrderId , razorpayPaymentId } = data;
+    if (!placeId || !checkIn || !checkOut || !guests || !totalPrice || !userId || !razorpaySignature || !razorpayOrderId || !razorpayPaymentId) {
       return NextResponse.json({
         code: 400,
         message: 'All fields are required',
@@ -42,6 +49,8 @@ import prisma from '@/lib/prisma';
         totalPrice,
       },
     });
+
+    
 
     return NextResponse.json({
       code: 200,
