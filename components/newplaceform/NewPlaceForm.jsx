@@ -281,6 +281,7 @@ console.log(formdata)
     setLoading(true);
     // Add ownerId to formdata
     formdata.ownerId = ownerId;
+    formdata.maxGuests = parseInt(formdata.maxGuests);
 
     // prepare the data to send to the server and send a post request to /api/places/create
 
