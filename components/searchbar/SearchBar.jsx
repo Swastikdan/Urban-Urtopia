@@ -33,13 +33,23 @@ import {
   Heart,
   MapPin,
   X,
+  ArrowLeft,
 } from 'lucide-react';
 import { addDays, isBefore, startOfDay } from 'date-fns';
+import Link from 'next/link';
 // import { title } from 'process';
 // import { filter } from 'indian-cities-database/cities';
 export default function SearchBar() {
   const searchParams = useSearchParams();
   const router = useRouter();
+    const [activeMobileSearchDiv, setActiveMobileSearchDiv] =
+      useState('location');
+
+    const MobileSearchDisplay = (id) => {
+      setActiveMobileSearchDiv(id);
+    };
+
+    console.log(activeMobileSearchDiv);
   const params = [
     'location',
     'checkin',
@@ -59,6 +69,8 @@ export default function SearchBar() {
     infants: 0,
     pets: 0,
   });
+
+  // console.log(searchState);
   const setAdults = (value) => {
     setSearchState((prevState) => ({ ...prevState, adults: value }));
   };
@@ -75,15 +87,86 @@ export default function SearchBar() {
     setSearchState((prevState) => ({ ...prevState, pets: value }));
   };
 
+  // useEffect(() => {
+  //   let newState = {};
+  //   params.forEach((param) => {
+  //     let value = searchParams.get(param);
+  //     if (value) {
+  //       newState[param] = value;
+  //     }
+  //   });
+  //   setSearchState((prevState) => ({ ...prevState, ...newState }));
+  // }, [searchParams]);
+
+  // useEffect(() => {
+  //   let newState = {};
+  //   params.forEach((param) => {
+  //     let value = searchParams.get(param);
+  //     if (value) {
+  //       // Parse adults, children, infants, and pets as numbers
+  //       if (['adults', 'children', 'infants', 'pets'].includes(param)) {
+  //         value = parseInt(value, 10);
+  //       }
+  //       newState[param] = value;
+  //     }
+  //   });
+  //   setSearchState((prevState) => ({ ...prevState, ...newState }));
+
+  //   // Set the date state
+  //   if (newState.checkin && newState.checkout) {
+  //     setDate({
+  //       from: new Date(newState.checkin),
+  //       to: new Date(newState.checkout),
+  //     });
+  //   }
+  // }, [searchParams]);
+
   useEffect(() => {
+    // console.log('searchParams:', searchParams);
+
     let newState = {};
     params.forEach((param) => {
       let value = searchParams.get(param);
       if (value) {
+        // Parse adults, children, infants, and pets as numbers
+        if (['adults', 'children', 'infants', 'pets'].includes(param)) {
+          value = parseInt(value, 10);
+        }
         newState[param] = value;
       }
     });
-    setSearchState((prevState) => ({ ...prevState, ...newState }));
+
+    // console.log('newState:', newState);
+
+    setSearchState((prevState) => {
+      const updatedState = { ...prevState, ...newState }; // renamed variable to avoid conflict
+      // console.log('new searchState:', updatedState);
+      return updatedState;
+    });
+
+    // Set the date state
+    if (newState.checkin && newState.checkout) {
+      const newDate = {
+        from: new Date(newState.checkin),
+        to: new Date(newState.checkout),
+      };
+      // console.log('new date:', newDate);
+      setDate(newDate);
+    }
+
+    // Cleanup function
+    return () => {
+      setSearchState({
+        location: '',
+        checkin: '',
+        checkout: '',
+        adults: 0,
+        children: 0,
+        infants: 0,
+        pets: 0,
+      }); // Reset searchState to initial value
+      setDate(null); // Reset date to initial value
+    };
   }, [searchParams]);
 
   useEffect(() => {
@@ -193,19 +276,20 @@ export default function SearchBar() {
 
   const [searchCities, setSearchCities] = useState([]);
   const [inputValue, setInputValue] = useState('');
- const handleLLocationSearch = (value) => {
-  if (!value) {
-    setSearchCities([]);
-    return;
-  }
-  const filteredCities = cities.filter((city) =>
-    city.city.toLowerCase().includes(value.toLowerCase()) ||
-    city.state.toLowerCase().includes(value.toLowerCase())
-  );
-  setSearchCities(filteredCities);
-};
+  const handleLLocationSearch = (value) => {
+    if (!value) {
+      setSearchCities([]);
+      return;
+    }
+    const filteredCities = cities.filter(
+      (city) =>
+        city.city.toLowerCase().includes(value.toLowerCase()) ||
+        city.state.toLowerCase().includes(value.toLowerCase()),
+    );
+    setSearchCities(filteredCities);
+  };
 
-  console.log(searchCities);
+  //console.log(searchState);
 
   return loading ? (
     <>
@@ -237,7 +321,7 @@ export default function SearchBar() {
           <div className="mr-2 rounded-full bg-white px-3 py-3">
             <Search width={20} height={20} />
           </div>
-          <div className="my-1 mr-4 h-8 w-full animate-pulse rounded-sm bg-gray-200"></div>
+          <div className="my-1 mr-2 h-8 w-full animate-pulse rounded-l-sm rounded-r-full bg-gray-200"></div>
         </div>
       </div>
     </>
@@ -264,7 +348,7 @@ export default function SearchBar() {
                 align="start"
                 className="w-[424px]  rounded-3xl p-5 "
               >
-                <div className="mb-3 flex w-full items-center rounded-full border-2 focus:border-black border-gray-300 text-[13px] font-medium text-black placeholder:text-[13px] placeholder:text-black ">
+                <div className="mb-3 flex w-full items-center rounded-full border-2 border-gray-300 text-[13px] font-medium text-black placeholder:text-[13px] placeholder:text-black focus:border-black ">
                   <input
                     type="text"
                     name="search-location"
@@ -279,16 +363,16 @@ export default function SearchBar() {
                     className="w-full rounded-full p-2 text-black placeholder-black outline-none "
                   />
                   <div>
-                  {
-                    inputValue ? (
-                      <X size={32} className="cursor-pointer p-1 rounded-3xl bg-gray-200 mr-1" onClick={() => {
-                        setInputValue('');
-                        setSearchCities([]);
-                      }} />
-                    ) : null
-                  }
-               
-
+                    {inputValue ? (
+                      <X
+                        size={32}
+                        className="mr-1 cursor-pointer rounded-3xl bg-gray-200 p-1"
+                        onClick={() => {
+                          setInputValue('');
+                          setSearchCities([]);
+                        }}
+                      />
+                    ) : null}
                   </div>
                 </div>
                 {inputValue ? (
@@ -384,7 +468,10 @@ export default function SearchBar() {
                 <Calendar
                   initialFocus
                   mode="range"
+                  pagedNavigation={true}
                   defaultMonth={date?.from}
+                  fromMonth={new Date()}
+                  disabled={{ before: new Date() }}
                   selected={date}
                   onSelect={setDate}
                   numberOfMonths={2}
@@ -571,9 +658,10 @@ export default function SearchBar() {
               </DropdownMenu>
               <button
                 onClick={() => handleSearch()}
-                className="ml-3 rounded-full bg-blue-600 p-2.5 text-white hover:bg-blue-700  "
+                className="ml-3 flex items-center rounded-full bg-blue-600 p-2.5  text-white hover:bg-blue-700"
               >
-                <Search width={20} height={20} className="text-white" />
+                <Search width={20} height={20} className="text-white " />
+                {/* <span className="text-sm font-semibold">Search</span> */}
               </button>
             </div>
           </div>
@@ -582,12 +670,146 @@ export default function SearchBar() {
 
       {/* Mobile SearchBar   */}
       <div className="flex w-full pt-4 md:hidden">
-        <div className="ml-2 flex w-full items-center  rounded-full bg-gray-100  p-1 md:hidden md:w-auto">
-          <div className="mr-2 rounded-full bg-white px-3 py-3">
-            <Search width={20} height={20} />
-          </div>
-          <div className="my-1 mr-4 h-8 w-full animate-pulse rounded-sm bg-gray-200"></div>
-        </div>
+        <Drawer className=" rounded-none ">
+          <DrawerTrigger className="h-auto w-full">
+            <div className="ml-2 flex w-full items-center  rounded-full bg-gray-100  p-1 md:hidden md:w-auto">
+              <div
+                className={`mr-2 rounded-full bg-white px-3 py-3   ${
+                  searchState.location ||
+                  searchState.checkin ||
+                  searchState.checkout ||
+                  searchState.adults ||
+                  searchState.children ||
+                  searchState.infants ||
+                  searchState.pets
+                    ? 'duration-100 hover:scale-95'
+                    : ''
+                }`}
+              >
+                {searchState.location ||
+                searchState.checkin ||
+                searchState.checkout ||
+                searchState.adults ||
+                searchState.children ||
+                searchState.infants ||
+                searchState.pets ? (
+                  <Link href="/" className=" ">
+                    <ArrowLeft width={20} height={20} />
+                  </Link>
+                ) : (
+                  <Search width={20} height={20} />
+                )}
+              </div>
+              <div className="flex flex-col text-sm">
+                <div className="text-start text-base font-semibold">
+                  {searchState.location
+                    ? searchState.location.charAt(0).toUpperCase() +
+                      searchState.location.slice(1)
+                    : 'Anywhere'}
+                </div>
+                <div className="flex pb-1 text-xs">
+                  <span className="border-r-[1px] pr-1">
+                    {searchState.checkin && searchState.checkout
+                      ? formatRangeDate(
+                          searchState.checkin,
+                          searchState.checkout,
+                        )
+                      : 'Any Date'}
+                  </span>
+                  <span className="pl-1">
+                    {Number(searchState.adults) +
+                      Number(searchState.children) >=
+                    16
+                      ? `16+  Guests`
+                      : Number(searchState.adults) +
+                            Number(searchState.children) >
+                          1
+                        ? Number(searchState.adults) +
+                          Number(searchState.children) +
+                          ' Guests'
+                        : Number(searchState.adults) +
+                              Number(searchState.children) ===
+                            1
+                          ? '1 Guest'
+                          : 'Add Guests'}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </DrawerTrigger>
+          <DrawerContent className="rounded-none bg-gray-100 h-full ">
+            <div className="flex items-end justify-end p-3 px-5">
+              <DrawerClose className="rounded-full bg-white p-2 ring-2 ring-black">
+                <X size={24} />
+              </DrawerClose>
+            </div>
+
+            <div className="flex flex-col space-y-5 px-3 py-3">
+              {activeMobileSearchDiv === 'location' ? (
+                <div className="h-96 w-full rounded-2xl bg-white p-1 text-center shadow-md shadow-gray-300">
+                  this is for the location
+                </div>
+              ) : (
+                <div
+                  key="location"
+                  className={`flex w-full justify-between rounded-xl bg-white px-5 py-5 shadow-sm shadow-gray-300`}
+                  onClick={() => MobileSearchDisplay('location')}
+                >
+                  <span className="text-sm font-semibold text-gray-500">
+                    Where
+                  </span>
+
+                  <span className="text-sm font-semibold ">I'm Flexible</span>
+                </div>
+              )}
+
+              {activeMobileSearchDiv === 'dates' ? (
+                <div className="h-96 w-full rounded-2xl bg-white p-1 text-center shadow-md shadow-gray-300">
+                  this is for the dates
+                </div>
+              ) : (
+                <div
+                  key="dates"
+                  className={` flex w-full justify-between rounded-xl bg-white px-5 py-5 shadow-sm shadow-gray-300`}
+                  onClick={() => MobileSearchDisplay('dates')}
+                >
+                  <span className="text-sm font-semibold text-gray-500">
+                    When
+                  </span>
+
+                  <span className="text-sm font-semibold ">Add Dates</span>
+                </div>
+              )}
+              {activeMobileSearchDiv === 'guests' ? (
+                <div className="h-96 w-full rounded-2xl bg-white p-1 text-center shadow-md shadow-gray-300">
+                  this is for the guests
+                </div>
+              ) : (
+                <div
+                  key="guests"
+                  className={`flex w-full justify-between rounded-xl bg-white px-5 py-5 shadow-sm shadow-gray-300`}
+                  onClick={() => MobileSearchDisplay('guests')}
+                >
+                  <span className="text-sm font-semibold text-gray-500">
+                    Who
+                  </span>
+
+                  <span className="text-sm font-semibold ">Add Guests</span>
+                </div>
+              )}
+            </div>
+
+            <div className="fixed w-full h-auto bottom-0 flex items-center justify-between border-t border-gray-300 bg-white px-5 py-3 ">
+              <span className="text-base font-semibold underline underline-offset-4">
+                Clear all
+              </span>
+              <button className="flex items-center space-x-1 rounded-md bg-blue-500 px-4 py-2 font-semibold text-white ">
+                <Search size={24} />
+                <span>Search</span>
+              </button>
+            </div>
+          </DrawerContent>
+        </Drawer>
       </div>
     </>
   );
